@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Zeemlin.Service.DTOs.Homework;
 
-namespace Zeemlin.Service.DTOs.Homework
+public class HomeworkForCreationDto
 {
-    internal class HomeworkForCreationDto
-    {
-    }
+    public string Description { get; set; }
+    public DateTime DueTime { get; set; }
+    public long GroupId { get; set; }
 }

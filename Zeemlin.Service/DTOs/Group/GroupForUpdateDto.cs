@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Zeemlin.Service.DTOs.Group;
 
-namespace Zeemlin.Service.DTOs.Group
+public class GroupForUpdateDto
 {
-    internal class GroupForUpdateDto
-    {
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public long CourseId { get; set; }
 }

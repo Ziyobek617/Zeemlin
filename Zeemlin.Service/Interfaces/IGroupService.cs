@@ -1,5 +1,4 @@
-﻿using Zeemlin.Service.DTOs.Course;
-using Zeemlin.Service.DTOs.Group;
+﻿using Zeemlin.Service.DTOs.Group;
 
 namespace Zeemlin.Service.Interfaces;
 

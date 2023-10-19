@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Zeemlin.Service.DTOs.Grade;
 
-namespace Zeemlin.Service.DTOs.Grade
+public class GradeForCreationDto
 {
-    internal class GradeForCreationDto
-    {
-    }
+    public long UserId { get; set; }
+    public long HomeworkId { get; set; }
+    public int Value { get; set; }
 }

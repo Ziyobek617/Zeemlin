@@ -18,10 +18,4 @@
     <ProjectReference Include="..\Zeemlin.Domain\Zeemlin.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\Group\" />
-    <Folder Include="DTOs\Course\" />
-    <Folder Include="DTOs\Homework\" />
-  </ItemGroup>
-
 </Project>

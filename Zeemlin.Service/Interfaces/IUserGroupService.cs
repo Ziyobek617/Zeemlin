@@ -1,5 +1,4 @@
-﻿using Zeemlin.Service.DTOs.Group;
-using Zeemlin.Service.DTOs.UserGroup;
+﻿using Zeemlin.Service.DTOs.UserGroup;
 
 namespace Zeemlin.Service.Interfaces;
 

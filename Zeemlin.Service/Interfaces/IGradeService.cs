@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Zeemlin.Service.DTOs.Grade;
 
-namespace Zeemlin.Service.Interfaces
+namespace Zeemlin.Service.Interfaces;
+
+public interface IGradeService
 {
-    internal class IGradeService
-    {
-    }
+    public Task<bool> RemoveAsync(long id);
+    public Task<GradeForResultDto> RetrieveIdAsync(long id);
+    public Task<IEnumerable<GradeForResultDto>> RetrieveAllAsync();
+    public Task<GradeForResultDto> UpdateAsync(GradeForUpdateDto dto);
+    public Task<GradeForResultDto> CreateAsync(GradeForCreationDto dto);
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Zeemlin.Service.DTOs.UserGroup;
 
-namespace Zeemlin.Service.DTOs.UserGroup
+public class UserGroupForCreationDto
 {
-    internal class UserGroupForCreationDto
-    {
-    }
+    public long UserId { get; set; }
+    public long GroupId { get; set; }
 }
