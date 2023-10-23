@@ -1,4 +1,5 @@
-﻿using Zeemlin.Service.DTOs.Group;
+﻿using Zeemlin.Service.DTOs.Grade;
+using Zeemlin.Service.DTOs.Group;
 
 namespace Zeemlin.Service.DTOs.Homework;
 
