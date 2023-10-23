@@ -4,9 +4,9 @@ namespace Zeemlin.Data.IRepositries;
 
 public interface IRepository<TEntity> where TEntity : Auditable
 {
-    public Task<bool> DeleteAsync(long id);
-    public IQueryable<TEntity> SelectAll();
-    public Task<TEntity> SelectByIdAsync(long id);
-    public Task<TEntity> InsertAsync(TEntity entity);
-    public Task<TEntity> UpdateAsync(TEntity entity);
+    Task<bool> DeleteAsync(long id);
+    IQueryable<TEntity> SelectAll();
+    Task<TEntity> SelectByIdAsync(long id);
+    Task<TEntity> InsertAsync(TEntity entity);
+    Task<TEntity> UpdateAsync(TEntity entity);
 }
