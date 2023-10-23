@@ -7,6 +7,6 @@ public interface IHomeworkService
     public Task<bool> RemoveAsync(long id);
     public Task<HomeworkForResultDto> RetrieveIdAsync(long id);
     public Task<IEnumerable<HomeworkForResultDto>> RetrieveAllAsync();
-    public Task<HomeworkForResultDto> UpdateAsync(HomeworkForUpdateDto dto);
+    public Task<HomeworkForResultDto> ModifyAsync(long id, HomeworkForUpdateDto dto);
     public Task<HomeworkForResultDto> CreateAsync(HomeworkForCreationDto dto);
 }
