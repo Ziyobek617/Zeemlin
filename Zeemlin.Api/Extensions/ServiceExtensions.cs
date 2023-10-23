@@ -15,5 +15,7 @@ public static class ServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        services.AddScoped<IEmailService, EmailService>();
+
     }
 }
