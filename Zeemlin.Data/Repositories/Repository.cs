@@ -7,44 +7,50 @@ namespace Zeemlin.Data.Repositories;
 
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditable
 {
-    private readonly AppDbContext dbContext;
-    private readonly DbSet<TEntity> dbSet;
+    protected readonly AppDbContext _dbContext;
+    protected readonly DbSet<TEntity> _dbSet;
 
     public Repository(AppDbContext dbContext)
     {
-        this.dbContext = dbContext;
-        this.dbSet = this.dbContext.Set<TEntity>();
+        this._dbContext = dbContext;
+        this._dbSet = _dbContext.Set<TEntity>();
     }
-    public async Task<bool> DeleteAsync(long Id)
-    {
-        var entity = await dbSet.FirstOrDefaultAsync(x => x.Id == Id);
-        dbSet.Remove(entity);
-        return true;
-    }
+
 
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        var model = (await this.dbSet.AddAsync(entity)).Entity;
-        return model;
+        var entry = await this._dbSet.AddAsync(entity);
+
+        await _dbContext.SaveChangesAsync();
+
+        return entry.Entity;
     }
 
-    public async Task<bool> SaveAsync()
+
+    public async Task<bool> DeleteAsync(long id)
     {
-        return await this.dbContext.SaveChangesAsync() > 0;
+        var entity = await this._dbSet.FirstOrDefaultAsync(e => e.Id == id);
+        _dbSet.Remove(entity);
+
+        return await _dbContext.SaveChangesAsync() > 0;
     }
 
+        
     public IQueryable<TEntity> SelectAll()
-    {
-        return this.dbSet;
-    }
-    public async Task<TEntity> SelectByIdAsync(long Id)
-    {
-        var entity = await this.dbSet.FirstOrDefaultAsync(u => u.Id == Id);
-        return entity;
-    }
+        => this._dbSet;
+
+
+
+    public async Task<TEntity> SelectByIdAsync(long id)
+        => await this._dbSet.FirstOrDefaultAsync(e => e.Id == id);
+
+
+
     public async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        var model = this.dbSet.Update(entity);
-        return model.Entity;
+        var entry = this._dbContext.Update(entity);
+        await this._dbContext.SaveChangesAsync();
+
+        return entry.Entity;
     }
 }

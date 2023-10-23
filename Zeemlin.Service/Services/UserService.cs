@@ -10,72 +10,89 @@ namespace Zeemlin.Service.Services;
 
 public class UserService : IUserService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<User> userRepository;
+    private readonly IMapper _mapper;
+    private readonly IRepository<User> _userRepository;
 
     public UserService(IMapper mapper, IRepository<User> userRepository)
     {
-        this.mapper = mapper;
-        this.userRepository = userRepository;
+        _mapper = mapper;
+        _userRepository = userRepository;
     }
-    public async Task<UserForResultDto> CreateAsync(UserForCreationDto dto)
+
+    public async Task<UserForResultDto> AddAsync(UserForCreationDto dto)
     {
-        var user = await this.userRepository.SelectAll().
-            FirstOrDefaultAsync(u => u.Email.ToLower() == dto.Email.ToLower());
+        var users = await _userRepository.SelectAll()
+            .Where(u => u.Email.ToLower() == dto.Email.ToLower())
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        if (user is not null)
-            throw new ZeemlinException(409, "User already exsits");
+        if (users is not null)
+            throw new ZeemlinException(409, "User is already exist.");
 
-        var mappeduser = this.mapper.Map<User>(dto);
-        mappeduser.CreatedAt = DateTime.UtcNow;
+        var mappedUser = _mapper.Map<User>(dto);
+        mappedUser.CreatedAt = DateTime.UtcNow;
 
-        var result = await this.userRepository.InsertAsync(mappeduser);
-        await this.userRepository.SaveAsync();
+        var createdUser = await _userRepository.InsertAsync(mappedUser);
+        return _mapper.Map<UserForResultDto>(mappedUser);
+    }
 
-        return this.mapper.Map<UserForResultDto>(result);
+    public async Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto)
+    {
+        var user = await _userRepository.SelectAll()
+        .Where(u => u.Id == id)
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
+        if (user is null)
+            throw new ZeemlinException(404, "User not found");
+
+        user.UpdatedAt = DateTime.UtcNow;
+        var person = _mapper.Map(dto, user);
+
+        await _userRepository.UpdateAsync(person);
+
+        return _mapper.Map<UserForResultDto>(person);
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        var user = await this.userRepository.SelectByIdAsync(id);
+        var user = await _userRepository.SelectAll()
+            .Where(u => u.Id == id)
+            .FirstOrDefaultAsync();
         if (user is null)
             throw new ZeemlinException(404, "User is not found");
 
-        await this.userRepository.DeleteAsync(id);
-        await this.userRepository.SaveAsync();
+        await _userRepository.DeleteAsync(id);
+
         return true;
     }
 
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync()
     {
-        var users = await this.userRepository.SelectAll()
-            .ToListAsync();
-        await this.userRepository.SaveAsync();
+        var users = await _userRepository.SelectAll().ToListAsync();
 
-        return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
+
+        return _mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
 
-    public async Task<UserForResultDto> RetrieveIdAsync(long id)
+    public async Task<UserForResultDto> RetrieveByEmailAsync(string email)
     {
-        var user = await this.userRepository.SelectByIdAsync(id);
+        var user = await _userRepository.SelectAll()
+            .Where(u => u.Email.ToLower() == email.ToLower())
+            .FirstOrDefaultAsync();
         if (user is null)
-            throw new ZeemlinException(404, "User is not found");
+            throw new ZeemlinException(404, "User Not Found");
 
-        await this.userRepository.SaveAsync();
-        return this.mapper.Map<UserForResultDto>(user);
+        return _mapper.Map<UserForResultDto>(user);
     }
 
-    public async Task<UserForResultDto> UpdateAsync(UserForUpdateDto dto)
+    public async Task<UserForResultDto> RetrieveByIdAsync(long id)
     {
-        var user = await this.userRepository.SelectByIdAsync(dto.Id);
-        if (user is null)
+        var users = await _userRepository.SelectAll()
+            .Where(u => u.Id == id)
+            .FirstOrDefaultAsync();
+        if (users is null)
             throw new ZeemlinException(404, "User is not found");
 
-        var mappedUser = this.mapper.Map<User>(dto);
-        mappedUser.UpdatedAt = DateTime.UtcNow;
-
-        await this.userRepository.SaveAsync();
-
-        return this.mapper.Map<UserForResultDto>(mappedUser);
+        return _mapper.Map<UserForResultDto>(users);
     }
 }

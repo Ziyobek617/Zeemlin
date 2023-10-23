@@ -5,9 +5,8 @@ using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UsersController : ControllerBase
+
+public class UsersController : BaseController
 {
     private readonly IUserService userService;
 
@@ -16,69 +15,63 @@ public class UsersController : ControllerBase
         this.userService = userService;
     }
 
+    //Create
+    [HttpPost]
+    public async Task<IActionResult> PostAsync([FromBody] UserForCreationDto dto)
+        => Ok(new Response()
+        {
+            StatusCode = 200,
+            Message = "succes",
+            Data = await this.userService.AddAsync(dto)
+        });
+
     //GetAll
     [HttpGet]
-    public async Task<ActionResult> GetAllAsync()
-    {
-        var response = new Response
+    public async Task<IActionResult> GetAllAsync()
+        => Ok(new Response()
         {
             StatusCode = 200,
             Message = "succes",
             Data = await this.userService.RetrieveAllAsync()
-        };
-        return Ok(response);
-    }
+        });
 
     //GetById
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetAsync(long id)
-    {
-        var response = new Response
+    public async Task<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
+        => Ok(new Response()
         {
             StatusCode = 200,
             Message = "succes",
-            Data = await this.userService.RetrieveIdAsync(id)
-        };
-        return Ok(response);
-    }
+            Data = await this.userService.RetrieveByIdAsync(id)
+        });
 
-    //Create
-    [HttpPost]
-    public async Task<ActionResult> PostAsync(UserForCreationDto dto)
-    {
-        var response = new Response
-        {
-            StatusCode = 200,
-            Message = "succes",
-            Data = await this.userService.CreateAsync(dto)
-        };
-        return Ok(response);
-    }
 
     //Delete
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteAsync(long id)
-    {
-        var response = new Response
+    public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
+        => Ok(new Response
         {
             StatusCode = 200,
             Message = "succes",
             Data = await this.userService.RemoveAsync(id)
-        };
-        return Ok(response);
-    }
-    
+        });
+
     //Update
-    [HttpPut]
-    public async Task<ActionResult> PutAsync(UserForUpdateDto dto)
-    {
-        var response = new Response
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] UserForUpdateDto dto)
+        => Ok(new Response()
         {
             StatusCode = 200,
-            Message = "succes",
-            Data = await this.userService.UpdateAsync(dto)
-        };
-        return Ok(response);
-    }
-}
+            Message = "Succes",
+            Data = await this.userService.ModifyAsync(id, dto)
+        });
 
+    [HttpGet("email")]
+    public async Task<IActionResult> GetByEmailAsync(string email)
+        => Ok(new Response()
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await this.userService.RetrieveByEmailAsync(email)
+        });
+}
