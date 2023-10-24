@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries;
+using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Course;
+using Zeemlin.Service.DTOs.User;
+using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Service.Services;
@@ -16,28 +20,67 @@ public class CourseService : ICourseService
         this._mapper = mapper;
         this._courseRepository = repository;
     }
-    public Task<CourseForResultDto> CreateAsync(CourseForCreationDto dto)
+    public async Task<CourseForResultDto> CreateAsync(CourseForCreationDto dto)
     {
-        throw new NotImplementedException();
+        var courses = await _courseRepository.SelectAll()
+            .Where(u => u.Name.ToLower() == dto.Name.ToLower())
+            .FirstOrDefaultAsync();
+
+        if (courses is not null)
+            throw new ZeemlinException(409, "Course is already exist.");
+
+        var mappedCourse = _mapper.Map<Course>(dto);
+        mappedCourse.CreatedAt = DateTime.UtcNow;
+
+        var createdUser = await _courseRepository.InsertAsync(mappedCourse);
+        return _mapper.Map<CourseForResultDto>(mappedCourse);
     }
 
-    public Task<bool> RemoveAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
-        throw new NotImplementedException();
+        var courses = await _courseRepository.SelectAll()
+            .Where(c => c.Id == id)
+            .FirstOrDefaultAsync();
+        if (courses is null)
+            throw new ZeemlinException(404, "Course is not found");
+
+        await _courseRepository.DeleteAsync(id);
+
+        return true;
     }
 
-    public Task<IEnumerable<CourseForResultDto>> RetrieveAllAsync()
+    public async Task<IEnumerable<CourseForResultDto>> RetrieveAllAsync()
     {
-        throw new NotImplementedException();
+        var courses = await _courseRepository.SelectAll().ToListAsync();
+
+        return _mapper.Map<IEnumerable<CourseForResultDto>>(courses);
     }
 
-    public Task<CourseForResultDto> RetrieveIdAsync(long id)
+    public async Task<CourseForResultDto> RetrieveByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var courses = await _courseRepository.SelectAll()
+            .Where (c => c.Id == id)
+            .FirstOrDefaultAsync();
+        if (courses is null)
+            throw new ZeemlinException(404, "Course is not found");
+
+        return _mapper.Map<CourseForResultDto>(courses); 
     }
 
-    public Task<CourseForResultDto> ModifyAsync(long id, CourseForUpdateDto dto)
+    public async Task<CourseForResultDto> ModifyAsync(long id, CourseForUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var courses = await _courseRepository.SelectAll()
+            .Where(c =>  c.Id == id)
+            .FirstOrDefaultAsync();
+        if (courses is null)
+            throw new ZeemlinException(404, "Course is not found");
+
+        courses.UpdatedAt = DateTime.UtcNow;
+        var course = _mapper.Map(dto, courses);
+
+        await _courseRepository.UpdateAsync(course);
+
+        return _mapper.Map<CourseForResultDto>(course);
+
     }
 }

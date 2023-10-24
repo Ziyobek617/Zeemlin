@@ -17,5 +17,8 @@ public static class ServiceExtensions
 
         services.AddScoped<IEmailService, EmailService>();
 
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<ICourseService, CourseService>();
+
     }
 }
