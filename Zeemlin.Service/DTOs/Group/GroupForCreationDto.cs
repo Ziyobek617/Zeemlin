@@ -1,4 +1,7 @@
-﻿namespace Zeemlin.Service.DTOs.Group;
+﻿
+using Zeemlin.Domain.Entities;
+
+namespace Zeemlin.Service.DTOs.Group;
 
 public class GroupForCreationDto
 {

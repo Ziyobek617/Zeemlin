@@ -14,11 +14,14 @@ public static class ServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
+        
         services.AddScoped<IEmailService, EmailService>();
 
-        services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<ICourseService, CourseService>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+
+        services.AddScoped<IGroupService, GroupService>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
 
     }
 }
