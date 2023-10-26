@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Zeemlin.Api.Models;
+using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.User;
 using Zeemlin.Service.Interfaces;
 
@@ -40,6 +41,10 @@ public class UsersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] UserForUpdateDto dto)
         => Ok(await this._userService.ModifyAsync(id, dto));
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> ChangeAsync([FromRoute(Name = "id")] long id, [FromBody] Role role)
+        => Ok(await this._userService.ChangeUserRoleAsynch(id, role));
 
     [HttpGet("email")]
     public async Task<IActionResult> GetByEmailAsync(string email)

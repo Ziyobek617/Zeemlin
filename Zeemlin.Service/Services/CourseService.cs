@@ -51,7 +51,7 @@ public class CourseService : ICourseService
 
     public async Task<IEnumerable<CourseForResultDto>> RetrieveAllAsync()
     {
-        var courses = await _courseRepository.SelectAll().ToListAsync();
+        var courses = await _courseRepository.SelectAll().Include(c => c.Groups).ToListAsync();
 
         return _mapper.Map<IEnumerable<CourseForResultDto>>(courses);
     }
