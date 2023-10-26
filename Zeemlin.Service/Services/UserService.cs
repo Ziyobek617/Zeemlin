@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
+using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.User;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
@@ -34,6 +35,23 @@ public class UserService : IUserService
 
         var createdUser = await _userRepository.InsertAsync(mappedUser);
         return _mapper.Map<UserForResultDto>(mappedUser);
+    }
+
+    public async Task<UserForResultDto> ChangeUserRoleAsynch(long id, Role role)
+    {
+        var user = await _userRepository.SelectAll()
+            .Where (u => u.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+            throw new ZeemlinException(404, "User not found");
+        
+        user.Role = role;
+        var result = await this._userRepository.UpdateAsync(user);
+
+        return this._mapper.Map<UserForResultDto>(result);
+
     }
 
     public async Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto)
