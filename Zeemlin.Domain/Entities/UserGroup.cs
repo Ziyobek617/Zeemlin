@@ -1,4 +1,5 @@
 ﻿using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities;
 
 namespace Zeemlin.Domain.Entities;
 
