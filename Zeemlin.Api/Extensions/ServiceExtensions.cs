@@ -23,5 +23,8 @@ public static class ServiceExtensions
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IGroupRepository, GroupRepository>();
 
+        services.AddScoped<IUserGroupService, UserGroupService>();
+        services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+
     }
 }
