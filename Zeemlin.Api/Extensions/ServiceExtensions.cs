@@ -26,5 +26,8 @@ public static class ServiceExtensions
         services.AddScoped<IUserGroupService, UserGroupService>();
         services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 
+        services.AddScoped<IHomeworkService, HomeworkService>();
+        services.AddScoped<IHomeworkRepository, HomeworkRepository>();
+
     }
 }
