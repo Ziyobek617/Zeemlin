@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zeemlin.Domain", "Zeemlin.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zeemlin.Data", "Zeemlin.Data\Zeemlin.Data.csproj", "{06821311-7D92-4069-A59E-B8B8ECEA2B0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeemlin.Service", "Zeemlin.Service\Zeemlin.Service.csproj", "{A2E20FA5-5FFC-4A80-8A43-0427F4359C71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zeemlin.Service", "Zeemlin.Service\Zeemlin.Service.csproj", "{A2E20FA5-5FFC-4A80-8A43-0427F4359C71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F52CF626-D46D-4ED0-9BA6-A7A34CBCB461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -17,6 +17,9 @@ public static class ServiceExtensions
         
         services.AddScoped<IEmailService, EmailService>();
 
+        services.AddScoped<IGradeService, GradeService>();
+        services.AddScoped<IGradeRepository, GradeRepository>();
+
         services.AddScoped<ICourseService, CourseService>();
         services.AddScoped<ICourseRepository, CourseRepository>();
 
