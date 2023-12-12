@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Zeemlin.Api.Models;
 using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.User;
@@ -20,6 +21,8 @@ public class UsersController : BaseController
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] UserForCreationDto dto)
         => Ok(await this._userService.AddAsync(dto));
+
+
 
     //GetAll
     [HttpGet]

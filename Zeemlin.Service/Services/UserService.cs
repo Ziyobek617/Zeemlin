@@ -92,7 +92,7 @@ public class UserService : IUserService
         return _mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
 
-    public async Task<UserForResultDto> RetrieveByEmailAsync(string email)
+    public async Task<User> RetrieveByEmailAsync(string email)
     {
         var user = await _userRepository.SelectAll()
             .Where(u => u.Email.ToLower() == email.ToLower())
@@ -100,7 +100,7 @@ public class UserService : IUserService
         if (user is null)
             throw new ZeemlinException(404, "User Not Found");
 
-        return _mapper.Map<UserForResultDto>(user);
+        return user;
     }
 
     public async Task<UserForResultDto> RetrieveByIdAsync(long id)

@@ -23,25 +23,18 @@ public class GroupService : IGroupService
 
     public async Task<GroupForResultDto> CreateAsync(GroupForCreationDto dto)
     {
-        // Check if a group with the same name already exists in the course.
         var groups = await _groupRepository.SelectAll()
             .Where(g => g.CourseId == dto.CourseId && g.Name.ToLower() == dto.Name.ToLower())
             .FirstOrDefaultAsync();
 
         if (groups is not null)
-        {
-            // Throw an exception if the group already exists.
             throw new ZeemlinException(409, "Group with the same name already exists in the course.");
-        }
 
-        // Create a new group from the DTO.
         var mappedGroup = _mapper.Map<Group>(dto);
         mappedGroup.CreatedAt = DateTime.UtcNow;
 
-        // Insert the new group into the database.
         var createdGroup = await _groupRepository.InsertAsync(mappedGroup);
 
-        // Map the created group to a DTO and return it.
         return _mapper.Map<GroupForResultDto>(createdGroup);
     }
 

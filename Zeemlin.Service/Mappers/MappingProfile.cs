@@ -6,6 +6,8 @@ using Zeemlin.Service.DTOs.Group;
 using Zeemlin.Service.DTOs.Course;
 using Zeemlin.Service.DTOs.Homework;
 using Zeemlin.Service.DTOs.UserGroup;
+using Zeemlin.Service.DTOs.GroupRole;
+using Zeemlin.Service.DTOs.GroupPermissions;
 
 namespace Zeemlin.Service.Mappers;
 
@@ -50,5 +52,9 @@ public class MappingProfile : Profile
         CreateMap<UserGroup, UserGroupForResultDto>().ReverseMap();
         CreateMap<UserGroup, UserGroupForCreationDto>().ReverseMap();
         #endregion
+
+        CreateMap<GroupRole, GroupRoleForResultDto>().ReverseMap();
+
+        CreateMap<GroupPermission, GroupPermissionForResultDto>().ReverseMap();
     }
 }

@@ -42,7 +42,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Grade", b =>
@@ -79,7 +79,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Group", b =>
@@ -114,7 +114,51 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
+                });
+
+            modelBuilder.Entity("Zeemlin.Domain.Entities.GroupPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PermissionType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GroupPermissions", (string)null);
+                });
+
+            modelBuilder.Entity("Zeemlin.Domain.Entities.GroupRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GroupRoles", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Homework", b =>
@@ -145,7 +189,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Homework");
+                    b.ToTable("Homework", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.User", b =>
@@ -191,7 +235,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.UserGroup", b =>
@@ -220,7 +264,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("UserGroups", (string)null);
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Grade", b =>
