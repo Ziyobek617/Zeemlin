@@ -8,6 +8,7 @@ using Zeemlin.Service.DTOs.Homework;
 using Zeemlin.Service.DTOs.UserGroup;
 using Zeemlin.Service.DTOs.GroupRole;
 using Zeemlin.Service.DTOs.GroupPermissions;
+using Zeemlin.Service.DTOs.Lesson;
 
 namespace Zeemlin.Service.Mappers;
 
@@ -56,5 +57,10 @@ public class MappingProfile : Profile
         CreateMap<GroupRole, GroupRoleForResultDto>().ReverseMap();
 
         CreateMap<GroupPermission, GroupPermissionForResultDto>().ReverseMap();
+
+        CreateMap<Lesson, LessonForCreationDto>().ReverseMap();
+        CreateMap<Lesson, LessonForUpdateDto>().ReverseMap();
+        CreateMap<Lesson, LessonForResultDto>().ReverseMap();
+
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Grade;
@@ -24,7 +23,7 @@ public class GradeService : IGradeService
     public async Task<GradeForResultDto> CreateAsync(GradeForCreationDto dto)
     {
         var grade = await _gradeRepository.SelectAll()
-            .Where(u => u.UserId == dto.UserId && u.GroupId == dto.GroupId && u.HomeworkId == dto.HomeworkId)
+            .Where(u => u.UserId == dto.UserId && u.HomeworkId == dto.HomeworkId)
             .FirstOrDefaultAsync();
         if (grade is not null)
             throw new ZeemlinException(409, "Already exist");
@@ -35,13 +34,13 @@ public class GradeService : IGradeService
         var createGrade = await _gradeRepository.InsertAsync(mappedGrade);
 
         return _mapper.Map<GradeForResultDto>(createGrade);
-       
+
     }
 
     public async Task<GradeForResultDto> ModifyAsync(long id, GradeForUpdateDto dto)
     {
         var grade = await _gradeRepository.SelectAll()
-            .Where(u => u.UserId == dto.UserId && u.GroupId == dto.GroupId && u.HomeworkId == dto.HomeworkId)
+            .Where(u => u.UserId == dto.UserId && u.HomeworkId == dto.HomeworkId)
             .FirstOrDefaultAsync();
         if (grade is null)
             throw new ZeemlinException(404, "Not found");

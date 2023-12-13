@@ -5,10 +5,8 @@ namespace Zeemlin.Domain.Entities;
 public class Grade : Auditable
 {
     public long UserId { get; set; }
-    public User Users { get; set; }
-    public long GroupId { get; set; }
-    public Group Group { get; set; }
+    public User User { get; set; } // One-to-many relationship
     public long HomeworkId { get; set; }
-    public Homework Homework { get; set; }
+    public Homework Homework { get; set; } // One-to-many relationship
     public int Value { get; set; }
 }
