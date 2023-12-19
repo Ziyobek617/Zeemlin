@@ -43,6 +43,9 @@ public static class ServiceExtensions
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<IHomeworkRepository, HomeworkRepository>();
 
+        services.AddScoped<ILessonService, LessonService>();
+        services.AddScoped<ILessonRepository, LessonRepository>();
+
     }
 
    

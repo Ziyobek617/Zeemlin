@@ -54,13 +54,24 @@ public class MappingProfile : Profile
         CreateMap<UserGroup, UserGroupForCreationDto>().ReverseMap();
         #endregion
 
+        #region GroupRole
         CreateMap<GroupRole, GroupRoleForResultDto>().ReverseMap();
+        #endregion
 
+        #region GroupPermission
         CreateMap<GroupPermission, GroupPermissionForResultDto>().ReverseMap();
+        #endregion
 
+        #region Lesson
         CreateMap<Lesson, LessonForCreationDto>().ReverseMap();
         CreateMap<Lesson, LessonForUpdateDto>().ReverseMap();
         CreateMap<Lesson, LessonForResultDto>().ReverseMap();
+        #endregion
 
+        #region LessonAttendance
+        CreateMap<LessonAttendance, LessonForCreationDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonForUpdateDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonForResultDto>().ReverseMap();
+        #endregion
     }
 }
