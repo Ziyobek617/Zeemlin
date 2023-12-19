@@ -1,5 +1,5 @@
 ﻿using Zeemlin.Service.DTOs.Grade;
-using Zeemlin.Service.DTOs.Group;
+using Zeemlin.Service.DTOs.Lesson;
 
 namespace Zeemlin.Service.DTOs.Homework;
 
@@ -10,7 +10,7 @@ public class HomeworkForResultDto
     public string Description { get; set; }
     public DateTime DueTime { get; set; }
     public long LessonId { get; set; }
-    public LessonForResult Lesson { get; set; }
+    public LessonForResultDto Lesson { get; set; }
     public ICollection<GradeForResultDto> Grade {  get; set; }
 
 }

@@ -22,7 +22,7 @@ public class HomeworkService : IHomeworkService
     public async Task<HomeworkForResultDto> CreateAsync(HomeworkForCreationDto dto)
     {
         var homework = await _homeworkRepository.SelectAll()
-            .Where(h => h.GroupId == dto.GroupId)
+            .Where(h => h.LessonId == dto.LessonId)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
