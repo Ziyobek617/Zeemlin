@@ -35,7 +35,7 @@ public class AuthService : IAuthService
 
     }
 
-    private string GenerateToken(User user)
+    private string GenerateToken(Student user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenKey = Encoding.UTF8.GetBytes(_configuration["JWT:Key"]);
@@ -44,7 +44,6 @@ public class AuthService : IAuthService
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim("Id",user.Id.ToString()),
-                new Claim(ClaimTypes.Role,user.Role.ToString()),
                 new Claim(ClaimTypes.Name,user.FirstName),
                 new Claim(ClaimTypes.Email,user.Email)
             }),
