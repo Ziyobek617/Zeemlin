@@ -11,9 +11,9 @@ namespace Zeemlin.Service.Services;
 public class UserGroupService : IUserGroupService
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<UserGroup> _usergroupRepository;
+    private readonly IRepository<StudentGroup> _usergroupRepository;
 
-    public UserGroupService(IMapper mapper, IRepository<UserGroup> usergroupRepository)
+    public UserGroupService(IMapper mapper, IRepository<StudentGroup> usergroupRepository)
     {
         _mapper = mapper;
         _usergroupRepository = usergroupRepository;
@@ -29,7 +29,7 @@ public class UserGroupService : IUserGroupService
         if (ug is not null)
             throw new ZeemlinException(409, "User is already exist");
 
-        var mappedUsergroup = _mapper.Map<UserGroup>(dto);
+        var mappedUsergroup = _mapper.Map<StudentGroup>(dto);
         mappedUsergroup.CreatedAt = DateTime.UtcNow;
 
         var createdUsergroup = await _usergroupRepository.InsertAsync(mappedUsergroup);

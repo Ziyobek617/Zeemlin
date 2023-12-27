@@ -12,9 +12,9 @@ namespace Zeemlin.Service.Services;
 public class UserService : IUserService
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<Student> _userRepository;
 
-    public UserService(IMapper mapper, IRepository<User> userRepository)
+    public UserService(IMapper mapper, IRepository<Student> userRepository)
     {
         _mapper = mapper;
         _userRepository = userRepository;
@@ -30,7 +30,7 @@ public class UserService : IUserService
         if (users is not null)
             throw new ZeemlinException(409, "User is already exist.");
 
-        var mappedUser = _mapper.Map<User>(dto);
+        var mappedUser = _mapper.Map<Student>(dto);
         mappedUser.CreatedAt = DateTime.UtcNow;
 
         var createdUser = await _userRepository.InsertAsync(mappedUser);
@@ -47,7 +47,6 @@ public class UserService : IUserService
         if (user is null)
             throw new ZeemlinException(404, "User not found");
         
-        user.Role = role;
         var result = await this._userRepository.UpdateAsync(user);
 
         return this._mapper.Map<UserForResultDto>(result);
@@ -92,7 +91,7 @@ public class UserService : IUserService
         return _mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
 
-    public async Task<User> RetrieveByEmailAsync(string email)
+    public async Task<Student> RetrieveByEmailAsync(string email)
     {
         var user = await _userRepository.SelectAll()
             .Where(u => u.Email.ToLower() == email.ToLower())

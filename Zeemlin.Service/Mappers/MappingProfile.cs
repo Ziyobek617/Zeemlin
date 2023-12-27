@@ -17,11 +17,11 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         #region User
-        CreateMap<User, UserForUpdateDto>().ReverseMap();
-        CreateMap<User, UserForResultDto>().ReverseMap();
-        CreateMap<User, UserForCreationDto>().ReverseMap();
-        CreateMap<User, UserForLoginDto>().ReverseMap();
-        CreateMap<User, UserForSendCodeDto>().ReverseMap();
+        CreateMap<Student, UserForUpdateDto>().ReverseMap();
+        CreateMap<Student, UserForResultDto>().ReverseMap();
+        CreateMap<Student, UserForCreationDto>().ReverseMap();
+        CreateMap<Student, UserForLoginDto>().ReverseMap();
+        CreateMap<Student, UserForSendCodeDto>().ReverseMap();
         #endregion
 
         #region Group
@@ -49,9 +49,9 @@ public class MappingProfile : Profile
         #endregion
 
         #region UserGroup
-        CreateMap<UserGroup, UserGroupForUpdateDto>().ReverseMap();
-        CreateMap<UserGroup, UserGroupForResultDto>().ReverseMap();
-        CreateMap<UserGroup, UserGroupForCreationDto>().ReverseMap();
+        CreateMap<StudentGroup, UserGroupForUpdateDto>().ReverseMap();
+        CreateMap<StudentGroup, UserGroupForResultDto>().ReverseMap();
+        CreateMap<StudentGroup, UserGroupForCreationDto>().ReverseMap();
         #endregion
 
         #region GroupRole
