@@ -2,7 +2,7 @@
 
 namespace Zeemlin.Data.IRepositries;
 
-public interface IUserRepository : IRepository<User>
+public interface IUserRepository : IRepository<Student>
 {
-    Task<IEnumerable<User>> GetSubscribedUsersAsync(long Id);
+    Task<IEnumerable<Student>> GetSubscribedUsersAsync(long Id);
 }

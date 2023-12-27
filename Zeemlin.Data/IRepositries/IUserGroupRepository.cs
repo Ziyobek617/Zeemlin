@@ -2,7 +2,7 @@
 
 namespace Zeemlin.Data.IRepositries;
 
-public interface IUserGroupRepository : IRepository<UserGroup>
+public interface IUserGroupRepository : IRepository<StudentGroup>
 {
-    Task<IEnumerable<UserGroup>> GetSubscribedUserGroupsAsync(long Id);
+    Task<IEnumerable<StudentGroup>> GetSubscribedUserGroupsAsync(long Id);
 }

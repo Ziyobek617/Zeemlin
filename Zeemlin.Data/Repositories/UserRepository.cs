@@ -4,13 +4,13 @@ using Zeemlin.Domain.Entities;
 
 namespace Zeemlin.Data.Repositories;
 
-public class UserRepository : Repository<User>, IUserRepository
+public class UserRepository : Repository<Student>, IUserRepository
 {
     public UserRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 
-    public Task<IEnumerable<User>> GetSubscribedUsersAsync(long Id)
+    public Task<IEnumerable<Student>> GetSubscribedUsersAsync(long Id)
     {
         throw new NotImplementedException();
     }
