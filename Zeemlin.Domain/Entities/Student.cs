@@ -16,15 +16,23 @@ public class Student : Registrate
     [Required]
     [MaxLength(50)]
     public string FatherName { get; set; }
+
+    // Address
     [Required]
     [MaxLength(50)]
-    public string DistrictName { get; set; }
+    public string DistrictName { get; set; } // Tuman nomi
     [Required]
     [MaxLength(50)]
-    public string GeneralAddressMFY { get; set; }
+    public string GeneralAddressMFY { get; set; } // MFY
     [Required]
     [MaxLength(50)]
-    public string StreetName { get; set; }
+    public string StreetName { get; set; } // Ko'cha nomi
+
+    // Properties for apartment building details:
+    public short? BuildingNumber { get; set; } // Bino raqami (optional)
+    public short? EntranceNumber { get; set; } // Kirish raqami (optional)
+    public short? Floor { get; set; } // Qavat raqami (optional)
+
     [Required]
-    public short HouseNumber { get; set; }
+    public short HouseNumber { get; set; } // Uy raqami (for non-apartment addresses)
 }
