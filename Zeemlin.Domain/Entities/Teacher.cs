@@ -12,7 +12,6 @@ public class Teacher : Registrate
     public string DistrictName { get; set; }
     [Required]
     public long SchoolNumber { get; set; }
-    [Required]
-    public long GroupId { get; set; }
+    public long? GroupId { get; set; }
     public Group Group { get; set; }
 }
