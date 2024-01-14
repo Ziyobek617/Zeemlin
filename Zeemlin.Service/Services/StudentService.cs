@@ -20,6 +20,32 @@ public class StudentService : IStudentService
         _mapper = mapper;
         _studentRepository = studentRepository;
     }
+    private string GenerateUniqueStudentId()
+    {
+        // You can use a library like System.Guid, or a custom algorithm
+        return Guid.NewGuid().ToString("D6"); // 6-digit hexadecimal string
+    }
+
+
+    public async Task<StudentForResultDto> VerifyParentAndRetrieveStudentAsync(string studentUniqueId, string verificationCode)
+    {
+        var student = await _studentRepository.SelectAll()
+            .Where(s => s.StudentUniqueId == studentUniqueId)
+            .FirstOrDefaultAsync();
+
+        if (student == null)
+        {
+            throw new ZeemlinException(404, "Student not found");
+        }
+
+        // Implement logic to check verification code (e.g., compare with stored code, use external service)
+        //if (!VerifyCode(verificationCode, student.Email, student.PhoneNumber))
+        //{
+        //    throw new ZeemlinException(401, "Invalid verification code");
+        //}
+
+        return _mapper.Map<StudentForResultDto>(student);
+    }
 
     public async Task<StudentForResultDto> AddAsync(StudentForCreationDto dto)
     {
@@ -33,6 +59,7 @@ public class StudentService : IStudentService
             throw new ZeemlinException(409, "User is already exist.");
 
         var mappedUser = _mapper.Map<Student>(dto);
+        mappedUser.StudentUniqueId = GenerateUniqueStudentId();
         mappedUser.CreatedAt = DateTime.UtcNow;
         var createdUser = await _studentRepository.InsertAsync(mappedUser);
 
@@ -87,9 +114,17 @@ public class StudentService : IStudentService
         return user;
     }
 
-    public Task<StudentForResultDto> RetrieveByIdAsync(long id)
+    public async Task<StudentForResultDto> RetrieveByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var student = await _studentRepository.SelectAll()
+            .Where(s => s.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (student is null)
+            throw new ZeemlinException(404, "Student not found");
+        
+        return _mapper.Map<StudentForResultDto>(student);
     }
 
     public async Task<Student> RetrieveByPhoneNumberAsync(string phoneNumber)

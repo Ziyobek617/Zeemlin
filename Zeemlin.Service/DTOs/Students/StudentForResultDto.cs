@@ -3,6 +3,7 @@
 public class StudentForResultDto
 {
     public long Id { get; set; }
+    public string StudentUniqueId { get; set; }
     public long SchoolNumber { get; set; }
     public long GroupId { get; set; }
     public string FatherName { get; set; }

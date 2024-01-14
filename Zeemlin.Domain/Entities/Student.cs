@@ -45,4 +45,6 @@ public class Student : Auditable
 
     [Required]
     public short HouseNumber { get; set; } // Uy raqami (for non-apartment addresses)
+    public string StudentUniqueId { get; set; }
+
 }
