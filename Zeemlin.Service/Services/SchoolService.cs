@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Schools;
@@ -11,29 +13,42 @@ public class SchoolService : ISchoolService
 {
     private readonly ISchoolRepository _schoolRepository;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _dbContext;
 
-    public SchoolService(ISchoolRepository schoolRepository, IMapper mapper)
+    public SchoolService(ISchoolRepository schoolRepository, IMapper mapper, AppDbContext dbContext)
     {
         _schoolRepository = schoolRepository;
         _mapper = mapper;
+        _dbContext = dbContext;
     }
+
 
     public async Task<SchoolForResultDto> AddAsync(SchoolForCreationDto dto)
     {
-        // Comprehensive validation:
+        // Validation:
         if (string.IsNullOrEmpty(dto.Name))
         {
             throw new ZeemlinException(400, "School name is required");
         }
 
-        if (dto.SchoolNumber <= 0)
+        if (dto.SchoolNumber < 0)
         {
             throw new ZeemlinException(400, "Invalid school number");
         }
 
-        // ... Add more validation rules as needed, e.g., for description length, phone number format, email validity ...
+        // Check for duplicate email:
+        var existingSchoolWithEmail = await _schoolRepository
+            .SelectAll()
+            .Where(e => e.Email.ToLower() == dto.Email.ToLower())
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        // Check for duplicate school number (optional, based on your requirements):
+        if (existingSchoolWithEmail != null)
+        {
+            throw new ZeemlinException(409, "Email is already in use.");
+        }
+
+        // Check for duplicate school number (optional):
         if (await _schoolRepository.ExistsAsync(dto.SchoolNumber))
         {
             throw new ZeemlinException(400, "School with the same number already exists");
@@ -42,10 +57,8 @@ public class SchoolService : ISchoolService
         // Map DTO to entity:
         var school = _mapper.Map<School>(dto);
 
-        // Set default values or apply additional logic if needed:
+        // Set default values:
         school.CreatedAt = DateTime.UtcNow;
-        school.UpdatedAt = DateTime.UtcNow; // Consider tracking updates as well
-                                            // ... other defaults or logic ...
 
         // Insert the school:
         await _schoolRepository.InsertAsync(school);
@@ -55,27 +68,31 @@ public class SchoolService : ISchoolService
     }
 
 
+
     public async Task<SchoolForResultDto> ModifyAsync(long id, SchoolForUpdateDto dto)
     {
-        var school = await _schoolRepository.Re(id);
-        if (school == null)
-        {
-            throw new ZeemlinException(404, "School not found");
-        }
+        var school = await _schoolRepository.SelectAll()
+            .Where(s => s.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        _mapper.Map(dto, school);
-        // Apply any specific update logic or validation
-        await _schoolRepository.UpdateAsync(school);
-        return _mapper.Map<SchoolForResultDto>(school);
+        if (school is null)
+            throw new ZeemlinException(404, "School not found");
+
+        school.UpdatedAt = DateTime.UtcNow;
+        var s = _mapper.Map(dto, school);
+        await _schoolRepository.UpdateAsync(s);
+        return _mapper.Map<SchoolForResultDto>(s);
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        var school = await _schoolRepository.RetrieveByIdAsync(id);
-        if (school == null)
-        {
+        var school = await _schoolRepository.SelectAll()
+            .Where(s => s.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        if (school is null)
             throw new ZeemlinException(404, "School not found");
-        }
 
         await _schoolRepository.DeleteAsync(id);
         return true;
@@ -83,17 +100,18 @@ public class SchoolService : ISchoolService
 
     public async Task<IEnumerable<SchoolForResultDto>> RetrieveAllAsync()
     {
-        var schools = await _schoolRepository.RetrieveAllAsync();
+        var schools = await _schoolRepository.SelectAll().ToListAsync();
         return _mapper.Map<IEnumerable<SchoolForResultDto>>(schools);
     }
 
     public async Task<SchoolForResultDto> RetrieveByIdAsync(long id)
     {
-        var school = await _schoolRepository.RetrieveByIdAsync(id);
-        if (school == null)
-        {
+        var school = await _schoolRepository.SelectAll()
+            .Where(s => s.Id == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        if (school is null)
             throw new ZeemlinException(404, "School not found");
-        }
 
         return _mapper.Map<SchoolForResultDto>(school);
     }

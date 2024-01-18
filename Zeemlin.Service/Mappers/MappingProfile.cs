@@ -16,7 +16,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        #region User
+        #region Student
         CreateMap<Student, UserForUpdateDto>().ReverseMap();
         CreateMap<Student, UserForResultDto>().ReverseMap();
         CreateMap<Student, UserForCreationDto>().ReverseMap();
@@ -73,5 +73,7 @@ public class MappingProfile : Profile
         CreateMap<LessonAttendance, LessonForUpdateDto>().ReverseMap();
         CreateMap<LessonAttendance, LessonForResultDto>().ReverseMap();
         #endregion
+
+        //CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
     }
 }

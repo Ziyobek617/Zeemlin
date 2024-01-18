@@ -9,6 +9,7 @@ public interface ISchoolService
     Task<bool> RemoveAsync(long id);
     Task<IEnumerable<SchoolForResultDto>> RetrieveAllAsync();
     Task<SchoolForResultDto> RetrieveByIdAsync(long id);
+    
     // Consider adding other methods as needed (e.g., search, filtering)
     // Later search and Filter
 }

@@ -87,7 +87,6 @@ public class UserService : IUserService
     {
         var users = await _userRepository.SelectAll().ToListAsync();
 
-
         return _mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
 

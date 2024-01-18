@@ -69,8 +69,6 @@ public class UserGroupService : IUserGroupService
     public async Task<IEnumerable<UserGroupForResultDto>> RetrieveAllAsync()
     {
         var usergroup = await _usergroupRepository.SelectAll()
-            .Include(ug => ug.Users)
-            .Include(ug => ug.Group)
             .ToListAsync();
 
 

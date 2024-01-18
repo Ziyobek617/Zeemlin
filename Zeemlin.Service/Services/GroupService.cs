@@ -24,15 +24,14 @@ public class GroupService : IGroupService
     public async Task<GroupForResultDto> CreateAsync(GroupForCreationDto dto)
     {
         var groups = await _groupRepository.SelectAll()
-            .Where(g => g.CourseId == dto.CourseId && g.Name.ToLower() == dto.Name.ToLower())
+            .Where(g=> g.Name.ToLower() == dto.Name.ToLower())
             .FirstOrDefaultAsync();
 
         if (groups is not null)
-            throw new ZeemlinException(409, "Group with the same name already exists in the course.");
+            throw new ZeemlinException(409, "Group name already exists");
 
         var mappedGroup = _mapper.Map<Group>(dto);
         mappedGroup.CreatedAt = DateTime.UtcNow;
-
         var createdGroup = await _groupRepository.InsertAsync(mappedGroup);
 
         return _mapper.Map<GroupForResultDto>(createdGroup);
@@ -71,7 +70,7 @@ public class GroupService : IGroupService
 
     public async Task<IEnumerable<GroupForResultDto>> RetrieveAllAsync()
     {
-        var group = await _groupRepository.SelectAll().Include(g=> g.UserGroups).ToListAsync();
+        var group = await _groupRepository.SelectAll().ToListAsync();
 
         return _mapper.Map<IEnumerable<GroupForResultDto>>(group);
     }

@@ -120,7 +120,7 @@ public class StudentService : IStudentService
             .Where(s => s.Id == id)
             .AsNoTracking()
             .FirstOrDefaultAsync();
-
+    
         if (student is null)
             throw new ZeemlinException(404, "Student not found");
         
