@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Zeemlin.Service.DTOs.Students;
-using Zeemlin.Service.DTOs.User;
 using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Api.Controllers.Users;
 
+[Authorize]
 public class StudentsController : BaseController
 {
     private readonly IStudentService _studentService;
@@ -14,6 +15,7 @@ public class StudentsController : BaseController
         _studentService = studentService;
     }
 
+    [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] StudentForCreationDto dto)
         => Ok(await this._studentService.AddAsync(dto));
 
@@ -25,7 +27,7 @@ public class StudentsController : BaseController
     public async Task<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
         => Ok(await this._studentService.RetrieveByIdAsync(id));
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(await this._studentService.RemoveAsync(id));
 

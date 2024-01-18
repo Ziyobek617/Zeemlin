@@ -37,7 +37,8 @@ public class UsersController : BaseController
 
     //Delete
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
+    public async Task<IActionResult> DeleteAsync([
+        FromRoute(Name = "id")] long id)
         => Ok(await this._userService.RemoveAsync(id));
 
     //Update
