@@ -31,6 +31,9 @@ public static class ServiceExtensions
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IGroupRepository, GroupRepository>();
 
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
+
         services.AddScoped<IGroupRoleService, GroupRoleService>();
         services.AddScoped<IGroupRoleRepository, GroupRoleRepository>();
 
@@ -59,27 +62,30 @@ public static class ServiceExtensions
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Name = "Authorization",
+                BearerFormat = "JWT",
+                Name = "JWT Authorization",
                 Description =
                     "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                 In = ParameterLocation.Header,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
                 Type = SecuritySchemeType.ApiKey
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
             {
-                new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference
+                    new OpenApiSecurityScheme
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                new string[]{ }
-            }
-        });
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { "Bearer" } // Add this
+                }
+            });
+            
         });
     }
 
