@@ -6,7 +6,7 @@ using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Api.Controllers.Users;
 
-[Authorize]
+//[Authorize]
 public class TeachersController : BaseController
 {
     private readonly ITeacherService _teacherService;
