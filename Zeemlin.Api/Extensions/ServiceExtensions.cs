@@ -28,26 +28,30 @@ public static class ServiceExtensions
         services.AddScoped<ICourseService, CourseService>();
         services.AddScoped<ICourseRepository, CourseRepository>();
 
+        services.AddScoped<ILessonService, LessonService>();
+        services.AddScoped<ILessonRepository, LessonRepository>();
+
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IGroupRepository, GroupRepository>();
 
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<IStudentRepository, StudentRepository>();
-
-        services.AddScoped<IGroupRoleService, GroupRoleService>();
-        services.AddScoped<IGroupRoleRepository, GroupRoleRepository>();
-
-        services.AddScoped<IGroupPermissionService, GroupPermissionService>();
-        services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
-
-        services.AddScoped<IUserGroupService, UserGroupService>();
-        services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+        
+        services.AddScoped<ITeacherService, TeacherService>();
+        services.AddScoped<ITeacherRepository, TeacherRepository>();
 
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<IHomeworkRepository, HomeworkRepository>();
 
-        services.AddScoped<ILessonService, LessonService>();
-        services.AddScoped<ILessonRepository, LessonRepository>();
+        services.AddScoped<IGroupRoleService, GroupRoleService>();
+        services.AddScoped<IGroupRoleRepository, GroupRoleRepository>();
+        
+        services.AddScoped<IUserGroupService, UserGroupService>();
+        services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+        
+        services.AddScoped<IGroupPermissionService, GroupPermissionService>();
+        services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
+
 
     }
 
