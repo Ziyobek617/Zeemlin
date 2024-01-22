@@ -11,8 +11,4 @@ public class SchoolRepository : Repository<School>, ISchoolRepository
     {
     }
 
-    public async Task<bool> ExistsAsync(long schoolNumber)
-    {
-        return await _dbContext.School.AnyAsync(s => s.SchoolNumber == schoolNumber);
-    }
 }
