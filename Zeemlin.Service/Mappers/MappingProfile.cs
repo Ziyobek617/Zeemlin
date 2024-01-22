@@ -9,6 +9,7 @@ using Zeemlin.Service.DTOs.UserGroup;
 using Zeemlin.Service.DTOs.GroupRole;
 using Zeemlin.Service.DTOs.GroupPermissions;
 using Zeemlin.Service.DTOs.Lesson;
+using Zeemlin.Service.DTOs.Teachers;
 
 namespace Zeemlin.Service.Mappers;
 
@@ -22,6 +23,12 @@ public class MappingProfile : Profile
         CreateMap<Student, UserForCreationDto>().ReverseMap();
         CreateMap<Student, UserForLoginDto>().ReverseMap();
         CreateMap<Student, UserForSendCodeDto>().ReverseMap();
+        #endregion
+
+        #region
+        CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
+        CreateMap<Teacher, TeacherForUpdateDto>().ReverseMap();
+        CreateMap<Teacher, TeacherForResultDto>().ReverseMap();
         #endregion
 
         #region Group
