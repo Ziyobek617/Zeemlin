@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Zeemlin.Service.DTOs.Students;
+using Zeemlin.Service.DTOs.Teachers;
 using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Api.Controllers.Users;
@@ -30,6 +31,10 @@ public class StudentsController : BaseController
     [HttpDelete("{id:long}")]
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(await this._studentService.RemoveAsync(id));
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] StudentForUpdateDto dto)
+        => Ok(await this._studentService.ModifyAsync(id, dto));
 
     [HttpGet("email")]
     public async Task<IActionResult> GetByEmailAsync(string email)
