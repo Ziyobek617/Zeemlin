@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Schools;
@@ -13,57 +12,47 @@ public class SchoolService : ISchoolService
 {
     private readonly ISchoolRepository _schoolRepository;
     private readonly IMapper _mapper;
-    private readonly AppDbContext _dbContext;
 
-    public SchoolService(ISchoolRepository schoolRepository, IMapper mapper, AppDbContext dbContext)
+    public SchoolService(ISchoolRepository schoolRepository, IMapper mapper)
     {
         _schoolRepository = schoolRepository;
         _mapper = mapper;
-        _dbContext = dbContext;
     }
 
 
     public async Task<SchoolForResultDto> AddAsync(SchoolForCreationDto dto)
     {
-        // Validation:
-        if (string.IsNullOrEmpty(dto.Name))
-        {
-            throw new ZeemlinException(400, "School name is required");
-        }
-
         if (dto.SchoolNumber < 0)
         {
             throw new ZeemlinException(400, "Invalid school number");
         }
 
-        // Check for duplicate email:
         var existingSchoolWithEmail = await _schoolRepository
             .SelectAll()
-            .Where(e => e.Email.ToLower() == dto.Email.ToLower())
+            .Where(e => e.Email.ToLower() == dto.Email.ToLower()
+            || e.PhoneNumber == dto.PhoneNumber)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (existingSchoolWithEmail != null)
-        {
+        if (existingSchoolWithEmail is not null)
             throw new ZeemlinException(409, "Email is already in use.");
-        }
 
-        // Check for duplicate school number (optional):
-        if (await _schoolRepository.ExistsAsync(dto.SchoolNumber))
-        {
-            throw new ZeemlinException(400, "School with the same number already exists");
-        }
+        var existingSchoolWithSameNumberAndStreet = await _schoolRepository
+            .SelectAll()
+            .Where(s => s.SchoolNumber == dto.SchoolNumber
+            && s.StreetName.Equals(dto.StreetName,
+            StringComparison.OrdinalIgnoreCase))
+            .AsNoTracking()
+            .AnyAsync();
 
-        // Map DTO to entity:
+        if (existingSchoolWithSameNumberAndStreet)
+            throw new ZeemlinException(409,
+                "A school with the same number already exists on that street.");
+
         var school = _mapper.Map<School>(dto);
-
-        // Set default values:
         school.CreatedAt = DateTime.UtcNow;
-
-        // Insert the school:
         await _schoolRepository.InsertAsync(school);
 
-        // Map back to result DTO:
         return _mapper.Map<SchoolForResultDto>(school);
     }
 
@@ -78,6 +67,16 @@ public class SchoolService : ISchoolService
 
         if (school is null)
             throw new ZeemlinException(404, "School not found");
+
+        var existingSchoolWithSameNumberAndStreet = await _schoolRepository
+            .SelectAll()
+            .Where(s => s.SchoolNumber == dto.SchoolNumber
+            && s.StreetName.Equals(dto.StreetName, StringComparison.OrdinalIgnoreCase))
+            .AsNoTracking()
+            .AnyAsync();
+
+        if (existingSchoolWithSameNumberAndStreet)
+            throw new ZeemlinException(409, "A school with the same number already exists on that street.");
 
         school.UpdatedAt = DateTime.UtcNow;
         var s = _mapper.Map(dto, school);
@@ -116,4 +115,3 @@ public class SchoolService : ISchoolService
         return _mapper.Map<SchoolForResultDto>(school);
     }
 }
-

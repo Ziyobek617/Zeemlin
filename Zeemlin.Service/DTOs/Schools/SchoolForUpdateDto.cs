@@ -7,7 +7,8 @@ public class SchoolForUpdateDto
 {
     // Include properties you want to allow updating
     // (You can choose specific properties or all, depending on your needs)
-
+    [Required]
+    public long SchoolNumber { get; set; }
     [MaxLength(255)]
     public string Name { get; set; }
 
