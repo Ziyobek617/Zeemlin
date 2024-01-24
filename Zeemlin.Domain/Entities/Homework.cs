@@ -9,5 +9,7 @@ public class Homework : Auditable
     public DateTime DueTime { get; set; }
     public long LessonId { get; set; } // Added
     public Lesson Lesson { get; set; } // Added
+    public long ScienceId { get; set; }
+    public Science Science { get; set; }
     public ICollection<Grade> Grades { get; set; }
 }
