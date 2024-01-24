@@ -48,7 +48,6 @@ public class GroupService : IGroupService
 
         group.UpdatedAt = DateTime.UtcNow;
         var groups = _mapper.Map(dto,group);
-
         await _groupRepository.UpdateAsync(groups);
         
         return _mapper.Map<GroupForResultDto>(groups);
