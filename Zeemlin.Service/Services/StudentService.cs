@@ -75,8 +75,8 @@ public class StudentService : IStudentService
         if (user is null)
             throw new ZeemlinException(404, "User not found");
 
-        user.UpdatedAt = DateTime.UtcNow;
         var person = _mapper.Map(dto, user);
+        person.UpdatedAt = DateTime.UtcNow;
         await _studentRepository.UpdateAsync(person);
 
         return _mapper.Map<StudentForResultDto>(person);

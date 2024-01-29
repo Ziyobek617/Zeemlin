@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using Zeemlin.Domain.Entities;
-using Zeemlin.Service.DTOs.User;
-using Zeemlin.Service.DTOs.Grade;
-using Zeemlin.Service.DTOs.Group;
-using Zeemlin.Service.DTOs.Course;
-using Zeemlin.Service.DTOs.Homework;
-using Zeemlin.Service.DTOs.UserGroup;
-using Zeemlin.Service.DTOs.GroupRole;
-using Zeemlin.Service.DTOs.GroupPermissions;
-using Zeemlin.Service.DTOs.Lesson;
-using Zeemlin.Service.DTOs.Teachers;
+using Zeemlin.Service.DTOs.Grade; //3
+using Zeemlin.Service.DTOs.Group; //6
+using Zeemlin.Service.DTOs.Homework; //7
+using Zeemlin.Service.DTOs.GroupRole; //5
+using Zeemlin.Service.DTOs.GroupPermissions; //4
+using Zeemlin.Service.DTOs.Lesson; //7
+using Zeemlin.Service.DTOs.Teachers; //2
+using Zeemlin.Service.DTOs.StudentGroups;
+using Zeemlin.Service.DTOs.Students; //1
+using Zeemlin.Service.DTOs.Schools; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -18,47 +18,39 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         #region Student
-        CreateMap<Student, UserForUpdateDto>().ReverseMap();
-        CreateMap<Student, UserForResultDto>().ReverseMap();
-        CreateMap<Student, UserForCreationDto>().ReverseMap();
-        CreateMap<Student, UserForLoginDto>().ReverseMap();
-        CreateMap<Student, UserForSendCodeDto>().ReverseMap();
+        CreateMap<Student, StudentForCreationDto>().ReverseMap();
+        CreateMap<Student, StudentForUpdateDto>().ReverseMap();
+        CreateMap<Student, StudentForResultDto>().ReverseMap();
         #endregion
 
-        #region
+        #region Teacher
         CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
         CreateMap<Teacher, TeacherForUpdateDto>().ReverseMap();
         CreateMap<Teacher, TeacherForResultDto>().ReverseMap();
         #endregion
 
         #region Group
+        CreateMap<Group, GroupForCreationDto>().ReverseMap();
         CreateMap<Group, GroupForUpdateDto>().ReverseMap();
         CreateMap<Group, GroupForResultDto>().ReverseMap();
-        CreateMap<Group, GroupForCreationDto>().ReverseMap();
-        #endregion
-
-        #region Course
-        CreateMap<Course, CourseForUpdateDto>().ReverseMap();
-        CreateMap<Course, CourseForResultDto>().ReverseMap();
-        CreateMap<Course, CourseForCreationDto>().ReverseMap();
         #endregion
 
         #region Homework
+        CreateMap<Homework, HomeworkForCreationDto>().ReverseMap();
         CreateMap<Homework, HomeworkForUpdateDto>().ReverseMap();
         CreateMap<Homework, HomeworkForResultDto>().ReverseMap();
-        CreateMap<Homework, HomeworkForCreationDto>().ReverseMap();
         #endregion
 
         #region Grade
+        CreateMap<Grade, GradeForCreationDto>().ReverseMap();
         CreateMap<Grade, GradeForUpdateDto>().ReverseMap();
         CreateMap<Grade, GradeForResultDto>().ReverseMap();
-        CreateMap<Grade, GradeForCreationDto>().ReverseMap();
         #endregion
 
         #region UserGroup
-        CreateMap<StudentGroup, UserGroupForUpdateDto>().ReverseMap();
-        CreateMap<StudentGroup, UserGroupForResultDto>().ReverseMap();
-        CreateMap<StudentGroup, UserGroupForCreationDto>().ReverseMap();
+        CreateMap<StudentGroup, StudentGroupForCreationDto>().ReverseMap();
+        CreateMap<StudentGroup, StudentGroupForUpdateDto>().ReverseMap();
+        CreateMap<StudentGroup, StudentGroupForResultDto>().ReverseMap();
         #endregion
 
         #region GroupRole
@@ -79,6 +71,12 @@ public class MappingProfile : Profile
         CreateMap<LessonAttendance, LessonForCreationDto>().ReverseMap();
         CreateMap<LessonAttendance, LessonForUpdateDto>().ReverseMap();
         CreateMap<LessonAttendance, LessonForResultDto>().ReverseMap();
+        #endregion
+
+        #region School
+        CreateMap<School, SchoolForCreationDto>().ReverseMap();
+        CreateMap<School, SchoolForUpdateDto>().ReverseMap();
+        CreateMap<School, SchoolForResultDto>().ReverseMap();
         #endregion
 
         //CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();

@@ -24,5 +24,4 @@ public class AppDbContext : DbContext
     public DbSet<GroupRole> GroupRoles { get; set; }
     public DbSet<GroupPermission> GroupPermissions { get; set; }
 
-    
 }

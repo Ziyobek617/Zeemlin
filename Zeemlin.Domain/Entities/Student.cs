@@ -50,4 +50,7 @@ public class Student : Auditable
     
     public string StudentUniqueId { get; set; }
 
+
+    public ICollection<StudentGroup> StudentGroups { get; set; }
+
 }

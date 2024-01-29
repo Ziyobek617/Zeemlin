@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Zeemlin.Domain.Commons;
 
 namespace Zeemlin.Domain.Entities;
@@ -9,7 +10,10 @@ public class Group : Auditable
     public string Name { get; set; }
     public string Description { get; set; }
     [Required]
-    public long TeacherId { get; set; }
+    public long HeadTeacherId { get; set; }
+    [JsonIgnore]
     public Teacher Teacher { get; set; }
+    public ICollection<Teacher> Teachers { get; set; }
+    public ICollection<Student> Students { get; set; }
     public ICollection<StudentGroup> StudentGroups { get; set; }
 }

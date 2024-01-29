@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Zeemlin.Domain.Commons;
 using Zeemlin.Domain.Enums;
 
@@ -24,5 +25,6 @@ public class Teacher : Auditable
     public long SchoolNumber { get; set; }
     public ScienceType ScienceType { get; set; }
     public long? GroupId { get; set; }
-    public Group Group { get; set; }
+    [JsonIgnore]
+    public ICollection<Group> Groups { get; set; }
 }

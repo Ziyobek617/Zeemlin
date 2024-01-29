@@ -25,9 +25,6 @@ public static class ServiceExtensions
         services.AddScoped<IGradeService, GradeService>();
         services.AddScoped<IGradeRepository, GradeRepository>();
 
-        services.AddScoped<ICourseService, CourseService>();
-        services.AddScoped<ICourseRepository, CourseRepository>();
-
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ILessonRepository, LessonRepository>();
 
@@ -46,12 +43,14 @@ public static class ServiceExtensions
         services.AddScoped<IGroupRoleService, GroupRoleService>();
         services.AddScoped<IGroupRoleRepository, GroupRoleRepository>();
         
-        services.AddScoped<IUserGroupService, UserGroupService>();
-        services.AddScoped<IUserGroupRepository, UserGroupRepository>();
-        
         services.AddScoped<IGroupPermissionService, GroupPermissionService>();
         services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
 
+        services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<ISchoolService, SchoolService>();
+
+        services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
+        services.AddScoped<IStudentGroupService, StudentGroupService>();
 
     }
 
