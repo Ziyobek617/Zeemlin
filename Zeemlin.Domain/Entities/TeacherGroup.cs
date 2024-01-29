@@ -1,6 +1,8 @@
-﻿namespace Zeemlin.Domain.Entities;
+﻿using Zeemlin.Domain.Commons;
 
-public class TeacherGroup
+namespace Zeemlin.Domain.Entities;
+
+public class TeacherGroup : Auditable
 {
     public long TeacherId { get; set; }
     public Teacher Teacher { get; set; }
