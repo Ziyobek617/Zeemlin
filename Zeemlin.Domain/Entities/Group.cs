@@ -11,9 +11,8 @@ public class Group : Auditable
     public string Description { get; set; }
     [Required]
     public long HeadTeacherId { get; set; }
-    [JsonIgnore]
-    public Teacher Teacher { get; set; }
-    public ICollection<Teacher> Teachers { get; set; }
-    public ICollection<Student> Students { get; set; }
+
+
     public ICollection<StudentGroup> StudentGroups { get; set; }
+    public ICollection<TeacherGroup> TeacherGroups { get; set; }
 }

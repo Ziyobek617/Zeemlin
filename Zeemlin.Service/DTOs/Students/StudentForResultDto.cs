@@ -1,4 +1,6 @@
-﻿namespace Zeemlin.Service.DTOs.Students;
+﻿using Zeemlin.Service.DTOs.StudentGroups;
+
+namespace Zeemlin.Service.DTOs.Students;
 
 public class StudentForResultDto
 {
@@ -16,4 +18,6 @@ public class StudentForResultDto
     public short HouseNumber { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
+
+    public StudentGroupForResultDto Group { get; set; }
 }
