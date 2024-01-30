@@ -1,5 +1,4 @@
 ﻿using Zeemlin.Service.DTOs.Teachers;
-using Zeemlin.Service.DTOs.UserGroup;
 
 namespace Zeemlin.Service.Interfaces;
 

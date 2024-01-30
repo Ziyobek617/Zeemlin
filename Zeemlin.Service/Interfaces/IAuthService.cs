@@ -1,8 +1,8 @@
-﻿using Zeemlin.Service.DTOs.User;
+﻿//using Zeemlin.Service.DTOs.User;
 
-namespace Zeemlin.Service.Interfaces;
+//namespace Zeemlin.Service.Interfaces;
 
-public interface IAuthService
-{
-    Task<LoginForResult> AuthenticateAsync(LoginDto login);
-}
+//public interface IAuthService
+//{
+//    Task<LoginForResult> AuthenticateAsync(LoginDto login);
+//}

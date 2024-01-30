@@ -1,5 +1,4 @@
 ﻿using Zeemlin.Service.DTOs.LessonAttendances;
-using Zeemlin.Service.DTOs.User;
 
 namespace Zeemlin.Service.Interfaces;
 

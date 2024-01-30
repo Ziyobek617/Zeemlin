@@ -14,11 +14,9 @@ public static class ServiceExtensions
 {
     public static void AddZeemlinService(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-        services.AddScoped<IAuthService, AuthService>();
+        //services.AddScoped<IAuthService, AuthService>();
 
         services.AddScoped<IEmailService, EmailService>();
 

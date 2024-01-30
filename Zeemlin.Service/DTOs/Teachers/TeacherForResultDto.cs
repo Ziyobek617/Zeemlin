@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zeemlin.Service.DTOs.Group;
+using Zeemlin.Service.DTOs.TeacherGroups;
 
 namespace Zeemlin.Service.DTOs.Teachers
 {
@@ -37,5 +38,7 @@ namespace Zeemlin.Service.DTOs.Teachers
         // Consider adding additional properties like created/updated dates
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public TeacherGroupForResultDto GroupForResult { get; set; }
+        //public ScienceTeacherForResultDto ScienceTeacher { get; set; }
     }
 }

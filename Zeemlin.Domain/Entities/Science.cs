@@ -8,14 +8,9 @@ namespace Zeemlin.Domain.Entities;
 public class Science : Auditable
 {
     [Required]
-    public string Name { get; set; }
-
+    public ScienceType ScienceType { get; set; }
     public string Description { get; set; }
 
-    [Required]
-    public ScienceType ScienceType { get; set; }
+    public ICollection<ScienceTeacher> scienceTeachers { get; set; }
 
-    public long? TeacherId { get; set; }
-    public Teacher Teacher { get; set; }
-    
 }

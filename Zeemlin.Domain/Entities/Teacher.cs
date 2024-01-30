@@ -26,4 +26,5 @@ public class Teacher : Auditable
     public ScienceType ScienceType { get; set; }
     public long? GroupId { get; set; }
     public ICollection<TeacherGroup> TeacherGroups { get; set; }
+    public ICollection<ScienceTeacher> scienceTeachers { get; set; }
 }

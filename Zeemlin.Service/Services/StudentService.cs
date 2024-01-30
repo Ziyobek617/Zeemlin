@@ -4,7 +4,6 @@ using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Students;
-using Zeemlin.Service.DTOs.User;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
 

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Zeemlin.Service.DTOs.Course;
 using Zeemlin.Service.DTOs.Group;
-using Zeemlin.Service.DTOs.User;
 using Zeemlin.Service.Interfaces;
 
 namespace Zeemlin.Api.Controllers;

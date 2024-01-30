@@ -1,6 +1,5 @@
 ﻿using Zeemlin.Service.DTOs.StudentGroups;
 using Zeemlin.Service.DTOs.TeacherGroups;
-using Zeemlin.Service.DTOs.UserGroup;
 
 namespace Zeemlin.Service.DTOs.Group;
 
