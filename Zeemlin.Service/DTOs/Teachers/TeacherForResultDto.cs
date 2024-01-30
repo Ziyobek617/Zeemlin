@@ -38,7 +38,7 @@ namespace Zeemlin.Service.DTOs.Teachers
         // Consider adding additional properties like created/updated dates
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public TeacherGroupForResultDto GroupForResult { get; set; }
+        public TeacherGroupForResultDto TeacherGroupForResult { get; set; }
         //public ScienceTeacherForResultDto ScienceTeacher { get; set; }
     }
 }
