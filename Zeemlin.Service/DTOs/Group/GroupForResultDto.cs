@@ -8,6 +8,6 @@ public class GroupForResultDto
     public long Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public StudentGroupForResultDto Users { get; set; }
+    public StudentGroupForResultDto Student { get; set; }
     public TeacherGroupForResultDto TeacherGroup { get; set; }
 }
