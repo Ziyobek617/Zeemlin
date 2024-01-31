@@ -50,7 +50,11 @@ public static class ServiceExtensions
         services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
         services.AddScoped<IStudentGroupService, StudentGroupService>();
 
-        
+        services.AddScoped<IScienceRepository, ScienceRepository>();
+        services.AddScoped<IScienceService, ScienceService>();
+
+        services.AddScoped<ITeacherGroupRepository, TeacherGroupRepository>();
+        services.AddScoped<ITeacherGroupService, TeacherGroupService>();
 
         services.AddScoped<IScienceTeacherRepository, ScienceTeacherRepository>();
         services.AddScoped<IScienceTeacherService, ScienceTeacherService>();

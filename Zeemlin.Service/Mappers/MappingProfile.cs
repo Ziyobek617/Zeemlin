@@ -9,7 +9,10 @@ using Zeemlin.Service.DTOs.Lesson; //7
 using Zeemlin.Service.DTOs.Teachers; //2
 using Zeemlin.Service.DTOs.StudentGroups;
 using Zeemlin.Service.DTOs.Students; //1
-using Zeemlin.Service.DTOs.Schools; //8
+using Zeemlin.Service.DTOs.Schools;
+using Zeemlin.Service.DTOs.TeacherGroups;
+using Zeemlin.Service.DTOs.Sciences;
+using Zeemlin.Service.DTOs.ScienceTeachers; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -47,7 +50,7 @@ public class MappingProfile : Profile
         CreateMap<Grade, GradeForResultDto>().ReverseMap();
         #endregion
 
-        #region UserGroup
+        #region StudentGroup
         CreateMap<StudentGroup, StudentGroupForCreationDto>().ReverseMap();
         CreateMap<StudentGroup, StudentGroupForUpdateDto>().ReverseMap();
         CreateMap<StudentGroup, StudentGroupForResultDto>().ReverseMap();
@@ -79,6 +82,20 @@ public class MappingProfile : Profile
         CreateMap<School, SchoolForResultDto>().ReverseMap();
         #endregion
 
-        //CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
+        CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
+        CreateMap<Teacher, TeacherForUpdateDto>().ReverseMap();
+        CreateMap<Teacher, TeacherForResultDto>().ReverseMap();
+
+        CreateMap<TeacherGroup, TeacherGroupForCreationDto>().ReverseMap();
+        CreateMap<TeacherGroup, TeacherGroupForUpdateDto>().ReverseMap();
+        CreateMap<TeacherGroup, TeacherGroupForResultDto>().ReverseMap();
+
+        CreateMap<Science, ScienceForCreationDto>().ReverseMap();
+        CreateMap<Science, ScienceForUpdateDto>().ReverseMap();
+        CreateMap<Science, ScienceForResultDto>().ReverseMap();
+
+        CreateMap<ScienceTeacher, ScienceTeacherForCreationDto>().ReverseMap();
+        CreateMap<ScienceTeacher, ScienceTeacherForUpdateDto>().ReverseMap();
+        CreateMap<ScienceTeacher, ScienceTeacherForResultDto>().ReverseMap();
     }
 }
