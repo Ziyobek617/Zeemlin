@@ -1,30 +1,43 @@
-﻿namespace Zeemlin.Service.DTOs.Schools;
+﻿using System.ComponentModel.DataAnnotations;
+using Zeemlin.Domain.Enums;
+
+namespace Zeemlin.Service.DTOs.Schools;
 
 public class SchoolForResultDto
 {
     public long Id { get; set; }
 
-    public long SchoolNumber { get; set; } // Expose SchoolNumber if needed in API responses
-
+    [Required] // Adjust MaxLength as needed
+    public long SchoolNumber { get; set; }
+    [Required]
+    [MaxLength(255)]
     public string Name { get; set; }
 
+    [Required]
+    [MaxLength(2000)]
     public string Description { get; set; }
 
     // Address properties
+    [Required]
+    [MaxLength(50)]
     public string Country { get; set; }
 
-    public string Region { get; set; } // Use string representation of the enum value
+    public Region Region { get; set; } // nullable to allow omission when creating
 
+    [Required]
+    [MaxLength(50)]
     public string DistrictName { get; set; }
 
+    [Required]
+    [MaxLength(50)]
     public string GeneralAddressMFY { get; set; }
 
+    [Required]
+    [MaxLength(50)]
     public string StreetName { get; set; }
 
     // Contact Information
-    public string PhoneNumber { get; set; }
-
-    public string Email { get; set; }
-
+    public string CallCenter { get; set; }
+    public string EmailCenter { get; set; }
     public string? Website { get; set; }
 }

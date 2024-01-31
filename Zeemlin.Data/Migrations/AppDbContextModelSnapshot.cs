@@ -22,29 +22,6 @@ namespace Zeemlin.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Zeemlin.Domain.Entities.Course", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
-
             modelBuilder.Entity("Zeemlin.Domain.Entities.Grade", b =>
                 {
                     b.Property<long>("Id")
@@ -98,9 +75,6 @@ namespace Zeemlin.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("CourseId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -119,8 +93,6 @@ namespace Zeemlin.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
 
                     b.ToTable("Groups");
                 });
@@ -370,6 +342,10 @@ namespace Zeemlin.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("CallCenter")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -388,7 +364,7 @@ namespace Zeemlin.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("EmailCenter")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -401,10 +377,6 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("Region")
                         .HasColumnType("integer");
@@ -480,7 +452,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("ScienceTeacher");
+                    b.ToTable("scienceTeachers");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Student", b =>
@@ -566,7 +538,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.StudentGroup", b =>
@@ -595,7 +567,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("StudentGroups");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Subject", b =>
@@ -711,7 +683,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherGroup");
+                    b.ToTable("teacherGroups");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Grade", b =>
@@ -743,13 +715,6 @@ namespace Zeemlin.Data.Migrations
                     b.Navigation("Homework");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Zeemlin.Domain.Entities.Group", b =>
-                {
-                    b.HasOne("Zeemlin.Domain.Entities.Course", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Homework", b =>
@@ -867,11 +832,6 @@ namespace Zeemlin.Data.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("Zeemlin.Domain.Entities.Course", b =>
-                {
-                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Group", b =>

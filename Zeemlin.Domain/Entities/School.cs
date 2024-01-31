@@ -34,7 +34,7 @@ public class School : Auditable
     public string StreetName { get; set; }
 
     // Contact Information
-    public string PhoneNumber { get; set; }
-    public string Email { get; set; }
+    public string CallCenter { get; set; }
+    public string EmailCenter { get; set; }
     public string? Website { get; set; }
 }

@@ -27,21 +27,10 @@ public class SchoolService : ISchoolService
             throw new ZeemlinException(400, "Invalid school number");
         }
 
-        var existingSchoolWithEmail = await _schoolRepository
-            .SelectAll()
-            .Where(e => e.Email.ToLower() == dto.Email.ToLower()
-            || e.PhoneNumber == dto.PhoneNumber)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
-
-        if (existingSchoolWithEmail is not null)
-            throw new ZeemlinException(409, "Email is already in use.");
-
         var existingSchoolWithSameNumberAndStreet = await _schoolRepository
             .SelectAll()
             .Where(s => s.SchoolNumber == dto.SchoolNumber
-            && s.StreetName.Equals(dto.StreetName,
-            StringComparison.OrdinalIgnoreCase))
+            && s.StreetName.Equals(dto.StreetName))
             .AsNoTracking()
             .AnyAsync();
 

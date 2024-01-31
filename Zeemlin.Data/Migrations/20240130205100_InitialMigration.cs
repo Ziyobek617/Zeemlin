@@ -13,21 +13,6 @@ namespace Zeemlin.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GroupPermissions",
                 columns: table => new
                 {
@@ -55,6 +40,23 @@ namespace Zeemlin.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GroupRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    HeadTeacherId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,8 +102,8 @@ namespace Zeemlin.Data.Migrations
                     DistrictName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     GeneralAddressMFY = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     StreetName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
+                    CallCenter = table.Column<string>(type: "text", nullable: false),
+                    EmailCenter = table.Column<string>(type: "text", nullable: false),
                     Website = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -169,57 +171,6 @@ namespace Zeemlin.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    HeadTeacherId = table.Column<long>(type: "bigint", nullable: false),
-                    CourseId = table.Column<long>(type: "bigint", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Groups_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ScienceTeacher",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ScienceId = table.Column<long>(type: "bigint", nullable: false),
-                    TeacherId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ScienceTeacher", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ScienceTeacher_Sciences_ScienceId",
-                        column: x => x.ScienceId,
-                        principalTable: "Sciences",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ScienceTeacher_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lessons",
                 columns: table => new
                 {
@@ -246,35 +197,7 @@ namespace Zeemlin.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherGroup",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TeacherId = table.Column<long>(type: "bigint", nullable: false),
-                    GroupId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeacherGroup", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TeacherGroup_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeacherGroup_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Students",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -301,11 +224,67 @@ namespace Zeemlin.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Groups_GroupId",
+                        name: "FK_Students_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "scienceTeachers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ScienceId = table.Column<long>(type: "bigint", nullable: false),
+                    TeacherId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_scienceTeachers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_scienceTeachers_Sciences_ScienceId",
+                        column: x => x.ScienceId,
+                        principalTable: "Sciences",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_scienceTeachers_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "teacherGroups",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TeacherId = table.Column<long>(type: "bigint", nullable: false),
+                    GroupId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_teacherGroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_teacherGroups_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_teacherGroups_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -364,15 +343,15 @@ namespace Zeemlin.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LessonAttendance_Users_UserId",
+                        name: "FK_LessonAttendance_Students_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserGroups",
+                name: "StudentGroups",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -384,17 +363,17 @@ namespace Zeemlin.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGroups", x => x.Id);
+                    table.PrimaryKey("PK_StudentGroups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserGroups_Groups_GroupId",
+                        name: "FK_StudentGroups_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserGroups_Users_StudentId",
+                        name: "FK_StudentGroups_Students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Users",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -435,9 +414,9 @@ namespace Zeemlin.Data.Migrations
                         principalTable: "Lessons",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Grades_Users_StudentId",
+                        name: "FK_Grades_Students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Users",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -461,11 +440,6 @@ namespace Zeemlin.Data.Migrations
                 name: "IX_Grades_StudentId",
                 table: "Grades",
                 column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Groups_CourseId",
-                table: "Groups",
-                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Homework_LessonId",
@@ -493,39 +467,39 @@ namespace Zeemlin.Data.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScienceTeacher_ScienceId",
-                table: "ScienceTeacher",
+                name: "IX_scienceTeachers_ScienceId",
+                table: "scienceTeachers",
                 column: "ScienceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScienceTeacher_TeacherId",
-                table: "ScienceTeacher",
+                name: "IX_scienceTeachers_TeacherId",
+                table: "scienceTeachers",
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherGroup_GroupId",
-                table: "TeacherGroup",
+                name: "IX_StudentGroups_GroupId",
+                table: "StudentGroups",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherGroup_TeacherId",
-                table: "TeacherGroup",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserGroups_GroupId",
-                table: "UserGroups",
-                column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserGroups_StudentId",
-                table: "UserGroups",
+                name: "IX_StudentGroups_StudentId",
+                table: "StudentGroups",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_GroupId",
-                table: "Users",
+                name: "IX_Students_GroupId",
+                table: "Students",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_teacherGroups_GroupId",
+                table: "teacherGroups",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_teacherGroups_TeacherId",
+                table: "teacherGroups",
+                column: "TeacherId");
         }
 
         /// <inheritdoc />
@@ -550,25 +524,25 @@ namespace Zeemlin.Data.Migrations
                 name: "School");
 
             migrationBuilder.DropTable(
-                name: "ScienceTeacher");
+                name: "scienceTeachers");
+
+            migrationBuilder.DropTable(
+                name: "StudentGroups");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "TeacherGroup");
-
-            migrationBuilder.DropTable(
-                name: "UserGroups");
+                name: "teacherGroups");
 
             migrationBuilder.DropTable(
                 name: "Homework");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "Lessons");
@@ -578,9 +552,6 @@ namespace Zeemlin.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
-
-            migrationBuilder.DropTable(
-                name: "Courses");
         }
     }
 }
