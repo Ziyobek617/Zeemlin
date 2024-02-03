@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Service.DTOs.Teachers
 {
@@ -21,6 +22,8 @@ namespace Zeemlin.Service.DTOs.Teachers
         public string Biography { get; set; }
 
         public string DistrictName { get; set; } // Allow optional updates
+        [Required]
+        public GenderType genderType { get; set; }
         public long? SchoolNumber { get; set; }  // Allow optional updates
     }
 }

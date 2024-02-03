@@ -5,7 +5,6 @@ namespace Zeemlin.Domain.Entities.Assets;
 public class TeacherAsset : Auditable
 {
     public long TeacherId { get; set; }
-    public string Filename { get; set; }
     public string Path { get; set; }
     public string ContentType { get; set; }
     public long FileSize { get; set; }

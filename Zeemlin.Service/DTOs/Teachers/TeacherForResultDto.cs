@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.Group;
 using Zeemlin.Service.DTOs.TeacherGroups;
 
@@ -28,6 +29,8 @@ namespace Zeemlin.Service.DTOs.Teachers
         [Required]
         [MaxLength(50)]
         public string DistrictName { get; set; }
+        [Required]
+        public GenderType genderType { get; set; }
 
         [Required]
         public long SchoolNumber { get; set; }
@@ -37,7 +40,6 @@ namespace Zeemlin.Service.DTOs.Teachers
 
         // Consider adding additional properties like created/updated dates
         public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
         public TeacherGroupForResultDto TeacherGroupForResult { get; set; }
         //public ScienceTeacherForResultDto ScienceTeacher { get; set; }
     }
