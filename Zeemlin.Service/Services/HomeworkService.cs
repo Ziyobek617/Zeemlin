@@ -21,18 +21,33 @@ public class HomeworkService : IHomeworkService
 
     public async Task<HomeworkForResultDto> CreateAsync(HomeworkForCreationDto dto)
     {
-        var homework = await _homeworkRepository.SelectAll()
+        var lesson = await _homeworkRepository.SelectAll()
             .Where(h => h.LessonId == dto.LessonId)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (homework is not null)
+        if (lesson is not null)
             throw new ZeemlinException(409, "Homework is already exist.");
+
+        var science = await _homeworkRepository.SelectAll()
+            .Where(h => h.ScienceId == dto.ScienceId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (science is not null)
+            throw new ZeemlinException(409, "science is already exist.");
+
+        var teacher = await _homeworkRepository.SelectAll()
+            .Where(h => h.TeacherId == dto.TeacherId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (teacher is not null)
+            throw new ZeemlinException(409, "Teacher is already exist.");
 
         var mappedHomework = _mapper.Map<Homework>(dto);
         mappedHomework.CreatedAt = DateTime.UtcNow;
-
-        var createdHomework = await _homeworkRepository.InsertAsync(mappedHomework);
+        await _homeworkRepository.InsertAsync(mappedHomework);
 
         return _mapper.Map<HomeworkForResultDto>(mappedHomework);
     }
@@ -46,10 +61,24 @@ public class HomeworkService : IHomeworkService
         if (homework is null)
             throw new ZeemlinException(404, "Homework not found");
 
+        var science = await _homeworkRepository.SelectAll()
+            .Where(h => h.ScienceId == dto.ScienceId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (science is null)
+            throw new ZeemlinException(404, "science not found");
+
+        var teacher = await _homeworkRepository.SelectAll()
+            .Where(h => h.TeacherId == dto.TeacherId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (teacher is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
         homework.UpdatedAt = DateTime.UtcNow;
-
         var vazifa = _mapper.Map(dto, homework);
-
         await _homeworkRepository.UpdateAsync(vazifa);
 
         return _mapper.Map<HomeworkForResultDto>(vazifa);
