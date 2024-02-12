@@ -27,7 +27,7 @@ public class HomeworkService : IHomeworkService
             .FirstOrDefaultAsync();
 
         if (lesson is not null)
-            throw new ZeemlinException(409, "Homework is already exist.");
+            throw new ZeemlinException(409, "Homework is already exists.");
 
         var science = await _homeworkRepository.SelectAll()
             .Where(h => h.ScienceId == dto.ScienceId)
@@ -35,7 +35,7 @@ public class HomeworkService : IHomeworkService
             .FirstOrDefaultAsync();
 
         if (science is not null)
-            throw new ZeemlinException(409, "science is already exist.");
+            throw new ZeemlinException(409, "science is already exists.");
 
         var teacher = await _homeworkRepository.SelectAll()
             .Where(h => h.TeacherId == dto.TeacherId)
@@ -43,7 +43,15 @@ public class HomeworkService : IHomeworkService
             .FirstOrDefaultAsync();
 
         if (teacher is not null)
-            throw new ZeemlinException(409, "Teacher is already exist.");
+            throw new ZeemlinException(409, "Teacher is already exists.");
+
+        var group = await _homeworkRepository.SelectAll()
+            .AsNoTracking()
+            .Where(g => g.GroupId == dto.GroupId)
+            .FirstOrDefaultAsync();
+
+        if (group is not null)
+            throw new ZeemlinException(409, "Group already exists.");
 
         var mappedHomework = _mapper.Map<Homework>(dto);
         mappedHomework.CreatedAt = DateTime.UtcNow;
@@ -76,6 +84,14 @@ public class HomeworkService : IHomeworkService
 
         if (teacher is null)
             throw new ZeemlinException(404, "Teacher not found");
+
+        var group = await _homeworkRepository.SelectAll()
+            .AsNoTracking()
+            .Where(g => g.GroupId == dto.GroupId)
+            .FirstOrDefaultAsync();
+
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found.");
 
         homework.UpdatedAt = DateTime.UtcNow;
         var vazifa = _mapper.Map(dto, homework);

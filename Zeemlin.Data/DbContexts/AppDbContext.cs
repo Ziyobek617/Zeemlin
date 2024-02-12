@@ -22,7 +22,5 @@ public class AppDbContext : DbContext
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<Homework> Homework { get; set; }
     public DbSet<StudentGroup> StudentGroups { get; set; }
-    public DbSet<GroupRole> GroupRoles { get; set; }
-    public DbSet<GroupPermission> GroupPermissions { get; set; }
 
 }

@@ -11,6 +11,8 @@ public class Homework : Auditable
     public Lesson Lesson { get; set; } // Added
     public long ScienceId { get; set; }
     public Science Science { get; set; }
+    public long GroupId { get; set; }
+    public Group Group { get; set; }
     public long TeacherId { get; set; }
     public Teacher Teacher { get; set; }
     public ICollection<Grade> Grades { get; set; }

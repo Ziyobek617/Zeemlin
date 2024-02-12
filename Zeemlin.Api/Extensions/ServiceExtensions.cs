@@ -38,12 +38,6 @@ public static class ServiceExtensions
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<IHomeworkRepository, HomeworkRepository>();
 
-        services.AddScoped<IGroupRoleService, GroupRoleService>();
-        services.AddScoped<IGroupRoleRepository, GroupRoleRepository>();
-        
-        services.AddScoped<IGroupPermissionService, GroupPermissionService>();
-        services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
-
         services.AddScoped<ISchoolRepository, SchoolRepository>();
         services.AddScoped<ISchoolService, SchoolService>();
 

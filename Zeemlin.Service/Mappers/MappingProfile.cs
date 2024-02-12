@@ -56,14 +56,6 @@ public class MappingProfile : Profile
         CreateMap<StudentGroup, StudentGroupForResultDto>().ReverseMap();
         #endregion
 
-        #region GroupRole
-        CreateMap<GroupRole, GroupRoleForResultDto>().ReverseMap();
-        #endregion
-
-        #region GroupPermission
-        CreateMap<GroupPermission, GroupPermissionForResultDto>().ReverseMap();
-        #endregion
-
         #region Lesson
         CreateMap<Lesson, LessonForCreationDto>().ReverseMap();
         CreateMap<Lesson, LessonForUpdateDto>().ReverseMap();
