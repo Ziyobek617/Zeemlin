@@ -26,6 +26,9 @@ public static class ServiceExtensions
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ILessonRepository, LessonRepository>();
 
+        services.AddScoped<ICourseServices, CourseService>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IGroupRepository, GroupRepository>();
 

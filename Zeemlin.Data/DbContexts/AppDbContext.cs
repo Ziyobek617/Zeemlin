@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<School> School { get; set; }
     public DbSet<Grade> Grades { get; set; }
+    public DbSet<Course> Courses { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<TeacherGroup> teacherGroups { get; set; }

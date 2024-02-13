@@ -115,7 +115,6 @@ public class SubjectService : ISubjectService
         var subjects = await _subjectRepository.SelectAll().AsNoTracking().ToListAsync();
 
         return _mapper.Map<IEnumerable<SubjectForResultDto>>(subjects);
-        throw new NotImplementedException();
     }
 
     public async Task<SubjectForResultDto> RetrieveByIdAsync(long id)

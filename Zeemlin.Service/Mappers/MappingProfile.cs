@@ -13,7 +13,8 @@ using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.DTOs.TeacherGroups;
 using Zeemlin.Service.DTOs.Sciences;
 using Zeemlin.Service.DTOs.ScienceTeachers;
-using Zeemlin.Service.DTOs.Subjects; //8
+using Zeemlin.Service.DTOs.Subjects;
+using Zeemlin.Service.DTOs.Courses; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -32,6 +33,11 @@ public class MappingProfile : Profile
         CreateMap<Teacher, TeacherForUpdateDto>().ReverseMap();
         CreateMap<Teacher, TeacherForResultDto>().ReverseMap();
         #endregion
+
+        // Course
+        CreateMap<Course, CourseForCreationDto>().ReverseMap();
+        CreateMap<Course, CourseForUpdateDto>().ReverseMap();
+        CreateMap<Course, CourseForResultDto>().ReverseMap();
 
         #region Group
         CreateMap<Group, GroupForCreationDto>().ReverseMap();
