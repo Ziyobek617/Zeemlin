@@ -29,6 +29,28 @@ public class SubjectService : ISubjectService
         if (name is not null)
             throw new ZeemlinException(409, "Subject already exists");
 
+        var group = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(g => g.GroupId == dto.GroupId)
+            .FirstOrDefaultAsync();
+        if (group is not null)
+            throw new ZeemlinException(409, "Group already exists");
+
+        var teacher = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(t => t.TeacherId == dto.TeacherId)
+            .FirstOrDefaultAsync();
+        if (teacher is not null)
+            throw new ZeemlinException(409, "Teacher already exists");
+
+        var lesson = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(l => l.LessonId == dto.LessonId)
+            .FirstOrDefaultAsync();
+        if (lesson is not null)
+            throw new ZeemlinException(409, "Lesson already exists");
+
+
         var mapped = _mapper.Map<Subject>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
         await _subjectRepository.InsertAsync(mapped);
@@ -45,6 +67,27 @@ public class SubjectService : ISubjectService
 
         if (update is null)
             throw new ZeemlinException(404, "Subject Not Found");
+
+        var group = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(g => g.GroupId == dto.GroupId)
+            .FirstOrDefaultAsync();
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found");
+
+        var teacher = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(t => t.TeacherId == dto.TeacherId)
+            .FirstOrDefaultAsync();
+        if (teacher is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
+        var lesson = await _subjectRepository.SelectAll()
+            .AsNoTracking()
+            .Where(l => l.LessonId == dto.LessonId)
+            .FirstOrDefaultAsync();
+        if (lesson is null)
+            throw new ZeemlinException(404, "Lesson not found");
 
         var mappedsubject = _mapper.Map(dto, update);
         mappedsubject.UpdatedAt = DateTime.UtcNow;
