@@ -1,4 +1,5 @@
 ﻿using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Assets;
 
 namespace Zeemlin.Domain.Entities;
 
@@ -15,5 +16,8 @@ public class Homework : Auditable
     public Group Group { get; set; }
     public long TeacherId { get; set; }
     public Teacher Teacher { get; set; }
+
+
     public ICollection<Grade> Grades { get; set; }
+    public ICollection<HomeworkAsset> Assets { get; set; }
 }
