@@ -3,8 +3,6 @@ using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Grade; //3
 using Zeemlin.Service.DTOs.Group; //6
 using Zeemlin.Service.DTOs.Homework; //7
-using Zeemlin.Service.DTOs.GroupRole; //5
-using Zeemlin.Service.DTOs.GroupPermissions; //4
 using Zeemlin.Service.DTOs.Lesson; //7
 using Zeemlin.Service.DTOs.Teachers; //2
 using Zeemlin.Service.DTOs.StudentGroups;
@@ -14,7 +12,10 @@ using Zeemlin.Service.DTOs.TeacherGroups;
 using Zeemlin.Service.DTOs.Sciences;
 using Zeemlin.Service.DTOs.ScienceTeachers;
 using Zeemlin.Service.DTOs.Subjects;
-using Zeemlin.Service.DTOs.Courses; //8
+using Zeemlin.Service.DTOs.Courses;
+using Zeemlin.Domain.Entities.Assets;
+using Zeemlin.Service.DTOs.Assets;
+using Zeemlin.Service.DTOs.Assets.HomeworkAssets; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -103,5 +104,14 @@ public class MappingProfile : Profile
         CreateMap<ScienceTeacher, ScienceTeacherForCreationDto>().ReverseMap();
         CreateMap<ScienceTeacher, ScienceTeacherForUpdateDto>().ReverseMap();
         CreateMap<ScienceTeacher, ScienceTeacherForResultDto>().ReverseMap();
+
+        // Assets
+        CreateMap<TeacherAsset, TeacherAssetForCreationDto>().ReverseMap();
+        CreateMap<TeacherAsset, TeacherAssetForUpdateDto>().ReverseMap();
+        CreateMap<TeacherAsset, TeacherAssetForResultDto>().ReverseMap();
+
+        CreateMap<HomeworkAsset, HomeworkAssetForCreationDto>().ReverseMap();
+        CreateMap<HomeworkAsset, HomeworkAssetForUpdateDto>().ReverseMap();
+        CreateMap<HomeworkAsset, HomeworkAssetForResultDto>().ReverseMap();
     }
 }

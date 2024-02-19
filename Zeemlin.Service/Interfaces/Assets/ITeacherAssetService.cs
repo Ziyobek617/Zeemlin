@@ -5,7 +5,7 @@ namespace Zeemlin.Service.Interfaces.Assets;
 
 public interface ITeacherAssetService
 {
-    Task<TeacherAssetForResultDto> UploadPictureAsync(TeacherAssetForUpdateDto dto);
+    Task UpdatePictureAsync(long assetId, TeacherAssetForUpdateDto dto);
     Task<bool> DeletePictureAsync(long teacherId);
 }
 

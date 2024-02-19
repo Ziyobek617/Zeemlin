@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Zeemlin.Data.IRepositries.Assets;
 using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Service.DTOs.Assets;
 using Zeemlin.Service.Exceptions;
+using Zeemlin.Service.Helpers;
 using Zeemlin.Service.Interfaces.Assets;
 
 namespace Zeemlin.Service.Services.Assets;
@@ -12,62 +14,98 @@ public class TeacherAssetService : ITeacherAssetService
 {
     private readonly IMapper _mapper;
     private readonly ITeacherAssetRepository _repository;
+    private readonly string _wwwRootPath;
+    private readonly long _maxSizeInBytes;
+    private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
 
-    public TeacherAssetService(IMapper mapper, ITeacherAssetRepository repository)
+    public IImageService ImageService { get; }
+
+    public TeacherAssetService(
+      IMapper mapper,
+      ITeacherAssetRepository repository,
+      IConfiguration configuration,
+      IImageService imageService)
     {
         _mapper = mapper;
         _repository = repository;
+        ImageService = imageService;
+        _wwwRootPath = configuration["TeacherAssetsPath"];
+        _maxSizeInBytes = long.Parse(configuration["TeacherAssetMaxSizeInBytes"]);
     }
+
+    
 
     public async Task<bool> DeletePictureAsync(long teacherId)
     {
-        var picture = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(p => p.TeacherId == teacherId)
-            .FirstOrDefaultAsync();
+        var picture = await _repository.SelectByIdAsync(teacherId);
 
-        if (picture is null)
-            throw new ZeemlinException(404, "Picture not found");
+        if (picture == null)
+        {
+            var defaultImagePath = "C:\\Users\\mahka\\Pictures\\Saved Pictures\\imzo.jpg"; // Replace with configurable path
+            picture = new TeacherAsset
+            {
+                TeacherId = teacherId,
+                Path = defaultImagePath
+            };
+            await _repository.InsertAsync(picture);
+        }
+        else
+        {
+            await ImageService.DeleteImageAsync(picture.Path);
 
-        await _repository.DeleteAsync(teacherId);
+            await _repository.DeleteAsync(picture.Id);
+        }
+
         return true;
     }
 
-    public async Task<TeacherAssetForResultDto> UploadPictureAsync(TeacherAssetForUpdateDto dto)
+    public async Task UpdatePictureAsync(long assetId, TeacherAssetForUpdateDto dto)
     {
-        // Get the teacher's gender
-        var teacher = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(t => t.TeacherId == dto.TeacherId)
-            .FirstOrDefaultAsync();
+        await ValidateImageAsync(dto.File);
 
-        if (teacher is null)
-            throw new ZeemlinException(404, "Teacher not found");
+        var existingPicture = await _repository.SelectByIdAsync(assetId);
+        await ImageService.DeleteImageAsync(existingPicture.Path);
 
-        // Check for existing picture
-        var existingPicture = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(p => p.TeacherId == dto.TeacherId)
-            .FirstOrDefaultAsync();
+        var asset = await _repository.SelectByIdAsync(assetId);
+        await SaveImageAsync(asset, dto.File);
 
-        // Delete existing picture if present
-        if (existingPicture != null)
-        {
-            await _repository.DeleteAsync(existingPicture.Id);
-        }
-
-        // Create new TeacherAsset entity
-        var asset = new TeacherAsset
-        {
-            TeacherId = dto.TeacherId,
-            Path = dto.File.ToString()
-        };
-
-        await _repository.InsertAsync(asset);
-
-        var resultDto = _mapper.Map<TeacherAssetForResultDto>(asset);
-
-        return resultDto;
+        asset.Path = dto.File.ToString();
+        await _repository.UpdateAsync(asset);
     }
 
+    private async Task ValidateImageAsync(IFormFile file)
+    {
+        if (file.Length > _maxSizeInBytes)
+        {
+            throw new ZeemlinException(400, "Image size exceeds maximum allowed size.");
+        }
+
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        if (!_allowedExtensions.Contains(extension))
+        {
+            throw new ZeemlinException(400, "Invalid image format. Only jpg, jpeg, and png are allowed.");
+        }
+
+    }
+
+    private async Task SaveImageAsync(TeacherAsset asset, IFormFile file)
+    {
+        var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
+        var fullPath = Path.Combine(_wwwRootPath, fileName);
+
+        try
+        {
+            await using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new ZeemlinException(500, "Error saving teacher picture: " + ex.Message);
+        }
+
+        asset.Path = fileName;
+
+    }
 }
