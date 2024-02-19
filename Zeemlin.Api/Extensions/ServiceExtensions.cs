@@ -7,6 +7,10 @@ using Zeemlin.Service.Interfaces;
 using Zeemlin.Service.Services;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Zeemlin.Data.IRepositries.Assets;
+using Zeemlin.Data.Repositories.Assets;
+using Zeemlin.Service.Interfaces.Assets;
+using Zeemlin.Service.Services.Assets;
 
 namespace Zeemlin.Api.Extensions;
 
@@ -58,6 +62,14 @@ public static class ServiceExtensions
 
         services.AddScoped<IScienceTeacherRepository, ScienceTeacherRepository>();
         services.AddScoped<IScienceTeacherService, ScienceTeacherService>();
+
+
+        // Assets
+        services.AddScoped<ITeacherAssetRepository, TeacherAssetRepository>();
+        services.AddScoped<ITeacherAssetService, TeacherAssetService>();
+
+        services.AddScoped<IHomeworkAssetRepository, HomeworkAssetRepository>();
+        services.AddScoped<IHomeworkAssetService, HomeworkAssetService>();
 
     }
 
