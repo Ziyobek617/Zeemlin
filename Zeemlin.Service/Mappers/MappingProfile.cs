@@ -15,7 +15,8 @@ using Zeemlin.Service.DTOs.Subjects;
 using Zeemlin.Service.DTOs.Courses;
 using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Service.DTOs.Assets;
-using Zeemlin.Service.DTOs.Assets.HomeworkAssets; //8
+using Zeemlin.Service.DTOs.Assets.HomeworkAssets;
+using Zeemlin.Service.DTOs.LessonAttendances; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -81,6 +82,8 @@ public class MappingProfile : Profile
         CreateMap<LessonAttendance, LessonForCreationDto>().ReverseMap();
         CreateMap<LessonAttendance, LessonForUpdateDto>().ReverseMap();
         CreateMap<LessonAttendance, LessonForResultDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonAttendanceReportDataDto>().ReverseMap();
+        CreateMap<LessonAttendance, StudentAttendanceDataDto>().ReverseMap();
         #endregion
 
         #region School

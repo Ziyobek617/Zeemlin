@@ -10,8 +10,4 @@ public class LessonAttendanceRepository : Repository<LessonAttendance>, ILessonA
     {
     }
 
-    public Task<IEnumerable<LessonAttendance>> GetSubscribedLessonAttendanceAsync(long Id)
-    {
-        throw new NotImplementedException();
-    }
 }

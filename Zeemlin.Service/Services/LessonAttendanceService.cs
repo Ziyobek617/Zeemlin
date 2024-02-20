@@ -1,167 +1,168 @@
-﻿//using System.Data.SqlClient;
-//using AutoMapper;
-//using Microsoft.EntityFrameworkCore;
-//using System.Linq;
-//using Zeemlin.Data.IRepositries;
-//using Zeemlin.Domain.Entities;
-//using Zeemlin.Domain.Enums;
-//using Zeemlin.Service.DTOs.LessonAttendances;
-//using Zeemlin.Service.Exceptions;
-//using Zeemlin.Service.Interfaces;
-//using Zeemlin.Service.DTOs.User;
-//using Zeemlin.Data.Repositories;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.IRepositries;
+using Zeemlin.Domain.Entities;
+using Zeemlin.Domain.Enums;
+using Zeemlin.Service.DTOs.LessonAttendances;
+using Zeemlin.Service.Exceptions;
+using Zeemlin.Service.Interfaces;
 
-//namespace Zeemlin.Service.Services
-//{
-//    public class LessonAttendanceService : ILessonAttendanceService
-//    {
-//        private readonly IMapper _mapper;
-//        private readonly IRepository<LessonAttendance> _lessonAttendanceRepository;
-//        private readonly IUserRepository _userRepository;
+namespace Zeemlin.Service.Services
+{
 
-//        public LessonAttendanceService(IMapper mapper, IRepository<LessonAttendance> lessonAttendanceRepository, IUserRepository userRepository)
-//        {
-//            this._mapper = mapper;
-//            this._lessonAttendanceRepository = lessonAttendanceRepository;
-//            this._userRepository = userRepository;
-//        }
+    public class LessonAttendanceService : ILessonAttendanceService
+    {
+        private readonly IMapper _mapper;
+        private readonly IRepository<LessonAttendance> _lessonAttendanceRepository;
 
-//        public Task<LessonAttendanceForResultDto> CreateAsync(LessonAttendanceForCreationDto dto)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public LessonAttendanceService(IMapper mapper, IRepository<LessonAttendance> lessonAttendanceRepository)
+        {
+            _mapper = mapper;
+            _lessonAttendanceRepository = lessonAttendanceRepository;
+        }
 
-//        public async Task<IEnumerable<UserForResultDto>> GetUsersWithoutAttendanceAsync()
-//        {
-//            var currentDate = DateTime.UtcNow.Date;
-//            var existingAttendances = await _lessonAttendanceRepository.FindByDateAsync(currentDate);
+        public Task<LessonAttendanceForResultDto> CreateAsync(LessonAttendanceForCreationDto dto)
+        {
+            throw new NotImplementedException();
+        }
 
-//            // Get all users
-//            var allUsers = await _userRepository.GetAllAsync();
+        public async Task<IEnumerable<LessonAttendanceReportDataDto>> GenerateReportAsync(
+    DateTime? startDate = null,
+    DateTime? endDate = null,
+    long? lessonId = null,
+    long? studentId = null)
+        {
+            var query = _lessonAttendanceRepository.SelectAll();
 
-//            // Filter users present on current date
-//            var presentUsers = new HashSet<User>(existingAttendances.Select(a => a.User));
+            if (startDate.HasValue)
+            {
+                query = query.Where(a => a.DateTime >= startDate);
+            }
 
-//            // Return users without attendance
-//            return allUsers.Where(u => !presentUsers.Contains(u))
-//                          .Select(u => new UserForResultDto
-//                          {
-//                              Id = u.Id,
-//                              FirstName = u.FirstName,
-//                              LastName = u.LastName,
-//                              // Include other relevant fields from User to UserForResultDto
-//                              // based on your requirements
-//                          });
-//        }
+            if (endDate.HasValue)
+            {
+                query = query.Where(a => a.DateTime <= endDate);
+            }
 
+            // Add more filters if needed
 
-//        public async Task MarkAllPresentAsync()
-//        {
-//            // Get current date and time
-//            var currentDate = DateTime.UtcNow.Date;
-//            var markPresentTime = DateTime.UtcNow.TimeOfDay; // Use specific time you want
+            var attendanceData = await query
+                .GroupBy(a => new { a.DateTime, a.Lesson.Title, a.Lesson.Teacher.FirstName, a.GroupName })
+                .Select(g => new LessonAttendanceReportDataDto
+                {
+                    Date = g.Key.DateTime,
+                    LessonName = g.Key.Title,
+                    TeacherName = g.Key.FirstName,
+                    GroupName = g.Key.GroupName,
+                    TotalStudents = g.Count(),
+                    PresentStudents = g.Count(a => a.LessonAttendanceType == LessonAttendanceType.Yes),
+                    // Add more calculations as needed
+                })
+                .ToListAsync();
 
-//            // Check if past the deadline (8 AM)
-//            if (markPresentTime > new TimeSpan(8, 0, 0))
-//            {
-//                return; // No need to update if past deadline
-//            }
+            return attendanceData;
+        }
 
-//            // Filter students without existing attendance for the day
-//            var studentsWithoutAttendanceList = await GetStudentsWithoutAttendanceAsync();
+        public async Task<IEnumerable<StudentAttendanceDataDto>> GetStudentAttendancesByNameAsync(string studentFullName)
+        {
+            // Assuming you have a LessonAttendanceRepository for data access
+            var studentAttendances = await _lessonAttendanceRepository.SelectAll()
+                .Where(a => a.Student.FirstName + " " + a.Student.LastName == studentFullName)
+                .Include(a => a.Student)
+                .Include(a => a.Lesson)
+                .ThenInclude(l => l.Group)
+                .Include(a => a.Lesson)
+                .ThenInclude(l => l.Subjects)
+                .Include(a => a.Lesson)
+                .ThenInclude(l => l.Teacher)
+                .ToListAsync();
 
-//            // Convert to LessonAttendance objects
-//            var attendanceRecords = studentsWithoutAttendanceList.Select(student =>
-//                new LessonAttendance { UserId = student.UserId, DateTime = currentDate, LessonAttendanceType = LessonAttendanceType.Yes });
+            // Map to a DTO for presentation
+            return studentAttendances.Select(a => new StudentAttendanceDataDto
+            {
+                StudentName = a.Student.FirstName,
+                StudentSurname = a.Student.LastName,
+                GroupName = a.Lesson.Group.Name,
+                Lesson = a.Lesson.Title,
+                Hour = a.Lesson.StartDate, 
+            }).ToList();
+        }
 
-//            using (var connection = new SqlConnection(connectionString))
-//            {
-//                connection.Open();
+        public async Task<LessonAttendanceForResultDto> ModifyAsync(long id, LessonAttendanceForUpdateDto dto)
+        {
+            // Check if attendance record exists
+            /// Summary
+            var existingAttendance = await _lessonAttendanceRepository.SelectAll()
+            .AsNoTracking()
+            .Where(l => l.Id == id)
+            .FirstOrDefaultAsync(); ;
+            if (existingAttendance is null)
+                throw new ZeemlinException(404, "Lesson attendance not found.");
 
-//                using (var bulkCopy = new SqlBulkCopy(connection))
-//                {
-//                    bulkCopy.DestinationTableName = "LessonAttendances";
+            /// Summary
+            var CheckLessonByIdAsync = await _lessonAttendanceRepository.SelectAll()
+                .AsNoTracking()
+                .Where(l => l.LessonId == dto.LessonId)
+                .FirstOrDefaultAsync();
+            if (CheckLessonByIdAsync is null)
+                throw new ZeemlinException(404, "Lesson is not found.");
 
-//                    foreach (var property in typeof(LessonAttendance).GetProperties())
-//                    {
-//                        bulkCopy.ColumnMappings.Add(property.Name, property.Name);
-//                    }
+            /// Summary
+            var CheckStudentByIdAsync = await _lessonAttendanceRepository.SelectAll()
+                .AsNoTracking()
+                .Where(u => u.StudentId == dto.StudentId)
+                .FirstOrDefaultAsync();
+            if (CheckStudentByIdAsync is null)
+                throw new ZeemlinException(404, "User is not found.");
 
-//                    bulkCopy.WriteToServer(attendanceRecords);
-//                }
-//            }
-//        }
+            // Validate provided data
+            if (dto.LessonId != existingAttendance.LessonId)
+            {
+                throw new ZeemlinException(400, "Modifying lesson ID is not allowed.");
+            }
 
+            _mapper.Map(dto, existingAttendance);
 
-//        public async Task<LessonAttendanceForResultDto> ModifyAsync(long id, LessonAttendanceForUpdateDto dto)
-//        {
-//            // Check if attendance record exists
-//            /// Summary
-//            var existingAttendance = await _lessonAttendanceRepository.SelectAll()
-//            .Where(l => l.Id == id)
-//            .AsNoTracking()
-//            .FirstOrDefaultAsync(); ;
-//            if (existingAttendance is null)
-//                throw new ZeemlinException(404, "Lesson attendance not found.");
+            // Assuming "UpdatedAt" isn't mapped
+            existingAttendance.UpdatedAt = DateTime.UtcNow;
+            await _lessonAttendanceRepository.UpdateAsync(existingAttendance);
 
-//            /// Summary
-//            var CheckLessonByIdAsync = await _lessonAttendanceRepository.SelectAll()
-//                .Where(l => l.LessonId == dto.LessonId)
-//                .AsNoTracking()
-//                .FirstOrDefaultAsync();
-//            if (CheckLessonByIdAsync is null)
-//                throw new ZeemlinException(404, "Lesson is not found.");
-
-//            /// Summary
-//            var CheckUserByIdAsync = await _lessonAttendanceRepository.SelectAll()
-//                .Where(u => u.UserId == dto.UserId)
-//                .AsNoTracking()
-//                .FirstOrDefaultAsync();
-//            if (CheckUserByIdAsync is null)
-//                throw new ZeemlinException(404, "User is not found.");
-
-//            // Validate provided data
-//            if (dto.LessonId != existingAttendance.LessonId)
-//            {
-//                throw new ZeemlinException(400, "Modifying lesson ID is not allowed.");
-//            }
-
-//            _mapper.Map(dto, existingAttendance);
-
-//            // Assuming "UpdatedAt" isn't mapped
-//            existingAttendance.UpdatedAt = DateTime.UtcNow; 
-//            await _lessonAttendanceRepository.UpdateAsync(existingAttendance);
-
-//            return _mapper.Map<LessonAttendanceForResultDto>(existingAttendance);
-//        }
+            return _mapper.Map<LessonAttendanceForResultDto>(existingAttendance);
+        }
 
 
-//        public Task<bool> RemoveAsync(long id)
-//        {
+        public async Task<bool> RemoveAsync(long id)
+        {
+            var existingAttendance = await _lessonAttendanceRepository.SelectAll()
+            .AsNoTracking()
+            .Where(l => l.Id == id)
+            .FirstOrDefaultAsync(); ;
+            if (existingAttendance is null)
+                throw new ZeemlinException(404, "Lesson attendance not found.");
 
-//            throw new NotImplementedException();
-//        }
+            await _lessonAttendanceRepository.DeleteAsync(id);
+            return true;
+        }
 
-//        public async Task<IEnumerable<LessonAttendanceForResultDto>> RetrieveAllAsync()
-//        {
-//            var Attendance = await _lessonAttendanceRepository.SelectAll().ToListAsync();
+        public async Task<IEnumerable<LessonAttendanceForResultDto>> RetrieveAllAsync()
+        {
+            var Attendance = await _lessonAttendanceRepository.SelectAll().ToListAsync();
 
-//            return _mapper.Map<IEnumerable<LessonAttendanceForResultDto>>(Attendance);
-//        }
+            return _mapper.Map<IEnumerable<LessonAttendanceForResultDto>>(Attendance);
+        }
 
-//        public async Task<LessonAttendanceForResultDto> RetrieveByIdAsync(long id)
-//        {
-//            var existingAttendance = await _lessonAttendanceRepository.SelectAll()
-//            .Where(l => l.Id == id)
-//            .AsNoTracking()
-//            .FirstOrDefaultAsync(); ;
-//            if (existingAttendance is null)
-//                throw new ZeemlinException(404, "Lesson attendance not found.");
+        public async Task<LessonAttendanceForResultDto> RetrieveByIdAsync(long id)
+        {
+            var existingAttendance = await _lessonAttendanceRepository.SelectAll()
+            .AsNoTracking()
+            .Where(l => l.Id == id)
+            .FirstOrDefaultAsync(); ;
+            if (existingAttendance is null)
+                throw new ZeemlinException(404, "Lesson attendance not found.");
 
-//            return _mapper.Map<LessonAttendanceForResultDto>(existingAttendance);
+            return _mapper.Map<LessonAttendanceForResultDto>(existingAttendance);
 
-//        }
+        }
 
-        
-//    }
-//}
+    }
+}

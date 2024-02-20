@@ -11,6 +11,5 @@ public class Subject : Auditable
     public long TeacherId { get; set; }
     public Teacher Teacher { get; set;}
     public long LessonId { get; set; }
-    public Lesson Lesson { get; set; }
 
 }
