@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Zeemlin.Data.DbContexts;
@@ -11,9 +12,11 @@ using Zeemlin.Data.DbContexts;
 namespace Zeemlin.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221152922_CreateNewEntities")]
+    partial class CreateNewEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -506,9 +509,6 @@ namespace Zeemlin.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
-                    b.Property<long>("DirectorId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("DistrictName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -546,8 +546,6 @@ namespace Zeemlin.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DirectorId");
 
                     b.ToTable("School");
                 });
@@ -856,45 +854,6 @@ namespace Zeemlin.Data.Migrations
                     b.ToTable("teacherGroups");
                 });
 
-            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Director", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Director");
-                });
-
             modelBuilder.Entity("Zeemlin.Domain.Entities.Assets.HomeworkAsset", b =>
                 {
                     b.HasOne("Zeemlin.Domain.Entities.Group", "Group")
@@ -1078,17 +1037,6 @@ namespace Zeemlin.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Zeemlin.Domain.Entities.School", b =>
-                {
-                    b.HasOne("Zeemlin.Domain.Entities.Users.Director", "Director")
-                        .WithMany("Schools")
-                        .HasForeignKey("DirectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Director");
-                });
-
             modelBuilder.Entity("Zeemlin.Domain.Entities.ScienceTeacher", b =>
                 {
                     b.HasOne("Zeemlin.Domain.Entities.Science", "Science")
@@ -1225,11 +1173,6 @@ namespace Zeemlin.Data.Migrations
                     b.Navigation("TeacherGroups");
 
                     b.Navigation("scienceTeachers");
-                });
-
-            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Director", b =>
-                {
-                    b.Navigation("Schools");
                 });
 #pragma warning restore 612, 618
         }

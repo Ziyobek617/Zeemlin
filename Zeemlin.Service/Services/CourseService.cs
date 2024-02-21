@@ -14,12 +14,10 @@ public class CourseService : ICourseServices
 {
     private readonly IMapper _mapper;
     private readonly ICourseRepository _courseRepository;
-    private readonly ICacheService _cacheService;
-    public CourseService(IMapper mapper, ICourseRepository courseRepository, ICacheService cacheService)
+    public CourseService(IMapper mapper, ICourseRepository courseRepository)
     {
         _mapper = mapper;
         _courseRepository = courseRepository;
-        _cacheService = cacheService;
     }
 
 
@@ -81,13 +79,8 @@ public class CourseService : ICourseServices
 
     public async Task<IEnumerable<CourseForResultDto>> RetrieveAllAsync()
     {
-        const string cacheKey = "allCourses";
-
-        return await _cacheService.GetAsync(cacheKey, async () =>
-        {
-            var courses = await _courseRepository.SelectAll().AsNoTracking().ToListAsync();
-            return _mapper.Map<IEnumerable<CourseForResultDto>>(courses);
-        });
+        var courses = await _courseRepository.SelectAll().AsNoTracking().ToListAsync();
+        return _mapper.Map<IEnumerable<CourseForResultDto>>(courses);
     }
 
 

@@ -18,17 +18,15 @@ public class TeacherAssetService : ITeacherAssetService
     private readonly long _maxSizeInBytes;
     private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
 
-    public IImageService ImageService { get; }
 
     public TeacherAssetService(
       IMapper mapper,
       ITeacherAssetRepository repository,
-      IConfiguration configuration,
-      IImageService imageService)
+      IConfiguration configuration
+      )
     {
         _mapper = mapper;
         _repository = repository;
-        ImageService = imageService;
         _wwwRootPath = configuration["TeacherAssetsPath"];
         _maxSizeInBytes = long.Parse(configuration["TeacherAssetMaxSizeInBytes"]);
     }
@@ -51,7 +49,6 @@ public class TeacherAssetService : ITeacherAssetService
         }
         else
         {
-            await ImageService.DeleteImageAsync(picture.Path);
 
             await _repository.DeleteAsync(picture.Id);
         }
@@ -64,7 +61,6 @@ public class TeacherAssetService : ITeacherAssetService
         await ValidateImageAsync(dto.File);
 
         var existingPicture = await _repository.SelectByIdAsync(assetId);
-        await ImageService.DeleteImageAsync(existingPicture.Path);
 
         var asset = await _repository.SelectByIdAsync(assetId);
         await SaveImageAsync(asset, dto.File);

@@ -29,9 +29,9 @@ public class SchoolService : ISchoolService
 
         var existingSchoolWithSameNumberAndStreet = await _schoolRepository
             .SelectAll()
+            .AsNoTracking()
             .Where(s => s.SchoolNumber == dto.SchoolNumber
             && s.StreetName.Equals(dto.StreetName))
-            .AsNoTracking()
             .AnyAsync();
 
         if (existingSchoolWithSameNumberAndStreet)
@@ -50,8 +50,8 @@ public class SchoolService : ISchoolService
     public async Task<SchoolForResultDto> ModifyAsync(long id, SchoolForUpdateDto dto)
     {
         var school = await _schoolRepository.SelectAll()
-            .Where(s => s.Id == id)
             .AsNoTracking()
+            .Where(s => s.Id == id)
             .FirstOrDefaultAsync();
 
         if (school is null)
@@ -59,9 +59,9 @@ public class SchoolService : ISchoolService
 
         var existingSchoolWithSameNumberAndStreet = await _schoolRepository
             .SelectAll()
-            .Where(s => s.SchoolNumber == dto.SchoolNumber
-            && s.StreetName.Equals(dto.StreetName, StringComparison.OrdinalIgnoreCase))
             .AsNoTracking()
+            .Where(s => s.SchoolNumber == dto.SchoolNumber
+            && s.StreetName.Equals(dto.StreetName))
             .AnyAsync();
 
         if (existingSchoolWithSameNumberAndStreet)
@@ -76,8 +76,8 @@ public class SchoolService : ISchoolService
     public async Task<bool> RemoveAsync(long id)
     {
         var school = await _schoolRepository.SelectAll()
-            .Where(s => s.Id == id)
             .AsNoTracking()
+            .Where(s => s.Id == id)
             .FirstOrDefaultAsync();
         if (school is null)
             throw new ZeemlinException(404, "School not found");
@@ -95,8 +95,8 @@ public class SchoolService : ISchoolService
     public async Task<SchoolForResultDto> RetrieveByIdAsync(long id)
     {
         var school = await _schoolRepository.SelectAll()
-            .Where(s => s.Id == id)
             .AsNoTracking()
+            .Where(s => s.Id == id)
             .FirstOrDefaultAsync();
         if (school is null)
             throw new ZeemlinException(404, "School not found");
