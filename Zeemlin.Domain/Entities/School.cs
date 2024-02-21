@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Users;
 using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities;
@@ -17,6 +18,12 @@ public class School : Auditable
     [Required]
     [MaxLength(2000)]
     public string Description { get; set; }
+
+    [Required]
+    public long DirectorId { get; set; } // Foreign key referencing Director.Id
+
+    // Navigation property, assuming a one-to-many relationship
+    public Director Director { get; set; }
 
     // Address
     [Required]
