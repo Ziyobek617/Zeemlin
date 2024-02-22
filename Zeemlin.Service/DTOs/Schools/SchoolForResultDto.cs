@@ -16,6 +16,8 @@ public class SchoolForResultDto
     [Required]
     [MaxLength(2000)]
     public string Description { get; set; }
+    public long DirectorId { get; set; }
+    
 
     // Address properties
     [Required]
