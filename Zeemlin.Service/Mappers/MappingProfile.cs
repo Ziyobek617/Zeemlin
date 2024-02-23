@@ -18,7 +18,9 @@ using Zeemlin.Service.DTOs.Assets;
 using Zeemlin.Service.DTOs.Assets.HomeworkAssets;
 using Zeemlin.Service.DTOs.LessonAttendances;
 using Zeemlin.Domain.Entities.Users;
-using Zeemlin.Service.DTOs.Users.SuperAdmins; //8
+using Zeemlin.Service.DTOs.Users.SuperAdmins;
+using Zeemlin.Service.DTOs.Users.Admins;
+using Zeemlin.Service.DTOs.Users.Directors; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -34,6 +36,14 @@ public class MappingProfile : Profile
         CreateMap<Teacher, TeacherForCreationDto>().ReverseMap();
         CreateMap<Teacher, TeacherForUpdateDto>().ReverseMap();
         CreateMap<Teacher, TeacherForResultDto>().ReverseMap();
+
+        CreateMap<Admin, AdminForCreationDto>().ReverseMap();
+        CreateMap<Admin, AdminForUpdateDto>().ReverseMap();
+        CreateMap<Admin, AdminForResultDto>().ReverseMap();
+
+        CreateMap<Director, DirectorForCreationDto>().ReverseMap();
+        CreateMap<Director, DirectorForUpdateDto>().ReverseMap();
+        CreateMap<Director, DirectorForResultDto>().ReverseMap();
 
         CreateMap<SuperAdmin, SuperAdminForCreationDto>().ReverseMap();
         CreateMap<SuperAdmin, SuperAdminForUpdateDto>().ReverseMap();

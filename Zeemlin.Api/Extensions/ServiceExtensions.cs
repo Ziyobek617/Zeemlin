@@ -28,11 +28,14 @@ public static class ServiceExtensions
 
         services.AddScoped<IEmailService, EmailService>();
         // Users
-        services.AddScoped<IGradeService, GradeService>();
-        services.AddScoped<IGradeRepository, GradeRepository>();
-
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<IStudentRepository, StudentRepository>();
+
+        services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<IAdminRepository, AdminRepository>();
+
+        services.AddScoped<IDirectorService, DirectorService>();
+        services.AddScoped<IDirectorRepository, DirectorRepository>();
 
         services.AddScoped<ISuperAdminService, SuperAdminService>();
         services.AddScoped<ISuperAdminRepository, SuperAdminRepository>();
@@ -61,6 +64,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<IHomeworkRepository, HomeworkRepository>();
+
+        services.AddScoped<IGradeService, GradeService>();
+        services.AddScoped<IGradeRepository, GradeRepository>();
 
         services.AddScoped<IScienceRepository, ScienceRepository>();
         services.AddScoped<IScienceService, ScienceService>();
