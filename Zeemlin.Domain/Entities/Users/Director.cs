@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities.Users
 {
@@ -19,6 +20,8 @@ namespace Zeemlin.Domain.Entities.Users
 
         [Required]
         public string Password { get; set; } // Password for authentication (securely hashed!)
+        public GenderType Gender { get; set; }
+        public string PassportSeria { get; set; }
 
         // List of Director's schools, ensuring bidirectional relationship
         public ICollection<School> Schools { get; set; } = new HashSet<School>();
