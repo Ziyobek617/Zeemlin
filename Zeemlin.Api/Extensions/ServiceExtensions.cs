@@ -11,6 +11,10 @@ using Zeemlin.Data.IRepositries.Assets;
 using Zeemlin.Data.Repositories.Assets;
 using Zeemlin.Service.Interfaces.Assets;
 using Zeemlin.Service.Services.Assets;
+using Zeemlin.Data.IRepositries.Users;
+using Zeemlin.Data.Repositories.Users;
+using Zeemlin.Service.Interfaces.Users;
+using Zeemlin.Service.Services.Users;
 
 namespace Zeemlin.Api.Extensions;
 
@@ -23,42 +27,47 @@ public static class ServiceExtensions
         //services.AddScoped<IAuthService, AuthService>();
 
         services.AddScoped<IEmailService, EmailService>();
-
+        // Users
         services.AddScoped<IGradeService, GradeService>();
         services.AddScoped<IGradeRepository, GradeRepository>();
 
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
+
+        services.AddScoped<ISuperAdminService, SuperAdminService>();
+        services.AddScoped<ISuperAdminRepository, SuperAdminRepository>();
+
+        services.AddScoped<ITeacherService, TeacherService>();
+        services.AddScoped<ITeacherRepository, TeacherRepository>();
+
+        // Schools
+        services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<ISchoolService, SchoolService>();
+
+        services.AddScoped<ICourseServices, CourseService>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        
+        services.AddScoped<IGroupService, GroupService>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
+        
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ILessonRepository, LessonRepository>();
 
         services.AddScoped<ILessonAttendanceRepository, LessonAttendanceRepository>();
         services.AddScoped<ILessonAttendanceService, LessonAttendanceService>();
 
-        services.AddScoped<ICourseServices, CourseService>();
-        services.AddScoped<ICourseRepository, CourseRepository>();
-
-        services.AddScoped<IGroupService, GroupService>();
-        services.AddScoped<IGroupRepository, GroupRepository>();
-
-        services.AddScoped<IStudentService, StudentService>();
-        services.AddScoped<IStudentRepository, StudentRepository>();
-
         services.AddScoped<ISubjectService, SubjectService>();
         services.AddScoped<ISubjectRepository, SubjectRepository>();
-        
-        services.AddScoped<ITeacherService, TeacherService>();
-        services.AddScoped<ITeacherRepository, TeacherRepository>();
 
         services.AddScoped<IHomeworkService, HomeworkService>();
         services.AddScoped<IHomeworkRepository, HomeworkRepository>();
 
-        services.AddScoped<ISchoolRepository, SchoolRepository>();
-        services.AddScoped<ISchoolService, SchoolService>();
-
-        services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
-        services.AddScoped<IStudentGroupService, StudentGroupService>();
-
         services.AddScoped<IScienceRepository, ScienceRepository>();
         services.AddScoped<IScienceService, ScienceService>();
+
+        // Relationships
+        services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
+        services.AddScoped<IStudentGroupService, StudentGroupService>();
 
         services.AddScoped<ITeacherGroupRepository, TeacherGroupRepository>();
         services.AddScoped<ITeacherGroupService, TeacherGroupService>();
