@@ -539,6 +539,9 @@ namespace Zeemlin.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<long?>("SuperAdminId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -548,6 +551,8 @@ namespace Zeemlin.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DirectorId");
+
+                    b.HasIndex("SuperAdminId");
 
                     b.ToTable("School");
                 });
@@ -856,6 +861,62 @@ namespace Zeemlin.Data.Migrations
                     b.ToTable("teacherGroups");
                 });
 
+            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Admin", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte>("Gender")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PassportSeria")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("SchoolId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SuperAdminId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
+
+                    b.HasIndex("SuperAdminId");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Director", b =>
                 {
                     b.Property<long>("Id")
@@ -875,7 +936,14 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<byte>("Gender")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PassportSeria")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -892,7 +960,53 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Director");
+                    b.ToTable("Directors");
+                });
+
+            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.SuperAdmin", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte>("Gender")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PassportSeria")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SuperAdmins");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Assets.HomeworkAsset", b =>
@@ -1086,6 +1200,10 @@ namespace Zeemlin.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Zeemlin.Domain.Entities.Users.SuperAdmin", null)
+                        .WithMany("Schools")
+                        .HasForeignKey("SuperAdminId");
+
                     b.Navigation("Director");
                 });
 
@@ -1182,6 +1300,21 @@ namespace Zeemlin.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Admin", b =>
+                {
+                    b.HasOne("Zeemlin.Domain.Entities.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zeemlin.Domain.Entities.Users.SuperAdmin", null)
+                        .WithMany("Admins")
+                        .HasForeignKey("SuperAdminId");
+
+                    b.Navigation("School");
+                });
+
             modelBuilder.Entity("Zeemlin.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Groups");
@@ -1229,6 +1362,13 @@ namespace Zeemlin.Data.Migrations
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Director", b =>
                 {
+                    b.Navigation("Schools");
+                });
+
+            modelBuilder.Entity("Zeemlin.Domain.Entities.Users.SuperAdmin", b =>
+                {
+                    b.Navigation("Admins");
+
                     b.Navigation("Schools");
                 });
 #pragma warning restore 612, 618
