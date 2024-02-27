@@ -14,13 +14,13 @@ namespace Zeemlin.Domain.Entities.Users
 
         [Required]
         public string LastName { get; set; } // Director's last name
-
-        [Required]
-        public string Email { get; set; } // Director's email address
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; } // Password for authentication (securely hashed!)
         public GenderType Gender { get; set; }
+        [Required]
         public string PassportSeria { get; set; }
 
         // List of Director's schools, ensuring bidirectional relationship
@@ -32,13 +32,6 @@ namespace Zeemlin.Domain.Entities.Users
             return Schools.FirstOrDefault(s => s.Name == SchoolName);
         }
 
-        public Director(string username, string firstName, string lastName, string email, string password)
-        {
-            Username = username;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Password = password;
-        }
+        
     }
 }
