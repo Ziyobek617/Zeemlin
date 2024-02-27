@@ -21,7 +21,7 @@ namespace Zeemlin.Service.DTOs.Teachers
         public string Biography { get; set; }
 
         public string DistrictName { get; set; }
-        public GenderType genderType { get; set; }
+        public string genderType { get; set; }
         public long SchoolNumber { get; set; }
 
         // Optionally include Group information if relevant

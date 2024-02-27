@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Teachers;
@@ -12,31 +13,44 @@ public class TeacherService : ITeacherService
 {
     private readonly IMapper _mapper;
     private readonly ITeacherRepository _repository;
+    private readonly AppDbContext appDbContext;
 
     public TeacherService(
-        IMapper mapper, 
-        ITeacherRepository repository)
+        IMapper mapper,
+        ITeacherRepository repository,
+        AppDbContext appDbContext)
     {
         _mapper = mapper;
         _repository = repository;
+        this.appDbContext = appDbContext;
     }
 
     public async Task<TeacherForResultDto> CreateAsync(TeacherForCreationDto dto)
     {
         var TeacherEmailExist = await _repository.SelectAll()
-            .Where(t => t.Email == dto.Email || t.PhoneNumber == dto.PhoneNumber)
             .AsNoTracking()
+            .Where(t => t.Email.ToLower() == dto.Email.ToLower() 
+            || t.PhoneNumber == dto.PhoneNumber)
             .FirstOrDefaultAsync();
-
         
         if(TeacherEmailExist is not null)
-            throw new ZeemlinException(409, "Teacher is already exist.");
-        
+            throw new ZeemlinException
+                (409, "Teacher is already exist.");
+
+        var school = await appDbContext.School
+            .FirstOrDefaultAsync(s => s.SchoolNumber == dto.SchoolNumber);
+
+        if (school is null)
+            throw new ZeemlinException(404, "School not found.");
+
+        if (dto.SchoolNumber <= 0)
+            throw new ZeemlinException
+                (400, "Invalid School Number. School Number must be greater than 0.");
 
         var mapped = _mapper.Map<Teacher>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
-
         var created = await _repository.InsertAsync(mapped);
+
         return _mapper.Map<TeacherForResultDto>(created);
 
     }
@@ -45,13 +59,33 @@ public class TeacherService : ITeacherService
     {
         var Teacher = await _repository
             .SelectAll()
-            .Where(t => t.Id == id)
             .AsNoTracking()
+            .Where(t => t.Id == id)
             .FirstOrDefaultAsync();
 
         if (Teacher is null)
             throw new ZeemlinException(404, "Teacher is not found.");
-        
+
+        var TeacherEmailExist = await _repository.SelectAll()
+            .AsNoTracking()
+            .Where(t => t.Email.ToLower() == dto.Email.ToLower() 
+            || t.PhoneNumber == dto.PhoneNumber)
+            .FirstOrDefaultAsync();
+
+
+        if (TeacherEmailExist is not null)
+            throw new ZeemlinException(409, "Teacher is already exist.");
+
+        var school = await appDbContext.School
+            .FirstOrDefaultAsync(s => s.SchoolNumber == dto.SchoolNumber);
+
+        if (school is null)
+            throw new ZeemlinException(404, "School not found.");
+
+        if (dto.SchoolNumber <= 0)
+            throw new ZeemlinException
+                (400, "Invalid School Number. School Number must be greater than 0.");
+
         Teacher.UpdatedAt = DateTime.UtcNow;
         var person = _mapper.Map(dto,Teacher);
         await _repository.UpdateAsync(person);
@@ -64,8 +98,8 @@ public class TeacherService : ITeacherService
     {
         var user = await _repository
             .SelectAll()
-            .Where(t => t.Id == id)
             .AsNoTracking()
+            .Where(t => t.Id == id)
             .FirstOrDefaultAsync();
 
         if (user is null)
@@ -77,7 +111,8 @@ public class TeacherService : ITeacherService
 
     public async Task<IEnumerable<TeacherForResultDto>> RetrieveAllAsync()
     {
-        var users = await _repository.SelectAll().ToListAsync();
+        var users = await _repository.SelectAll().AsNoTracking().ToListAsync();
+
         return _mapper.Map<IEnumerable<TeacherForResultDto>>(users);
 
     }
@@ -86,8 +121,8 @@ public class TeacherService : ITeacherService
     {
         var user = await _repository
             .SelectAll()
-            .Where(t => t.Id == id)
             .AsNoTracking()
+            .Where(t => t.Id == id)
             .FirstOrDefaultAsync();
 
         if (user is null)

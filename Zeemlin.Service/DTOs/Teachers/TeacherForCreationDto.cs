@@ -21,7 +21,7 @@ namespace Zeemlin.Service.DTOs.Teachers
         [EmailAddress]
         [Required]
         public string Email { get; set; }
-
+            
         [PasswordPropertyText]
         [Required]
         public string Password { get; set; }
