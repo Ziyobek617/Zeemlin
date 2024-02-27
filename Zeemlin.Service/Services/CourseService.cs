@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
@@ -23,28 +24,38 @@ public class CourseService : ICourseServices
 
     public async Task<CourseForResultDto> CreateAsync(CourseForCreationDto dto)
     {
-        var name = await _courseRepository.SelectAll()
+        // Validate SchoolId range
+        if (dto.SchoolId < 1) // Adjust the range based on your valid school IDs
+        {
+            throw new ZeemlinException(400, "Invalid SchoolId. School ID must be between 1 and 100.");
+        }
+
+        // Check for duplicate course name within the same school
+        var existingCourse = await _courseRepository.SelectAll()
             .AsNoTracking()
-            .Where(n => n.Name.ToLower() == dto.Name.ToLower())
+            .Where(c => c.Name.ToLower() == dto.Name.ToLower() && c.SchoolId == dto.SchoolId)
             .FirstOrDefaultAsync();
 
-        if (name is not null)
-            throw new ZeemlinException(409, "Course already exists");
+        if (existingCourse is not null)
+        {
+            throw new ZeemlinException(409, "Course with the same name already exists in this school.");
+        }
 
         var school = await _courseRepository.SelectAll()
             .AsNoTracking()
             .Where(s => s.SchoolId == dto.SchoolId)
             .FirstOrDefaultAsync();
 
-        if (school is not null)
-            throw new ZeemlinException(409, "School already exists");
-
+        if (school is null)
+            throw new ZeemlinException(404, "School Not Found");
+    
         var mappedCourse = _mapper.Map<Course>(dto);
         mappedCourse.CreatedAt = DateTime.UtcNow;
         await _courseRepository.InsertAsync(mappedCourse);
 
         return _mapper.Map<CourseForResultDto>(mappedCourse);
     }
+
 
     public async Task<CourseForResultDto> ModifyAsync(long id, CourseForUpdateDto dto)
     {
@@ -55,6 +66,24 @@ public class CourseService : ICourseServices
 
         if (IsValidId is null)
             throw new ZeemlinException(404, "Course not found");
+
+        var existingCourse = await _courseRepository.SelectAll()
+        .AsNoTracking()
+        .Where(c => c.Name.ToLower() == dto.Name.ToLower() && c.SchoolId == dto.SchoolId)
+        .FirstOrDefaultAsync();
+
+        if (existingCourse is not null)
+        {
+            throw new ZeemlinException(409, "Course with the same name already exists in this school.");
+        }
+
+        var school = await _courseRepository.SelectAll()
+            .AsNoTracking()
+            .Where(s => s.SchoolId == dto.SchoolId)
+            .FirstOrDefaultAsync();
+
+        if (school is null)
+            throw new ZeemlinException(404, "School Not Found");
 
         var mapped = _mapper.Map(dto, IsValidId);
         mapped.UpdatedAt = DateTime.UtcNow;

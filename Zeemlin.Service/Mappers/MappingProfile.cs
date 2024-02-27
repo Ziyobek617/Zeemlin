@@ -41,6 +41,7 @@ public class MappingProfile : Profile
         CreateMap<Admin, AdminForUpdateDto>().ReverseMap();
         CreateMap<Admin, AdminForResultDto>().ReverseMap();
 
+
         CreateMap<Director, DirectorForCreationDto>().ReverseMap();
         CreateMap<Director, DirectorForUpdateDto>().ReverseMap();
         CreateMap<Director, DirectorForResultDto>().ReverseMap();

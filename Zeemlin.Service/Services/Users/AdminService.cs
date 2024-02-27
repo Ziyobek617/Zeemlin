@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries.Users;
+using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Users;
+using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.DTOs.Users.Admins;
 using Zeemlin.Service.DTOs.Users.SuperAdmins;
 using Zeemlin.Service.Exceptions;
@@ -12,12 +16,13 @@ namespace Zeemlin.Service.Services.Users;
 public class AdminService : IAdminService
 {
     private readonly IMapper _mapper;
-
     private readonly IAdminRepository _adminRepository;
-    public AdminService(IMapper mapper, IAdminRepository adminRepository)
+    private readonly AppDbContext _context;
+    public AdminService(IMapper mapper, IAdminRepository adminRepository, AppDbContext context)
     {
         _mapper = mapper;
         _adminRepository = adminRepository;
+        _context = context;
     }
 
     public async Task<AdminForResultDto> CreateAsync(AdminForCreationDto dto)
@@ -49,14 +54,14 @@ public class AdminService : IAdminService
         if (IsValidPassportSeria is not null)
             throw new ZeemlinException(409, "PassportSeria already exists");
 
-        //var IsValidSchoolNumber = await _adminRepository
-        //    .SelectAll()
-        //    .AsNoTracking()
-        //    .Where(s => s.SchoolId == dto.SchoolId)
-        //    .FirstOrDefaultAsync();
+        var IsValidSchoolNumber = await _adminRepository
+            .SelectAll()
+            .AsNoTracking()
+            .Where(s => s.SchoolId == dto.SchoolId)
+            .FirstOrDefaultAsync();
 
-        //if (IsValidSchoolNumber is not null)
-        //    throw new ZeemlinException(409, "School already exists");
+        if (IsValidSchoolNumber is null)
+            throw new ZeemlinException(404, "School Not Found");
 
 
         var mapped = _mapper.Map<Admin>(dto);
@@ -83,7 +88,7 @@ public class AdminService : IAdminService
             .FirstOrDefaultAsync();
 
         if (IsValidUsername is not null)
-            throw new ZeemlinException(409, "Username Not Found");
+            throw new ZeemlinException(409, "Username already exists");
 
         var IsValidUserEmail = await _adminRepository
             .SelectAll()
@@ -92,7 +97,7 @@ public class AdminService : IAdminService
             .FirstOrDefaultAsync();
 
         if (IsValidUserEmail is not null)
-            throw new ZeemlinException(404, "Email not found");
+            throw new ZeemlinException(409, "Email already exists");
 
         var IsValidPassportSeria = await _adminRepository
             .SelectAll()
@@ -101,16 +106,16 @@ public class AdminService : IAdminService
             .FirstOrDefaultAsync();
 
         if (IsValidPassportSeria is not null)
-            throw new ZeemlinException(404, "PassportSeria Not Found");
+            throw new ZeemlinException(404, "PassportSeria already exists");
 
-        //var IsValidSchoolNumber = await _adminRepository
-        //    .SelectAll()
-        //    .AsNoTracking()
-        //    .Where(s => s.SchoolId == dto.SchoolId)
-        //    .FirstOrDefaultAsync();
+        var IsValidSchoolNumber = await _adminRepository
+            .SelectAll()
+            .AsNoTracking()
+            .Where(s => s.SchoolId == dto.SchoolId)
+            .FirstOrDefaultAsync();
 
-        //if (IsValidSchoolNumber is null)
-        //    throw new ZeemlinException(404, "School Not Found");
+        if (IsValidSchoolNumber is null)
+            throw new ZeemlinException(404, "School Not Found");
 
         var mapped = _mapper.Map(dto, IsValidId);
         mapped.UpdatedAt = DateTime.UtcNow;
@@ -132,6 +137,18 @@ public class AdminService : IAdminService
         await _adminRepository.DeleteAsync(id);
         return true;
     }
+
+    public async Task<List<Admin>> SearchAdmins(string searchTerm, AppDbContext context)
+    {
+        var query = context.Admins.Where(a =>
+            a.Username.Contains(searchTerm) ||
+            a.PassportSeria.Contains(searchTerm) ||
+            a.Email.Contains(searchTerm));
+        return await query.ToListAsync();
+    }
+
+
+
 
     public async Task<IEnumerable<AdminForResultDto>> RetrieveAllAsync()
     {
