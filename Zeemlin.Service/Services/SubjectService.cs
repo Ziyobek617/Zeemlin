@@ -29,19 +29,19 @@ public class SubjectService : ISubjectService
         if (name is not null)
             throw new ZeemlinException(409, "Subject already exists");
 
-        var group = await _subjectRepository.SelectAll()
-            .AsNoTracking()
-            .Where(g => g.GroupId == dto.GroupId)
-            .FirstOrDefaultAsync();
-        if (group is not null)
-            throw new ZeemlinException(409, "Group already exists");
+        //var group = await _subjectRepository.SelectAll()
+        //    .AsNoTracking()
+        //    .Where(g => g.GroupId == dto.GroupId)
+        //    .FirstOrDefaultAsync();
+        //if (group is not null)
+        //    throw new ZeemlinException(409, "Group already exists");
 
-        var teacher = await _subjectRepository.SelectAll()
-            .AsNoTracking()
-            .Where(t => t.TeacherId == dto.TeacherId)
-            .FirstOrDefaultAsync();
-        if (teacher is not null)
-            throw new ZeemlinException(409, "Teacher already exists");
+        //var teacher = await _subjectRepository.SelectAll()
+        //    .AsNoTracking()
+        //    .Where(t => t.TeacherId == dto.TeacherId)
+        //    .FirstOrDefaultAsync();
+        //if (teacher is not null)
+        //    throw new ZeemlinException(409, "Teacher already exists");
 
         var lesson = await _subjectRepository.SelectAll()
             .AsNoTracking()
@@ -68,19 +68,19 @@ public class SubjectService : ISubjectService
         if (update is null)
             throw new ZeemlinException(404, "Subject Not Found");
 
-        var group = await _subjectRepository.SelectAll()
-            .AsNoTracking()
-            .Where(g => g.GroupId == dto.GroupId)
-            .FirstOrDefaultAsync();
-        if (group is null)
-            throw new ZeemlinException(404, "Group not found");
+        //var group = await _subjectRepository.SelectAll()
+        //    .AsNoTracking()
+        //    .Where(g => g.GroupId == dto.GroupId)
+        //    .FirstOrDefaultAsync();
+        //if (group is null)
+        //    throw new ZeemlinException(404, "Group not found");
 
-        var teacher = await _subjectRepository.SelectAll()
-            .AsNoTracking()
-            .Where(t => t.TeacherId == dto.TeacherId)
-            .FirstOrDefaultAsync();
-        if (teacher is null)
-            throw new ZeemlinException(404, "Teacher not found");
+        //var teacher = await _subjectRepository.SelectAll()
+        //    .AsNoTracking()
+        //    .Where(t => t.TeacherId == dto.TeacherId)
+        //    .FirstOrDefaultAsync();
+        //if (teacher is null)
+        //    throw new ZeemlinException(404, "Teacher not found");
 
         var lesson = await _subjectRepository.SelectAll()
             .AsNoTracking()

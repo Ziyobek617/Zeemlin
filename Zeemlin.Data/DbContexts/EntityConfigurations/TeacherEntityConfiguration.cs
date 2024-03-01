@@ -52,8 +52,6 @@ public class TeacherEntityConfiguration : IEntityTypeConfiguration<Teacher>
             .Property(p => p.SchoolNumber)
             .IsRequired(true);
 
-        builder
-            .Property(p => p.GroupId)
-            .IsRequired(false);
+        
     }
 }

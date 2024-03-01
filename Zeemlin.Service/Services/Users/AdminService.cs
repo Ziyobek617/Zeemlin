@@ -54,11 +54,7 @@ public class AdminService : IAdminService
         if (IsValidPassportSeria is not null)
             throw new ZeemlinException(409, "PassportSeria already exists");
 
-        var IsValidSchoolNumber = await _adminRepository
-            .SelectAll()
-            .AsNoTracking()
-            .Where(s => s.SchoolId == dto.SchoolId)
-            .FirstOrDefaultAsync();
+        var IsValidSchoolNumber = await _context.School.FirstOrDefaultAsync(s => s.Id == dto.SchoolId);
 
         if (IsValidSchoolNumber is null)
             throw new ZeemlinException(404, "School Not Found");

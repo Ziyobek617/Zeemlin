@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
 using Zeemlin.Domain.Commons;
 using Zeemlin.Domain.Entities.Users;
 using Zeemlin.Domain.Enums;
@@ -44,4 +42,7 @@ public class School : Auditable
     public string CallCenter { get; set; }
     public string EmailCenter { get; set; }
     public string? Website { get; set; }
+
+    public ICollection<Course> Courses { get; set; }
+    public ICollection<Group> Groups { get; set; }
 }

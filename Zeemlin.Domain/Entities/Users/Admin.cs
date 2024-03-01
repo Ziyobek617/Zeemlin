@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Zeemlin.Domain.Commons;
+﻿using Zeemlin.Domain.Commons;
 using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities.Users;

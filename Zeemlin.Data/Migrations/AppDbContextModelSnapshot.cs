@@ -199,7 +199,7 @@ namespace Zeemlin.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("CourseId")
+                    b.Property<long>("CourseId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
@@ -209,12 +209,13 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("HeadTeacherId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long?>("SchoolId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -222,6 +223,8 @@ namespace Zeemlin.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Groups");
                 });
@@ -552,6 +555,9 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("DirectorId");
 
+                    b.HasIndex("SchoolNumber")
+                        .IsUnique();
+
                     b.HasIndex("SuperAdminId");
 
                     b.ToTable("School");
@@ -609,7 +615,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("scienceTeachers");
+                    b.ToTable("ScienceTeacher");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Student", b =>
@@ -724,7 +730,7 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentGroups");
+                    b.ToTable("StudentGroup");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Subject", b =>
@@ -742,9 +748,6 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("LessonId")
                         .HasColumnType("bigint");
 
@@ -752,19 +755,12 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("TeacherId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
-
                     b.HasIndex("LessonId");
-
-                    b.HasIndex("TeacherId");
 
                     b.ToTable("Subjects");
                 });
@@ -800,9 +796,6 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long?>("GroupId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -829,36 +822,34 @@ namespace Zeemlin.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.TeacherGroup", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TeacherId")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("Id")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherId", "GroupId");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("teacherGroups");
+                    b.ToTable("TeacherGroups");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Users.Admin", b =>
@@ -1050,7 +1041,7 @@ namespace Zeemlin.Data.Migrations
             modelBuilder.Entity("Zeemlin.Domain.Entities.Course", b =>
                 {
                     b.HasOne("Zeemlin.Domain.Entities.School", "School")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1067,19 +1058,19 @@ namespace Zeemlin.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Zeemlin.Domain.Entities.Homework", "Homework")
-                        .WithMany("Grades")
+                        .WithMany()
                         .HasForeignKey("HomeworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Zeemlin.Domain.Entities.Lesson", "Lesson")
-                        .WithMany("Grades")
+                        .WithMany()
                         .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Zeemlin.Domain.Entities.Student", "Student")
-                        .WithMany()
+                        .WithMany("Grades")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1095,9 +1086,17 @@ namespace Zeemlin.Data.Migrations
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Group", b =>
                 {
-                    b.HasOne("Zeemlin.Domain.Entities.Course", null)
+                    b.HasOne("Zeemlin.Domain.Entities.Course", "Course")
                         .WithMany("Groups")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zeemlin.Domain.Entities.School", null)
+                        .WithMany("Groups")
+                        .HasForeignKey("SchoolId");
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Homework", b =>
@@ -1258,27 +1257,13 @@ namespace Zeemlin.Data.Migrations
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Subject", b =>
                 {
-                    b.HasOne("Zeemlin.Domain.Entities.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Zeemlin.Domain.Entities.Lesson", null)
+                    b.HasOne("Zeemlin.Domain.Entities.Lesson", "Lesson")
                         .WithMany("Subjects")
                         .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Zeemlin.Domain.Entities.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Teacher");
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.TeacherGroup", b =>
@@ -1330,17 +1315,20 @@ namespace Zeemlin.Data.Migrations
             modelBuilder.Entity("Zeemlin.Domain.Entities.Homework", b =>
                 {
                     b.Navigation("Assets");
-
-                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Lesson", b =>
                 {
-                    b.Navigation("Grades");
-
                     b.Navigation("LessonAttendances");
 
                     b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("Zeemlin.Domain.Entities.School", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Science", b =>
@@ -1350,6 +1338,8 @@ namespace Zeemlin.Data.Migrations
 
             modelBuilder.Entity("Zeemlin.Domain.Entities.Student", b =>
                 {
+                    b.Navigation("Grades");
+
                     b.Navigation("StudentGroups");
                 });
 

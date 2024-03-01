@@ -9,7 +9,6 @@ public class Course : Auditable
     public long SchoolId { get; set; }
     public School School { get; set; }
 
-
     public ICollection<Group> Groups { get; set; }
 
 }

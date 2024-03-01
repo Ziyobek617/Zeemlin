@@ -1,5 +1,4 @@
 ﻿using Zeemlin.Domain.Commons;
-using Zeemlin.Domain.Enums.Events;
 
 namespace Zeemlin.Domain.Entities.Events
 {

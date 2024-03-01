@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
@@ -15,10 +16,13 @@ public class CourseService : ICourseServices
 {
     private readonly IMapper _mapper;
     private readonly ICourseRepository _courseRepository;
-    public CourseService(IMapper mapper, ICourseRepository courseRepository)
+    private readonly AppDbContext _context;
+
+    public CourseService(IMapper mapper, ICourseRepository courseRepository, AppDbContext context)
     {
         _mapper = mapper;
         _courseRepository = courseRepository;
+        _context = context;
     }
 
 
@@ -41,14 +45,11 @@ public class CourseService : ICourseServices
             throw new ZeemlinException(409, "Course with the same name already exists in this school.");
         }
 
-        var school = await _courseRepository.SelectAll()
-            .AsNoTracking()
-            .Where(s => s.SchoolId == dto.SchoolId)
-            .FirstOrDefaultAsync();
+        var IsValidSchoolNumber = await _context.School.FirstOrDefaultAsync(s => s.Id == dto.SchoolId);
 
-        if (school is null)
+        if (IsValidSchoolNumber is null)
             throw new ZeemlinException(404, "School Not Found");
-    
+
         var mappedCourse = _mapper.Map<Course>(dto);
         mappedCourse.CreatedAt = DateTime.UtcNow;
         await _courseRepository.InsertAsync(mappedCourse);

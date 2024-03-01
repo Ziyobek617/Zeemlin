@@ -11,7 +11,7 @@ namespace Zeemlin.Domain.Entities.Questions
         public string Description { get; set; }
         public long TeacherId { get; set; }
         public Teacher Teacher { get; set; }
-        public IList<Answer> Answers { get; set; }
+        public ICollection<Answer> Answers { get; set; }
 
         public Question(string text, DifficultyLevel difficulty, AnswerType type)
         {

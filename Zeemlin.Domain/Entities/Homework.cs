@@ -18,6 +18,5 @@ public class Homework : Auditable
     public Teacher Teacher { get; set; }
 
 
-    public ICollection<Grade> Grades { get; set; }
     public ICollection<HomeworkAsset> Assets { get; set; }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 using Zeemlin.Domain.Commons;
 using Zeemlin.Domain.Enums;
 
