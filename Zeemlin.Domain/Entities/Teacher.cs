@@ -28,5 +28,4 @@ public class Teacher : Auditable
 
 
     public ICollection<TeacherGroup> TeacherGroups { get; set; }
-    public ICollection<ScienceTeacher> scienceTeachers { get; set; }
 }

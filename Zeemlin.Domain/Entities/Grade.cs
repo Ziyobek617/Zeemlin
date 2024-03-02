@@ -7,12 +7,8 @@ public class Grade : Auditable
 {
     public long UserId { get; set; }
     public Student Student { get; set; } // One-to-many relationship
-    public long GroupId { get; set; }
-    public Group Group { get; set; } // One-to-many relationship
     public long LessonId { get; set; }
     public Lesson Lesson { get; set; } // One-to-many relationship
-    public long HomeworkId { get; set; }
-    public Homework Homework { get; set; } // One-to-many relationship
     public DateTime DateTimeCreated { get; set; }
     public AssessmentType AssessmentType { get; set; }
     public int Value { get; set; }

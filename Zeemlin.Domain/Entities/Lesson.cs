@@ -14,6 +14,7 @@ public class Lesson : Auditable
     public long TeacherId { get; set; }
     public Teacher Teacher { get; set; }
 
+
+    public ICollection<Homework> Homework { get; set; }
     public ICollection<Subject> Subjects { get; set; }
-    public ICollection<LessonAttendance> LessonAttendances { get;set;}
 }

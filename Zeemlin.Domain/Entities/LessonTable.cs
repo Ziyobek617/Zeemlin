@@ -8,9 +8,7 @@ public class LessonTable : Auditable
     public DateTime GetDate { get; set; } // What day is the lesson? For example: Monday or Tuesday
     public string Title { get; set; } // Which science is written here
 
-    public long GroupId { get; set; } // It is written here which group it belongs to
-    public Group Group { get; set; }
-    public long TeacherId { get; set; } // Write here which teacher will teach the group
-    public Teacher Teacher { get; set; }
+    public long LessonId { get; set; }
+    public Lesson Lesson { get; set; }
 
 }

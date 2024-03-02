@@ -18,10 +18,9 @@ public class School : Auditable
     public string Description { get; set; }
 
     [Required]
-    public long DirectorId { get; set; } // Foreign key referencing Director.Id
+    public long DirectorId { get; set; }
+    public Director Director { get; set; } // Navigation property for Director
 
-    // Navigation property, assuming a one-to-many relationship
-    public Director Director { get; set; }
 
     // Address
     [Required]
@@ -44,5 +43,4 @@ public class School : Auditable
     public string? Website { get; set; }
 
     public ICollection<Course> Courses { get; set; }
-    public ICollection<Group> Groups { get; set; }
 }

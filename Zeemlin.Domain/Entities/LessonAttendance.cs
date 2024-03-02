@@ -12,6 +12,5 @@ public class LessonAttendance : Auditable
     public string GroupName { get; set; }
     public string TeacherName { get; set; }
     public DateTime DateTime { get; set; }
-    public ScienceType ScienceType { get; set; }
     public LessonAttendanceType LessonAttendanceType { get; set; }
 }

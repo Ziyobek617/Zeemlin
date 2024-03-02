@@ -24,13 +24,7 @@ namespace Zeemlin.Domain.Entities.Users
         public string PassportSeria { get; set; }
 
         // List of Director's schools, ensuring bidirectional relationship
-        public ICollection<School> Schools { get; set; } = new HashSet<School>();
-
-        // Method to access a specific school by ID
-        public School GetSchoolByName(string SchoolName)
-        {
-            return Schools.FirstOrDefault(s => s.Name == SchoolName);
-        }
+        public ICollection<School> Schools { get; set; }
 
         
     }

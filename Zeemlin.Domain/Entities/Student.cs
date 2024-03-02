@@ -53,5 +53,6 @@ public class Student : Auditable
 
     public ICollection<Grade> Grades { get; set; }
     public ICollection<StudentGroup> StudentGroups { get; set; }
+    public ICollection<LessonAttendance> LessonAttendances { get; set; }
 
 }
