@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts.EntityConfigurations;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Assets;
+using Zeemlin.Domain.Entities.Questions;
 using Zeemlin.Domain.Entities.Users;
 using static Zeemlin.Data.DbContexts.EntityConfigurations.AssetsConfiguration;
+using static Zeemlin.Data.DbContexts.EntityConfigurations.SchoolConfiguration;
+using static Zeemlin.Data.DbContexts.EntityConfigurations.UserConfiguration;
 
 namespace Zeemlin.Data.DbContexts
 {
@@ -24,6 +28,7 @@ namespace Zeemlin.Data.DbContexts
         public DbSet<Student> Students { get; set; }
 
         // Assets
+        public DbSet<SchoolAsset> SchoolAssets { get; set; }
         public DbSet<TeacherAsset> TeacherAssets { get; set; }
         public DbSet<HomeworkAsset> HomeworkAssets { get; set; }
 
@@ -38,15 +43,39 @@ namespace Zeemlin.Data.DbContexts
         public DbSet<Homework> Homework { get; set; }
         public DbSet<Grade> Grades { get; set; }
 
+        // Questions
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questiones { get; set; } 
+        public DbSet<Answer> Answers { get; set; }
+
         // Many-to-Many Relationships (without navigation properties)
         public DbSet<TeacherGroup> TeacherGroups { get; set; } // Explicitly define the join table
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Assets
             modelBuilder.ApplyConfiguration(new SchoolAssetConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkAssetConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherAssetConfiguration());
 
+            // Users
+            modelBuilder.ApplyConfiguration(new SuperAdminConfiguration());
+            modelBuilder.ApplyConfiguration(new DirectorConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            modelBuilder.ApplyConfiguration(new TeacherConfiguration());
+            modelBuilder.ApplyConfiguration(new StudentConfiguration());
+
+            // School
+            modelBuilder.ApplyConfiguration(new SchoolConfigurations());
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupConfiguration());
+            modelBuilder.ApplyConfiguration(new StudentGroupConfiguration());
+            modelBuilder.ApplyConfiguration(new TeacherGroupConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonConfiguration());
+            modelBuilder.ApplyConfiguration(new HomeworkConfiguration());
+            modelBuilder.ApplyConfiguration(new SubjectConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonAttendanceConfiguration());
+            modelBuilder.ApplyConfiguration(new GradeConfiguration());
             // Other entity configurations...
         }
 

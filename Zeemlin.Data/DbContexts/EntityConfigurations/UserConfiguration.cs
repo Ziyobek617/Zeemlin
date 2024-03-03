@@ -69,22 +69,28 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
             public void Configure(EntityTypeBuilder<Teacher> builder)
             {
                 builder.ToTable("Teachers");
-                builder.HasKey(e => e.Id);
+                builder.HasKey(t => t.Id);
 
-                builder.Property(e => e.FirstName).IsRequired();
-                builder.Property(e => e.LastName).IsRequired();
-                builder.Property(e => e.DateOfBirth).IsRequired();
-                builder.Property(e => e.PhoneNumber);
-                builder.Property(e => e.Email);
-                builder.Property(e => e.Password);
-                builder.Property(e => e.Biography);
-                builder.Property(e => e.DistrictName).IsRequired().HasMaxLength(50);
-                builder.Property(e => e.SchoolNumber).IsRequired();
-                builder.Property(e => e.ScienceType);
+                // Define property configurations
+                builder.Property(t => t.FirstName).IsRequired();
+                builder.Property(t => t.LastName).IsRequired();
+                builder.Property(t => t.DateOfBirth).IsRequired();
+                builder.Property(t => t.PhoneNumber).IsRequired();
+                builder.Property(t => t.Email).IsRequired();
+                builder.Property(t => t.Password).IsRequired();
+                builder.Property(t => t.DistrictName).IsRequired().HasMaxLength(50);
+                builder.Property(t => t.SchoolNumber).IsRequired();
+                builder.Property(t => t.ScienceType).IsRequired();
+                builder.Property(t => t.genderType).IsRequired();
 
-                builder.HasMany(e => e.TeacherGroups)
+                // Define relationships
+                builder.HasMany(t => t.TeacherGroups)
                     .WithOne(tg => tg.Teacher)
                     .HasForeignKey(tg => tg.TeacherId);
+
+                builder.HasMany(t => t.Questions)
+                    .WithOne(q => q.Teacher)
+                    .HasForeignKey(q => q.TeacherId);
             }
         }
 
