@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Questions;
 using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities;
@@ -28,4 +29,5 @@ public class Teacher : Auditable
 
 
     public ICollection<TeacherGroup> TeacherGroups { get; set; }
+    public ICollection<Question> Questions { get; set; }
 }

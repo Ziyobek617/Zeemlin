@@ -22,19 +22,6 @@ public class GradeService : IGradeService
 
     public async Task<GradeForResultDto> CreateAsync(GradeForCreationDto dto)
     {
-        var gradeHomeworkId = await _gradeRepository.SelectAll()
-            .Where(g => g.HomeworkId == dto.HomeworkId)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
-        if (gradeHomeworkId is not null)
-            throw new ZeemlinException(409, "Already exist");
-
-        var gradeGroupId = await _gradeRepository.SelectAll()
-            .AsNoTracking()
-            .Where(g => g.GroupId == dto.GroupId)
-            .FirstOrDefaultAsync();
-        if (gradeGroupId is not null)
-            throw new ZeemlinException(409, "Group already exist");
 
         var gradeLessonId = await _gradeRepository.SelectAll()
             .AsNoTracking()
@@ -50,15 +37,15 @@ public class GradeService : IGradeService
             .FirstOrDefaultAsync();
 
         if (gradeUserId is not null)
-            throw new ZeemlinException(409, "Already exist");
+            throw new ZeemlinException(409, "Student already exists");
 
         var value = await _gradeRepository.SelectAll()
             .Where(i => i.Value == dto.Value)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (gradeUserId is not null)
-            throw new ZeemlinException(409, "Already exist");
+        if (value is not null)
+            throw new ZeemlinException(409, "Value already exists");
 
         var mappedGrade = _mapper.Map<Grade>(dto);
         mappedGrade.CreatedAt = DateTime.UtcNow;
@@ -71,12 +58,12 @@ public class GradeService : IGradeService
 
     public async Task<GradeForResultDto> ModifyAsync(long id, GradeForUpdateDto dto)
     {
-        var gradeHomeworkId = await _gradeRepository.SelectAll()
-            .Where(g => g.HomeworkId == dto.HomeworkId)
+        var gradeId = await _gradeRepository.SelectAll()
+            .Where(g => g.Id == id)
             .AsNoTracking()
             .FirstOrDefaultAsync();
-        if (gradeHomeworkId is null)
-            throw new ZeemlinException(404, "Homework Not Found");
+        if (gradeId is null)
+            throw new ZeemlinException(404, "Grade Not Found");
 
         var gradeUserId = await _gradeRepository
             .SelectAll()
@@ -87,13 +74,6 @@ public class GradeService : IGradeService
         if (gradeUserId is null)
             throw new ZeemlinException(404, "Student Not Found");
 
-        var gradeGroupId = await _gradeRepository.SelectAll()
-            .AsNoTracking()
-            .Where(u => u.GroupId == dto.GroupId)
-            .FirstOrDefaultAsync();
-        if (gradeGroupId is null)
-            throw new ZeemlinException(404, "Group Not Found");
-
         var gradeLessonId = await _gradeRepository.SelectAll()
             .AsNoTracking()
             .Where(u => u.LessonId == dto.LessonId)
@@ -101,8 +81,8 @@ public class GradeService : IGradeService
         if (gradeLessonId is null)
             throw new ZeemlinException(404, "Lesson Not Found");
 
-        gradeHomeworkId.UpdatedAt = DateTime.UtcNow;
-        var baho = _mapper.Map(dto, gradeHomeworkId);
+        gradeId.UpdatedAt = DateTime.UtcNow;
+        var baho = _mapper.Map(dto, gradeId);
         await _gradeRepository.UpdateAsync(baho);
 
         return _mapper.Map<GradeForResultDto>(baho);

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Questions;
 using Zeemlin.Domain.Entities.Users;
 using Zeemlin.Domain.Enums;
 
@@ -43,4 +44,5 @@ public class School : Auditable
     public string? Website { get; set; }
 
     public ICollection<Course> Courses { get; set; }
+    public ICollection<Quiz> Quizzes { get; set; }
 }

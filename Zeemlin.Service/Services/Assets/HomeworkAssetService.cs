@@ -23,20 +23,6 @@ public class HomeworkAssetService : IHomeworkAssetService
 
     public async Task<HomeworkAssetForResultDto> CreateAsync(HomeworkAssetForCreationDto dto)
     {
-        var IsValidTeacherId = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(t => t.TeacherId == dto.TeacherId)
-            .FirstOrDefaultAsync();
-
-        if (IsValidTeacherId is not null)
-            throw new ZeemlinException(409, "Teacher already exists");
-
-        var IsValidGroupId = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(g => g.GroupId == dto.GroupId)
-            .FirstOrDefaultAsync();
-        if (IsValidGroupId is not null)
-            throw new ZeemlinException(409, "Group already exists");
 
         var IsValidHomeworkId = await _repository.SelectAll()
             .AsNoTracking()
