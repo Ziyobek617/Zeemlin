@@ -9,8 +9,6 @@ using Zeemlin.Service.DTOs.StudentGroups;
 using Zeemlin.Service.DTOs.Students; //1
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.DTOs.TeacherGroups;
-using Zeemlin.Service.DTOs.Sciences;
-using Zeemlin.Service.DTOs.ScienceTeachers;
 using Zeemlin.Service.DTOs.Subjects;
 using Zeemlin.Service.DTOs.Courses;
 using Zeemlin.Domain.Entities.Assets;
@@ -72,11 +70,6 @@ public class MappingProfile : Profile
         CreateMap<Grade, GradeForUpdateDto>().ReverseMap();
         CreateMap<Grade, GradeForResultDto>().ReverseMap();
 
-        CreateMap<Science, ScienceForCreationDto>().ReverseMap();
-        CreateMap<Science, ScienceForUpdateDto>().ReverseMap();
-        CreateMap<Science, ScienceForResultDto>().ReverseMap();
-
-
         CreateMap<Subject, SubjectForCreationDto>().ReverseMap();
         CreateMap<Subject, SubjectForUpdateDto>().ReverseMap();
         CreateMap<Subject, SubjectForResultDto>().ReverseMap();
@@ -100,10 +93,6 @@ public class MappingProfile : Profile
         CreateMap<TeacherGroup, TeacherGroupForCreationDto>().ReverseMap();
         CreateMap<TeacherGroup, TeacherGroupForUpdateDto>().ReverseMap();
         CreateMap<TeacherGroup, TeacherGroupForResultDto>().ReverseMap();
-
-        CreateMap<ScienceTeacher, ScienceTeacherForCreationDto>().ReverseMap();
-        CreateMap<ScienceTeacher, ScienceTeacherForUpdateDto>().ReverseMap();
-        CreateMap<ScienceTeacher, ScienceTeacherForResultDto>().ReverseMap();
         #endregion
 
         #region Assets

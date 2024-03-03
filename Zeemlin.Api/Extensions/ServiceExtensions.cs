@@ -68,18 +68,12 @@ public static class ServiceExtensions
         services.AddScoped<IGradeService, GradeService>();
         services.AddScoped<IGradeRepository, GradeRepository>();
 
-        services.AddScoped<IScienceRepository, ScienceRepository>();
-        services.AddScoped<IScienceService, ScienceService>();
-
         // Relationships
         services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
         services.AddScoped<IStudentGroupService, StudentGroupService>();
 
         services.AddScoped<ITeacherGroupRepository, TeacherGroupRepository>();
         services.AddScoped<ITeacherGroupService, TeacherGroupService>();
-
-        services.AddScoped<IScienceTeacherRepository, ScienceTeacherRepository>();
-        services.AddScoped<IScienceTeacherService, ScienceTeacherService>();
 
 
         // Assets
