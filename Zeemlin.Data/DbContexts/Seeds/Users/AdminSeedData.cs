@@ -10,7 +10,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 1,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school1",
             FirstName = "John",
             LastName = "Doe",
@@ -24,7 +24,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 2,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school1",
             FirstName = "Jane",
             LastName = "Smith",
@@ -38,7 +38,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 3,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school2",
             FirstName = "Michael",
             LastName = "Johnson",
@@ -52,7 +52,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 4,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school2",
             FirstName = "Emma",
             LastName = "Davis",
@@ -66,7 +66,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 5,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school3",
             FirstName = "William",
             LastName = "Brown",
@@ -80,7 +80,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 6,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school3",
             FirstName = "Olivia",
             LastName = "Taylor",
@@ -94,7 +94,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 7,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school4",
             FirstName = "David",
             LastName = "Wilson",
@@ -108,7 +108,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 8,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school4",
             FirstName = "Sophia",
             LastName = "Martinez",
@@ -122,7 +122,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 9,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school5",
             FirstName = "James",
             LastName = "Anderson",
@@ -136,7 +136,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 10,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school5",
             FirstName = "Ava",
             LastName = "Hernandez",
@@ -150,7 +150,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 11,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school6",
             FirstName = "Benjamin",
             LastName = "Young",
@@ -164,7 +164,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 12,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school6",
             FirstName = "Mia",
             LastName = "Lopez",
@@ -178,7 +178,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 13,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school7",
             FirstName = "Daniel",
             LastName = "Gonzalez",
@@ -192,7 +192,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 14,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school7",
             FirstName = "Isabella",
             LastName = "Perez",
@@ -206,7 +206,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 15,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school4",
             FirstName = "Islom",
             LastName = "Karimov",
@@ -220,7 +220,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 16,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school4",
             FirstName = "Nozima",
             LastName = "Yo'ldosheva",
@@ -234,7 +234,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 17,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school9",
             FirstName = "Ethan",
             LastName = "Moore",
@@ -248,7 +248,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 18,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school9",
             FirstName = "Charlotte",
             LastName = "Rogers",
@@ -262,7 +262,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 19,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school10",
             FirstName = "Alexander",
             LastName = "Scott",
@@ -276,7 +276,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 20,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school10",
             FirstName = "Amelia",
             LastName = "Gomez",
@@ -290,7 +290,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 21,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school11",
             FirstName = "Henry",
             LastName = "Wright",
@@ -304,7 +304,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 22,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school11",
             FirstName = "Sophie",
             LastName = "Flores",
@@ -318,7 +318,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 23,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin1_school12",
             FirstName = "Liam",
             LastName = "Sanchez",
@@ -332,7 +332,7 @@ public static class AdminSeedData
         yield return new Admin
         {
             Id = 24,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Username = "admin2_school12",
             FirstName = "Grace",
             LastName = "Chang",
@@ -343,5 +343,18 @@ public static class AdminSeedData
             SchoolId = 12
         };
 
+        yield return new Admin
+        {
+            Id = 25,
+            CreatedAt = DateTime.UtcNow,
+            Username = "admin3_school12",
+            FirstName = "mps",
+            LastName = "cmwp",
+            Email = "cmwp@admin2.com",
+            Password = "hashed_password",
+            Gender = GenderType.Female,
+            PassportSeria = "QR123456",
+            SchoolId = 13
+        };
     }
 }

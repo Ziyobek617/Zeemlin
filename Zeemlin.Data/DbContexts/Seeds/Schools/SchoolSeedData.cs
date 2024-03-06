@@ -10,11 +10,11 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 1,
-            CreatedAt = DateTime.Now, // Set current time as CreatedAt
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 12345,
             Name = "Toshkent Xalqaro Maktabi",
             Description = "Xalqaro standartlarga asoslangan innovatsion ta'lim muassasasi",
-            DirectorId = 1, // Assuming you have a Director with ID 1
+            DirectorId = 1,
             Country = "O'zbekiston",
             Region = Region.TashkentCity,
             DistrictName = "Mirzo Ulug'bek",
@@ -28,11 +28,11 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 2,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 54321,
             Name = "Samarqand Texnologiya Instituti",
             Description = "Yuqori malakali mutaxassislar tayyorlaydigan oliy ta'lim muassasasi",
-            DirectorId = 2, // Assuming you have a Director with ID 2
+            DirectorId = 2, 
             Country = "O'zbekiston",
             Region = Region.Samarkand,
             DistrictName = "Eskishahar",
@@ -47,7 +47,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 3,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 67890,
             Name = "Andijon Pedagogika Instituti",
             Description = "Pedagogika sohasida yuqori malakali mutaxassislar tayyorlaydigan oliy ta'lim muassasasi",
@@ -65,7 +65,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 4,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 98765,
             Name = "Namangan Davlat Universiteti",
             Description = "Oliy ta'lim sohasida yuqori malakali mutaxassislar tayyorlaydigan davlat universiteti",
@@ -83,7 +83,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 5,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 13579,
             Name = "Tashkent Language Training Center",
             Description = "Center providing language training services.",
@@ -101,7 +101,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 6,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 24680,
             Name = "Samarkand Computer Training Center",
             Description = "Center offering computer training courses.",
@@ -119,7 +119,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 7,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 35791,
             Name = "Navoiy Fitness Training Center",
             Description = "Fitness center offering various training programs.",
@@ -137,7 +137,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 8,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 46802,
             Name = "Surxondaryo Photography Training Center",
             Description = "Center specializing in photography training.",
@@ -155,7 +155,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 9,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 13579,
             Name = "Tashkent Language Training Center",
             Description = "Center providing language training services.",
@@ -173,7 +173,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 10,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 24680,
             Name = "Samarkand Computer Training Center",
             Description = "Center offering computer training courses.",
@@ -191,7 +191,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 11,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 35791,
             Name = "Navoiy Fitness Training Center",
             Description = "Fitness center offering various training programs.",
@@ -209,7 +209,7 @@ public class SchoolSeedData
         yield return new School
         {
             Id = 12,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             SchoolNumber = 46802,
             Name = "Surxondaryo Photography Training Center",
             Description = "Center specializing in photography training.",
@@ -220,6 +220,24 @@ public class SchoolSeedData
             GeneralAddressMFY = "Termiz MFY",
             StreetName = "Shaxrisabz Street",
             CallCenter = "+998900000020",
+            EmailCenter = "info@sptc.uz",
+            Website = "https://sptc.uz"
+        };
+        
+        yield return new School
+        {
+            Id = 13,
+            CreatedAt = DateTime.UtcNow,
+            SchoolNumber = 4680,
+            Name = "Surxondaryo Photography Training Center",
+            Description = "Center specializing in photography training.",
+            DirectorId = 5,
+            Country = "Uzbekistan",
+            Region = Region.Surxondaryo,
+            DistrictName = "Termiz shahri",
+            GeneralAddressMFY = "Termiz MFY",
+            StreetName = "Shaxrisabz Street",
+            CallCenter = "+998900000021",
             EmailCenter = "info@sptc.uz",
             Website = "https://sptc.uz"
         };

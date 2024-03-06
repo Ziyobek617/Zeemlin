@@ -14,7 +14,7 @@ public class SuperAdminSeedData
             FirstName = "Shahnoza",
             LastName = "Odilova",
             Email = "shahnozaodilova@gmail.com",
-            Password = "hashed_password", // Replace with actual hashed password
+            Password = "hashed_password", 
             Gender = GenderType.Female,
             PassportSeria = "AB123456",
             CreatedAt = DateTime.UtcNow,
@@ -27,7 +27,7 @@ public class SuperAdminSeedData
             FirstName = "Moxinur",
             LastName = "Zokirova",
             Email = "moxi05@gmail.com",
-            Password = "hashed_password", // Replace with actual hashed password
+            Password = "hashed_password", 
             Gender = GenderType.Female,
             PassportSeria = "CD789012",
             CreatedAt = DateTime.UtcNow,
@@ -39,7 +39,7 @@ public class SuperAdminSeedData
             FirstName = "Muhammadjon",
             LastName = "Akbarov",
             Email = "akbarov@gmail.com",
-            Password = "hashed_password", // Replace with actual hashed password
+            Password = "hashed_password", 
             Gender = GenderType.Male,
             PassportSeria = "AB123458",
             CreatedAt = DateTime.UtcNow,
@@ -52,13 +52,24 @@ public class SuperAdminSeedData
             FirstName = "Ruxshona",
             LastName = "Nodirova",
             Email = "ruxshona0@gmail.com",
-            Password = "hashed_password", // Replace with actual hashed password
+            Password = "hashed_password", 
             Gender = GenderType.Female,
             PassportSeria = "CD789013",
             CreatedAt = DateTime.UtcNow,
         };
 
-        // ... Add 8 more SuperAdmin seed data instances here ...
+        yield return new SuperAdmin
+        {
+            Id = 5,
+            Username = "superadmin4",
+            FirstName = "Kimdir",
+            LastName = "Bilmiman",
+            Email = "kimdir@gmail.com",
+            Password = "hashed_password",
+            Gender = GenderType.Female,
+            PassportSeria = "CD789014",
+            CreatedAt = DateTime.UtcNow,
+        };
     }
 
 }

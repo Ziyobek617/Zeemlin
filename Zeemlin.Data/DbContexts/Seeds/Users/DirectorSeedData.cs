@@ -77,5 +77,19 @@ public static class DirectorSeedData
             CreatedAt = DateTime.UtcNow,
             Schools = new List<School>() 
         };
+
+        yield return new Director
+        {
+            Id = 6,
+            Username = "director5",
+            FirstName = "mcpw",
+            LastName = "cmla",
+            Email = "ikcmwopv@director.com",
+            Password = "hashed_password",
+            Gender = GenderType.Male,
+            PassportSeria = "IJ785212",
+            CreatedAt = DateTime.UtcNow,
+            Schools = new List<School>()
+        };
     }
 }
