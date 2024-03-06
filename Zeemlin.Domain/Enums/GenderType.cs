@@ -3,5 +3,5 @@
 public enum GenderType : byte
 {
     Male = 1,
-    Famale  = 2,
+    Female  = 2,
 }

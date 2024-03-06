@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Zeemlin.Data.DbContexts.EntityConfigurations;
+using Zeemlin.Data.DbContexts.Seeds.Schools;
+using Zeemlin.Data.DbContexts.Seeds.Users;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Domain.Entities.Questions;
@@ -65,6 +66,10 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new TeacherConfiguration());
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
 
+            modelBuilder.Entity<SuperAdmin>().HasData(SuperAdminSeedData.GetSuperAdmins());
+            modelBuilder.Entity<Admin>().HasData(AdminSeedData.GetAdmins());
+            modelBuilder.Entity<Director>().HasData(DirectorSeedData.GetDirectors());
+
             // School
             modelBuilder.ApplyConfiguration(new SchoolConfigurations());
             modelBuilder.ApplyConfiguration(new CourseConfiguration());
@@ -76,6 +81,8 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new SubjectConfiguration());
             modelBuilder.ApplyConfiguration(new LessonAttendanceConfiguration());
             modelBuilder.ApplyConfiguration(new GradeConfiguration());
+
+            modelBuilder.Entity<School>().HasData(SchoolSeedData.GetSchools());
             // Other entity configurations...
         }
 
