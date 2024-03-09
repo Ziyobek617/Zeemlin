@@ -69,7 +69,7 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.Entity<SuperAdmin>().HasData(SuperAdminSeedData.GetSuperAdmins());
             modelBuilder.Entity<Admin>().HasData(AdminSeedData.GetAdmins());
             modelBuilder.Entity<Director>().HasData(DirectorSeedData.GetDirectors());
-            //modelBuilder.Entity<Teacher>().HasData(TeacherSeedData.GetTeachers());
+            modelBuilder.Entity<Teacher>().HasData(TeacherSeedData.GetTeachers());
 
             // School
             modelBuilder.ApplyConfiguration(new SchoolConfigurations());
@@ -84,8 +84,8 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new GradeConfiguration());
 
             modelBuilder.Entity<School>().HasData(SchoolSeedData.GetSchools());
-            //modelBuilder.Entity<Course>().HasData(CourseSeedData.GetCourses());
-            //modelBuilder.Entity<Group>().HasData(GroupSeedData.GetGroups());
+            modelBuilder.Entity<Course>().HasData(CourseSeedData.GetCourses());
+            modelBuilder.Entity<Group>().HasData(GroupSeedData.GetGroups());
             //modelBuilder.Entity<Lesson>().HasData(LessonSeedData.GetLessons());
             //modelBuilder.Entity<Homework>().HasData(HomeworkSeedData.GetHomeworks());
             //modelBuilder.Entity<TeacherGroup>().HasData(TeacherGroupSeedData.GetTeacherGroups());

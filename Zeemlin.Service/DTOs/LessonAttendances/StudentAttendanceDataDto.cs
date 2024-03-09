@@ -7,5 +7,5 @@ public class StudentAttendanceDataDto
     public string GroupName { get; set; }
     public string ClassTeacher { get; set; }
     public string Lesson { get; set; }
-    public DateTime Hour { get; set; }
+    public string Hour { get; set; }
 }

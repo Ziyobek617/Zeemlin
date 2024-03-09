@@ -132,7 +132,7 @@ public class SchoolConfiguration
 
             builder.Property(e => e.Title);
             builder.Property(e => e.Description);
-            builder.Property(e => e.DueTime).IsRequired();
+            builder.Property(e => e.Deadline).IsRequired();
             builder.Property(e => e.LessonId).IsRequired();
 
             builder.HasMany(e => e.Assets)
