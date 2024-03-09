@@ -108,7 +108,6 @@ public class SchoolConfiguration
 
             builder.Property(e => e.Title);
             builder.Property(e => e.Description);
-            builder.Property(e => e.Duration);
             builder.Property(e => e.StartDate);
             builder.Property(e => e.EndDate);
             builder.Property(e => e.GroupId).IsRequired();
