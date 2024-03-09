@@ -286,6 +286,15 @@ namespace Zeemlin.Data.DbContexts.Seeds.Schools
                 Description = "A group focusing on yoga, meditation, and mindfulness practices.",
                 CourseId = 21
             };
+
+            yield return new Group
+            {
+                Id = 32,
+                CreatedAt = DateTime.UtcNow,
+                Name = "Yoga and Meditation Group",
+                Description = "A group focusing on yoga, meditation, and mindfulness practices.",
+                CourseId = 15
+            };
         }
     }
 }

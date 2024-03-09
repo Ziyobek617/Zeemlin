@@ -199,6 +199,14 @@ namespace Zeemlin.Data.DbContexts.Seeds.Schools
                 TeacherId = 21,
                 GroupId = 24
             };
+
+            yield return new TeacherGroup
+            {
+                Id = 25,
+                CreatedAt = DateTime.UtcNow,
+                TeacherId = 22,
+                GroupId = 25
+            };
         }
     }
 }

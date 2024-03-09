@@ -223,6 +223,15 @@ namespace Zeemlin.Data.DbContexts.Seeds.Schools
                 Description = "A course exploring the art and techniques of French cuisine, including cooking methods and recipes.",
                 SchoolId = 9
             };
+
+            yield return new Course
+            {
+                Id = 25,
+                CreatedAt = DateTime.UtcNow,
+                Name = "Course",
+                Description = "A course exploring the art and techniques of French cuisine, including cooking methods and recipes.",
+                SchoolId = 10
+            };
         }
     }
 }

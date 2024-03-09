@@ -119,6 +119,16 @@ namespace Zeemlin.Data.DbContexts.Seeds.Schools
                 DueTime = new DateTime(2024, 3, 23, 23, 59, 59),
                 LessonId = 8
             };
+
+            yield return new Homework
+            {
+                Id = 12,
+                CreatedAt = DateTime.UtcNow,
+                Title = "Artwork Reproduction",
+                Description = "Reproduce a famous Renaissance artwork using your preferred medium.",
+                DueTime = new DateTime(2024, 3, 23, 23, 59, 59),
+                LessonId = 8
+            };
         }
     }
 }
