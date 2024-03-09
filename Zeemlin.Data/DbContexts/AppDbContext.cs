@@ -86,9 +86,9 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.Entity<School>().HasData(SchoolSeedData.GetSchools());
             modelBuilder.Entity<Course>().HasData(CourseSeedData.GetCourses());
             modelBuilder.Entity<Group>().HasData(GroupSeedData.GetGroups());
-            //modelBuilder.Entity<Lesson>().HasData(LessonSeedData.GetLessons());
-            //modelBuilder.Entity<Homework>().HasData(HomeworkSeedData.GetHomeworks());
-            //modelBuilder.Entity<TeacherGroup>().HasData(TeacherGroupSeedData.GetTeacherGroups());
+            modelBuilder.Entity<Lesson>().HasData(LessonSeedData.GetLessons());
+            modelBuilder.Entity<Homework>().HasData(HomeworkSeedData.GetHomeworks());
+            modelBuilder.Entity<TeacherGroup>().HasData(TeacherGroupSeedData.GetTeacherGroups());
             // Other entity configurations...
         }
 
