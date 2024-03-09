@@ -3,6 +3,7 @@ using Zeemlin.Api.Middlewares;
 using Zeemlin.Data.DbContexts;
 using Zeemlin.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Zeemlin.Service.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
+WebHostEnviromentHelper.WebRootPath = Path.GetFullPath("wwwroot");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

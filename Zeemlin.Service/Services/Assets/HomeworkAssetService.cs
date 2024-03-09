@@ -36,20 +36,10 @@ public class HomeworkAssetService : IHomeworkAssetService
         var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(dto.Path.FileName);
         var fullPath = Path.Combine(WwwRootPath, fileName);
 
-
-
         using (var stream = File.OpenWrite(fullPath))
         {
             await dto.Path.CopyToAsync(stream);
         }
-
-
-        //var mappedAsset = new HomeworkAsset
-        //{
-        //    CreatedAt = DateTime.UtcNow,
-        //    Path = Path.Combine("HomeworkAssets", fileName)
-        //};
-
 
         var mappedHomeworkAsset = _mapper.Map<HomeworkAsset>(dto);
         mappedHomeworkAsset.CreatedAt = DateTime.UtcNow;
