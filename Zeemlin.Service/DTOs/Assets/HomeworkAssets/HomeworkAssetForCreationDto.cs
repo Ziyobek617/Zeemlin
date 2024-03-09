@@ -6,6 +6,5 @@ namespace Zeemlin.Service.DTOs.Assets.HomeworkAssets;
 public class HomeworkAssetForCreationDto
 {
     public IFormFile Path { get; set; }
-    public long FileSize { get; set; }
     public long HomeworkId { get; set; }
 }

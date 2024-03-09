@@ -21,7 +21,7 @@ public class HomeworkAssetService : IHomeworkAssetService
         _repository = repository;
     }
 
-    public async Task<HomeworkAssetForResultDto> CreateAsync(HomeworkAssetForCreationDto dto)
+    public async Task<HomeworkAssetForResultDto> UploadAsync(HomeworkAssetForCreationDto dto)
     {
 
         var IsValidHomeworkId = await _repository.SelectAll()
@@ -32,42 +32,28 @@ public class HomeworkAssetService : IHomeworkAssetService
         if (IsValidHomeworkId is not null)
             throw new ZeemlinException(409, "Homework already exists");
 
-        var WwwRootPath = Path.Combine(WebHostEnviromentHelper.WebRootPath, "Media", "HomeworkAssets");
-        var assetsFolderPath = Path.Combine(WwwRootPath, "Media");
-        var ImagesFolderPath = Path.Combine(assetsFolderPath, "HomeworkAssets");
-
-        if (!Directory.Exists(assetsFolderPath))
-        {
-            Directory.CreateDirectory(assetsFolderPath);
-        }
-
-        if (!Directory.Exists(ImagesFolderPath))
-        {
-            Directory.CreateDirectory(ImagesFolderPath);
-        }
+        var WwwRootPath = Path.Combine(WebHostEnviromentHelper.WebRootPath, "HomeworkAssets");
         var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(dto.Path.FileName);
-
         var fullPath = Path.Combine(WwwRootPath, fileName);
+
+
 
         using (var stream = File.OpenWrite(fullPath))
         {
             await dto.Path.CopyToAsync(stream);
-            await stream.FlushAsync();
-            stream.Close();
         }
 
-        string resultImage = Path.Combine("Media", "HomeworkAssets", fileName);
 
-        var mappedAsset = new HomeworkAsset
-        {
-            HomeworkId = dto.HomeworkId,
-        };
-        mappedAsset.CreatedAt = DateTime.UtcNow;
-        mappedAsset.Path = resultImage;
+        //var mappedAsset = new HomeworkAsset
+        //{
+        //    CreatedAt = DateTime.UtcNow,
+        //    Path = Path.Combine("HomeworkAssets", fileName)
+        //};
 
 
         var mappedHomeworkAsset = _mapper.Map<HomeworkAsset>(dto);
         mappedHomeworkAsset.CreatedAt = DateTime.UtcNow;
+        mappedHomeworkAsset.UploadedDate = DateTime.UtcNow;
         await _repository.InsertAsync(mappedHomeworkAsset);
 
         return _mapper.Map<HomeworkAssetForResultDto>(mappedHomeworkAsset);
@@ -116,7 +102,7 @@ public class HomeworkAssetService : IHomeworkAssetService
             throw new ZeemlinException(404, "Homework not found");
 
         await _repository.DeleteAsync(id);
-        return true;
+        return true; 
     }
 
     public async Task<IEnumerable<HomeworkAssetForResultDto>> RetrieveAllAsync()

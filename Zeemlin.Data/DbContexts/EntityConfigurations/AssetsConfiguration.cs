@@ -14,8 +14,6 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.HasKey(e => e.Id);
 
                 builder.Property(e => e.Path).IsRequired();
-                builder.Property(e => e.ContentType).IsRequired();
-                builder.Property(e => e.FileSize).IsRequired();
                 builder.Property(e => e.UploadedDate).IsRequired();
 
                 builder.HasOne(e => e.School)
@@ -32,8 +30,6 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.HasKey(e => e.Id);
 
                 builder.Property(e => e.Path).IsRequired();
-                builder.Property(e => e.ContentType).IsRequired();
-                builder.Property(e => e.FileSize).IsRequired();
                 builder.Property(e => e.UploadedDate).IsRequired();
 
                 builder.HasOne(e => e.Homework)
@@ -50,8 +46,6 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.HasKey(e => e.Id);
 
                 builder.Property(e => e.Path).IsRequired();
-                builder.Property(e => e.ContentType).IsRequired();
-                builder.Property(e => e.FileSize).IsRequired();
                 builder.Property(e => e.UploadedDate).IsRequired();
 
                 builder.HasOne(e => e.Teacher)

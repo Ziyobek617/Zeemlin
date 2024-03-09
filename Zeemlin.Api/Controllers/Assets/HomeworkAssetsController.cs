@@ -16,7 +16,7 @@ public class HomeworkAssetsController : BaseController
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] HomeworkAssetForCreationDto dto)
-            => Ok(await _homeworkAssetService.CreateAsync(dto));
+            => Ok(await _homeworkAssetService.UploadAsync(dto));
 
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
@@ -31,7 +31,4 @@ public class HomeworkAssetsController : BaseController
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(await _homeworkAssetService.RemoveAsync(id));
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromForm] HomeworkAssetForUpdateDto dto)
-        => Ok(await this._homeworkAssetService.ModifyAsync(id, dto));
 }
