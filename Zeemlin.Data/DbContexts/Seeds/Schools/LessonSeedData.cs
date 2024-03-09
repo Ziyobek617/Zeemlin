@@ -150,6 +150,19 @@ namespace Zeemlin.Data.DbContexts.Seeds.Schools
                 GroupId = 11, // Assuming group with Id 11
                 TeacherId = 11 // Assuming teacher with Id 11
             };
+
+            yield return new Lesson
+            {
+                Id = 12,
+                CreatedAt = DateTime.UtcNow,
+                Title = "Introduction to Web Development",
+                Description = "A beginner-level lesson introducing basic web development concepts and technologies.",
+                Duration = TimeSpan.FromHours(1),
+                StartDate = new DateTime(2024, 3, 20, 10, 0, 0),
+                EndDate = new DateTime(2024, 3, 20, 11, 0, 0),
+                GroupId = 12, 
+                TeacherId = 12
+            };
         }
     }
 }

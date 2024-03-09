@@ -518,6 +518,23 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 ScienceType = ScienceType.GermanLanguage,
                 genderType = GenderType.Female
             };
+
+            yield return new Teacher
+            {
+                Id = 31,
+                CreatedAt = DateTime.UtcNow,
+                FirstName = "Sophia",
+                LastName = "Lee",
+                DateOfBirth = new DateTime(1988, 5, 25),
+                PhoneNumber = "+998900000031",
+                Email = "sophidalee@school.com",
+                Password = "hashed_password",
+                Biography = "Passionate teacher specializing in German language.",
+                DistrictName = "Shahriston",
+                SchoolNumber = 3,
+                ScienceType = ScienceType.GermanLanguage,
+                genderType = GenderType.Female
+            };
         }
     }
 }
