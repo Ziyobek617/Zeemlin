@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries.Assets;
 using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Service.DTOs.Assets.HomeworkAssets;
@@ -13,24 +14,24 @@ namespace Zeemlin.Service.Services.Assets;
 public class HomeworkAssetService : IHomeworkAssetService
 {
     private readonly IMapper _mapper;
-
     private readonly IHomeworkAssetRepository _repository;
-    public HomeworkAssetService(IMapper mapper, IHomeworkAssetRepository repository)
+    private readonly AppDbContext _context;
+    public HomeworkAssetService(IMapper mapper,
+        IHomeworkAssetRepository repository,
+        AppDbContext context)
     {
         _mapper = mapper;
         _repository = repository;
+        _context = context;
     }
 
     public async Task<HomeworkAssetForResultDto> UploadAsync(HomeworkAssetForCreationDto dto)
     {
 
-        var IsValidHomeworkId = await _repository.SelectAll()
-            .AsNoTracking()
-            .Where(h => h.HomeworkId == dto.HomeworkId)
-            .FirstOrDefaultAsync();
+        var IsValidHomeworkId = await _context.Homework.FirstOrDefaultAsync(h => h.Id == dto.HomeworkId);
 
-        if (IsValidHomeworkId is not null)
-            throw new ZeemlinException(409, "Homework already exists");
+        if (IsValidHomeworkId is null)
+            throw new ZeemlinException(404, "Homework not found");
 
         var WwwRootPath = Path.Combine(WebHostEnviromentHelper.WebRootPath, "HomeworkAssets");
         var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(dto.Path.FileName);
@@ -41,9 +42,12 @@ public class HomeworkAssetService : IHomeworkAssetService
             await dto.Path.CopyToAsync(stream);
         }
 
+        string resultImage = Path.Combine("HomeworkAssets", fileName);
+
         var mappedHomeworkAsset = _mapper.Map<HomeworkAsset>(dto);
         mappedHomeworkAsset.CreatedAt = DateTime.UtcNow;
         mappedHomeworkAsset.UploadedDate = DateTime.UtcNow;
+        mappedHomeworkAsset.Path = resultImage;
         await _repository.InsertAsync(mappedHomeworkAsset);
 
         return _mapper.Map<HomeworkAssetForResultDto>(mappedHomeworkAsset);
