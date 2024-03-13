@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries.Assets;
 using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Service.DTOs.Assets;
@@ -14,6 +16,7 @@ public class TeacherAssetService : ITeacherAssetService
 {
     private readonly IMapper _mapper;
     private readonly ITeacherAssetRepository _repository;
+    private readonly AppDbContext _context;
     private readonly string _wwwRootPath;
     private readonly long _maxSizeInBytes;
     private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
@@ -22,51 +25,29 @@ public class TeacherAssetService : ITeacherAssetService
     public TeacherAssetService(
       IMapper mapper,
       ITeacherAssetRepository repository,
-      IConfiguration configuration
-      )
+      IConfiguration configuration,
+      AppDbContext context)
     {
         _mapper = mapper;
         _repository = repository;
-        _wwwRootPath = configuration["TeacherAssetsPath"];
-        _maxSizeInBytes = long.Parse(configuration["TeacherAssetMaxSizeInBytes"]);
+        _maxSizeInBytes = 5 * 1024 * 1024;
+        _context = context;
     }
 
-    
 
-    public async Task<bool> DeletePictureAsync(long teacherId)
+
+    public async Task<bool> DeletePictureAsync(long id)
     {
-        var picture = await _repository.SelectByIdAsync(teacherId);
+        var delete = await _repository.SelectAll()
+           .AsNoTracking()
+           .Where(u => u.Id == id)
+           .FirstOrDefaultAsync();
+        if (delete is null)
+            throw new ZeemlinException(404, "Teacher Asset not found");
 
-        if (picture == null)
-        {
-            var defaultImagePath = "C:\\Users\\mahka\\Pictures\\Saved Pictures\\imzo.jpg"; // Replace with configurable path
-            picture = new TeacherAsset
-            {
-                TeacherId = teacherId,
-                Path = defaultImagePath
-            };
-            await _repository.InsertAsync(picture);
-        }
-        else
-        {
-
-            await _repository.DeleteAsync(picture.Id);
-        }
+        await _repository.DeleteAsync(id);
 
         return true;
-    }
-
-    public async Task UpdatePictureAsync(long assetId, TeacherAssetForUpdateDto dto)
-    {
-        await ValidateImageAsync(dto.File);
-
-        var existingPicture = await _repository.SelectByIdAsync(assetId);
-
-        var asset = await _repository.SelectByIdAsync(assetId);
-        await SaveImageAsync(asset, dto.File);
-
-        asset.Path = dto.File.ToString();
-        await _repository.UpdateAsync(asset);
     }
 
     private async Task ValidateImageAsync(IFormFile file)
@@ -84,24 +65,52 @@ public class TeacherAssetService : ITeacherAssetService
 
     }
 
-    private async Task SaveImageAsync(TeacherAsset asset, IFormFile file)
+    
+
+    public async Task<TeacherAssetForResultDto> UploadAsync(TeacherAssetForCreationDto dto)
     {
-        var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
-        var fullPath = Path.Combine(_wwwRootPath, fileName);
+        var IsValidTeacherId = await _context.Teachers.FirstOrDefaultAsync(h => h.Id == dto.TeacherId);
 
-        try
+        if (IsValidTeacherId is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
+        var WwwRootPath = Path.Combine(WebHostEnviromentHelper.WebRootPath, "TeacherAssets");
+        var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(dto.Path.FileName);
+        var fullPath = Path.Combine(WwwRootPath, fileName);
+        await ValidateImageAsync(dto.Path);
+
+        using (var stream = File.OpenWrite(fullPath))
         {
-            await using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new ZeemlinException(500, "Error saving teacher picture: " + ex.Message);
+            await dto.Path.CopyToAsync(stream);
         }
 
-        asset.Path = fileName;
+        string resultImage = Path.Combine("TeacherAssets", fileName);
 
+        var mapped = _mapper.Map<TeacherAsset>(dto);
+        mapped.CreatedAt = DateTime.UtcNow;
+        mapped.UploadedDate = DateTime.UtcNow;
+        mapped.Path = resultImage;
+        await _repository.InsertAsync(mapped);
+
+        return _mapper.Map<TeacherAssetForResultDto>(mapped);
+    }
+
+    public async Task<TeacherAssetForResultDto> RetrieveByIdAsync(long id)
+    {
+        var update = await _repository.SelectAll()
+           .AsNoTracking()
+           .Where(u => u.Id == id)
+           .FirstOrDefaultAsync();
+        if (update is null)
+            throw new ZeemlinException(404, "Teacher Asset not found");
+
+        return _mapper.Map<TeacherAssetForResultDto>(update);
+    }
+
+    public async Task<IEnumerable<TeacherAssetForResultDto>> RetrieveAllAsync()
+    {
+        var assets = await _repository.SelectAll().AsNoTracking().ToListAsync();
+
+        return _mapper.Map<IEnumerable<TeacherAssetForResultDto>>(assets);
     }
 }

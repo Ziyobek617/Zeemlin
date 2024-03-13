@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\HomeworkAssets\" />
+    <Folder Include="wwwroot\TeacherAssets\" />
   </ItemGroup>
 
 </Project>

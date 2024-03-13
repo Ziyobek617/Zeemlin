@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Zeemlin.Api.Controllers.Assets;
-using Zeemlin.Domain.Entities.Assets;
+﻿using Microsoft.AspNetCore.Mvc;
 using Zeemlin.Service.DTOs.Assets;
 using Zeemlin.Service.Interfaces.Assets;
-using Zeemlin.Service.Exceptions;
+using Zeemlin.Service.Services.Assets;
 
 namespace Zeemlin.Api.Controllers.Assets
 {
@@ -13,20 +9,26 @@ namespace Zeemlin.Api.Controllers.Assets
     public class TeacherAssetsController : BaseController
     {
         private readonly ITeacherAssetService _assetService;
-        private readonly IMapper _mapper;
 
-        public TeacherAssetsController(ITeacherAssetService assetService, IMapper mapper)
+        public TeacherAssetsController(ITeacherAssetService assetService)
         {
             _assetService = assetService;
-            _mapper = mapper;
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long Id, [FromForm] TeacherAssetForUpdateDto dto)
-            => Ok(this._assetService.UpdatePictureAsync(Id,dto));
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromForm] TeacherAssetForCreationDto dto)
+            => Ok(await _assetService.UploadAsync(dto));
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(long teacherId)
-            => Ok(this._assetService.DeletePictureAsync(teacherId));
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
+        => Ok(await _assetService.DeletePictureAsync(id));
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        => Ok(await _assetService.RetrieveAllAsync());
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute(Name = "id")] long id)
+            => Ok(await _assetService.RetrieveByIdAsync(id));
     }
 }
