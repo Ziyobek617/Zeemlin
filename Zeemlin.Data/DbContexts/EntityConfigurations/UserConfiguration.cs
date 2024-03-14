@@ -36,6 +36,7 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.Property(e => e.FirstName).IsRequired();
                 builder.Property(e => e.LastName).IsRequired();
                 builder.Property(e => e.Email).IsRequired();
+                builder.Property(e => e.PhoneNumber).IsRequired();
                 builder.Property(e => e.Password).IsRequired();
                 builder.Property(e => e.Gender).IsRequired();
                 builder.Property(e => e.PassportSeria);

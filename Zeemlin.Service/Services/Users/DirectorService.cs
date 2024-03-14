@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Data.Repositories.Users;
 using Zeemlin.Domain.Entities.Users;
@@ -40,6 +42,15 @@ public class DirectorService : IDirectorService
 
         if (IsValidUserEmail is not null)
             throw new ZeemlinException(409, "Email already exists");
+
+        var IsValidUserPhoneNumber = await _repository
+            .SelectAll()
+            .AsNoTracking()
+            .Where(u => u.PhoneNumber == dto.PhoneNumber)
+            .FirstOrDefaultAsync();
+
+        if (IsValidUserPhoneNumber is not null)
+            throw new ZeemlinException(409, "Phone number already exists");
 
         var IsValidPassportSeria = await _repository
             .SelectAll()
@@ -107,5 +118,15 @@ public class DirectorService : IDirectorService
             throw new ZeemlinException(404, "Not Found");
 
         return _mapper.Map<DirectorForResultDto>(IsValidId);
+    }
+
+    public async Task<List<Director>> RetrieveByUsernameAsync(string search, AppDbContext context)
+    {
+        var query = context.Directors.Where(a =>
+            a.Username.Contains(search) ||
+            a.PassportSeria.Contains(search) ||
+            a.Email.Contains(search) ||
+            a.PhoneNumber.Contains(search));
+        return await query.ToListAsync();
     }
 }
