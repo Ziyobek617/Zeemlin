@@ -102,21 +102,17 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.ToTable("Students");
                 builder.HasKey(e => e.Id);
 
-                builder.Property(e => e.FirstName).IsRequired();
-                builder.Property(e => e.LastName).IsRequired();
+                builder.Property(e => e.FirstName).IsRequired().HasMaxLength(50); ;
+                builder.Property(e => e.LastName).IsRequired().HasMaxLength(50); ;
                 builder.Property(e => e.DateOfBirth).IsRequired();
-                builder.Property(e => e.PhoneNumber);
-                builder.Property(e => e.Email);
-                builder.Property(e => e.Password);
-                builder.Property(e => e.SchoolNumber).IsRequired();
-                builder.Property(e => e.GroupId).IsRequired();
                 builder.Property(e => e.FatherName).IsRequired();
+                builder.Property(t => t.genderType).IsRequired();
+                builder.Property(e => e.PhoneNumber).IsRequired();
+                builder.Property(e => e.Email).IsRequired();
+                builder.Property(e => e.Password).IsRequired();
                 builder.Property(e => e.DistrictName).IsRequired().HasMaxLength(50);
                 builder.Property(e => e.GeneralAddressMFY).IsRequired().HasMaxLength(50);
-                builder.Property(e => e.StreetName).IsRequired().HasMaxLength(50);
-                builder.Property(e => e.BuildingNumber);
-                builder.Property(e => e.EntranceNumber);
-                builder.Property(e => e.Floor);
+                builder.Property(e => e.StreetName).IsRequired().HasMaxLength(100);
                 builder.Property(e => e.HouseNumber).IsRequired();
                 builder.Property(e => e.StudentUniqueId);
 
