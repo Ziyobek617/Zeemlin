@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
@@ -13,57 +14,64 @@ public class StudentService : IStudentService
 {
     private readonly IMapper _mapper;
     private readonly IStudentRepository _studentRepository;
+    private readonly AppDbContext dbContext;
 
-    public StudentService(IStudentRepository studentRepository, IMapper mapper)
+    public StudentService(
+        IStudentRepository studentRepository,
+        IMapper mapper, 
+        AppDbContext dbContext)
     {
         _mapper = mapper;
         _studentRepository = studentRepository;
+        this.dbContext = dbContext;
     }
-    private string GenerateUniqueStudentId()
+    private async Task<string> GenerateUniqueStudentId()
     {
-        // You can use a library like System.Guid, or a custom algorithm
-        return Guid.NewGuid().ToString("D6"); // 6-digit hexadecimal string
-    }
-
-
-    public async Task<StudentForResultDto> VerifyParentAndRetrieveStudentAsync(string studentUniqueId, string verificationCode)
-    {
-        var student = await _studentRepository.SelectAll()
-            .Where(s => s.StudentUniqueId == studentUniqueId)
-            .FirstOrDefaultAsync();
-
-        if (student == null)
+        string studentId;
+        do
         {
-            throw new ZeemlinException(404, "Student not found");
-        }
+            studentId = GenerateRandomAlphanumericString(8);
+        } while (await _studentRepository.ExistsAsync(studentId)); // Check for existence
 
-        // Implement logic to check verification code (e.g., compare with stored code, use external service)
-        //if (!VerifyCode(verificationCode, student.Email, student.PhoneNumber))
-        //{
-        //    throw new ZeemlinException(401, "Invalid verification code");
-        //}
+        return studentId;
+    }
 
-        return _mapper.Map<StudentForResultDto>(student);
+    private string GenerateRandomAlphanumericString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        return new string(Enumerable.Repeat(chars, length)
+          .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
     public async Task<StudentForResultDto> AddAsync(StudentForCreationDto dto)
     {
-        var students = await _studentRepository
-            .SelectAll()
-            .Where(e => e.Email.ToLower() == dto.Email.ToLower())
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
+        var existingStudentEmail = await _studentRepository
+          .SelectAll()
+          .Where(e => e.Email.ToLower() == dto.Email.ToLower())
+          .AsNoTracking()
+          .FirstOrDefaultAsync();
 
-        if (students is not null)
+        if (existingStudentEmail is not null)
             throw new ZeemlinException(409, "User is already exist.");
 
-        var mappedUser = _mapper.Map<Student>(dto);
-        mappedUser.StudentUniqueId = GenerateUniqueStudentId();
-        mappedUser.CreatedAt = DateTime.UtcNow;
-        var createdUser = await _studentRepository.InsertAsync(mappedUser);
+        var existingStudentPhoneNumber = await _studentRepository
+          .SelectAll()
+          .Where(e => e.PhoneNumber == dto.PhoneNumber)
+          .AsNoTracking()
+          .FirstOrDefaultAsync();
 
-        return _mapper.Map<StudentForResultDto>(mappedUser);
+        if (existingStudentPhoneNumber is not null)
+            throw new ZeemlinException(409, "User is already exist.");
+
+        var mappedStudent = _mapper.Map<Student>(dto);
+        mappedStudent.StudentUniqueId = await GenerateUniqueStudentId();
+        mappedStudent.CreatedAt = DateTime.UtcNow;
+        await _studentRepository.InsertAsync(mappedStudent);
+
+        return _mapper.Map<StudentForResultDto>(mappedStudent);
     }
+
 
     public async Task<StudentForResultDto> ModifyAsync(long id, StudentForUpdateDto dto)
     {
@@ -126,15 +134,13 @@ public class StudentService : IStudentService
         return _mapper.Map<StudentForResultDto>(student);
     }
 
-    public async Task<Student> RetrieveByPhoneNumberAsync(string phoneNumber)
+    public async Task<List<Student>> RetrieveByDataAsync(string data)
     {
-        var student = await _studentRepository.SelectAll()
-            .Where(u => u.PhoneNumber == phoneNumber)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
-        if (student is null)
-            throw new ZeemlinException(404, "User Not Found");
-
-        return student;
+        var query = dbContext.Students.Where(a =>
+           a.FirstName.Contains(data) ||
+           a.LastName.Contains(data) ||
+           a.Email.Contains(data) ||
+           a.PhoneNumber.Contains(data));
+        return await query.ToListAsync();
     }
 }

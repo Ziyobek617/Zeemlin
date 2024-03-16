@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Service.DTOs.Students;
 using Zeemlin.Service.DTOs.Teachers;
 using Zeemlin.Service.Interfaces;
@@ -36,11 +37,9 @@ public class StudentsController : BaseController
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] StudentForUpdateDto dto)
         => Ok(await this._studentService.ModifyAsync(id, dto));
 
-    [HttpGet("email")]
-    public async Task<IActionResult> GetByEmailAsync(string email)
-        => Ok(await this._studentService.RetrieveByEmailAsync(email));
-
-    [HttpGet("PhoneNumber")]
-    public async Task<IActionResult> GetByPhoneNumberAsync(string phoneNumber)
-        => Ok(await this._studentService.RetrieveByPhoneNumberAsync(phoneNumber));
+    [HttpGet("FirstName-LastName-Email-PhoneNumber")]
+    public async Task<IActionResult> SearchStudentsTerm(string student)
+    {
+        return Ok(await _studentService.RetrieveByDataAsync(student));
+    }
 }
