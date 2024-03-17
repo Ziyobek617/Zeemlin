@@ -50,6 +50,7 @@ namespace Zeemlin.Data.DbContexts
         public DbSet<Answer> Answers { get; set; }
 
         // Many-to-Many Relationships (without navigation properties)
+        public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<TeacherGroup> TeacherGroups { get; set; } // Explicitly define the join table
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
