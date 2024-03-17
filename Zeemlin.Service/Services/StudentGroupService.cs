@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.StudentGroups;
@@ -12,27 +13,34 @@ public class StudentGroupService : IStudentGroupService
 {
     private readonly IMapper _mapper;
     private readonly IStudentGroupRepository _studentGroupRepository;
-    public StudentGroupService(IMapper mapper, IStudentGroupRepository studentGroupRepository)
+    private readonly AppDbContext appDbContext;
+    public StudentGroupService(IMapper mapper, IStudentGroupRepository studentGroupRepository, AppDbContext appDbContext)
     {
         _mapper = mapper;
         _studentGroupRepository = studentGroupRepository;
+        this.appDbContext = appDbContext;
     }
 
     public async Task<StudentGroupForResultDto> AddAsync(StudentGroupForCreationDto dto)
     {
-        var group = await _studentGroupRepository.SelectAll()
-        .Where(u => u.GroupId == dto.GroupId)
-        .AsNoTracking()
-        .FirstOrDefaultAsync();
-        if (group is not null)
-            throw new ZeemlinException(400, "Group already exists");
+        var group = await appDbContext.Groups.FirstOrDefaultAsync(g => g.Id == dto.GroupId);
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found");
 
-        var student = await _studentGroupRepository.SelectAll()
-        .Where(s => s.StudentId == dto.StudentId)
-        .AsNoTracking()
-        .FirstOrDefaultAsync();
-        if (student is not null)
-            throw new ZeemlinException(400, "Studeny already exists");
+        var student = await appDbContext.Students.FirstOrDefaultAsync(s => s.Id == dto.StudentId); // Or use FirstOrDefaultAsync for optional student
+        if (student is null)
+            throw new ZeemlinException(404, "Student not found");
+
+        var existingStudentGroup = await _studentGroupRepository.SelectAll()
+     .Where(s => s.StudentId == dto.StudentId && s.GroupId == dto.GroupId)
+     .AsNoTracking()
+     .FirstOrDefaultAsync();
+
+        if (existingStudentGroup is not null)
+        {
+            throw new ZeemlinException(400,
+                "Student already exists in group ");
+        }
 
         var mappedStudentGroup = _mapper.Map<StudentGroup>(dto);
         mappedStudentGroup.CreatedAt = DateTime.UtcNow;
