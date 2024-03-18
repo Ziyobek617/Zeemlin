@@ -18,7 +18,8 @@ using Zeemlin.Service.DTOs.LessonAttendances;
 using Zeemlin.Domain.Entities.Users;
 using Zeemlin.Service.DTOs.Users.SuperAdmins;
 using Zeemlin.Service.DTOs.Users.Admins;
-using Zeemlin.Service.DTOs.Users.Directors; //8
+using Zeemlin.Service.DTOs.Users.Directors;
+using Zeemlin.Service.DTOs.Assets.SchoolAssets; //8
 
 namespace Zeemlin.Service.Mappers;
 
@@ -96,6 +97,9 @@ public class MappingProfile : Profile
         #endregion
 
         #region Assets
+        CreateMap<SchoolAsset, SchoolAssetForCreationDto>().ReverseMap();
+        CreateMap<SchoolAsset, SchoolAssetForResultDto>().ReverseMap();
+
         CreateMap<TeacherAsset, TeacherAssetForCreationDto>().ReverseMap();
         CreateMap<TeacherAsset, TeacherAssetForUpdateDto>().ReverseMap();
         CreateMap<TeacherAsset, TeacherAssetForResultDto>().ReverseMap();

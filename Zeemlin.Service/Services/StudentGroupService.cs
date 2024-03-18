@@ -32,15 +32,12 @@ public class StudentGroupService : IStudentGroupService
             throw new ZeemlinException(404, "Student not found");
 
         var existingStudentGroup = await _studentGroupRepository.SelectAll()
-     .Where(s => s.StudentId == dto.StudentId && s.GroupId == dto.GroupId)
-     .AsNoTracking()
-     .FirstOrDefaultAsync();
+         .Where(s => s.StudentId == dto.StudentId && s.GroupId == dto.GroupId)
+         .AsNoTracking()
+         .FirstOrDefaultAsync();
 
         if (existingStudentGroup is not null)
-        {
-            throw new ZeemlinException(400,
-                "Student already exists in group ");
-        }
+            throw new ZeemlinException(400,"Student already exists in group ");
 
         var mappedStudentGroup = _mapper.Map<StudentGroup>(dto);
         mappedStudentGroup.CreatedAt = DateTime.UtcNow;

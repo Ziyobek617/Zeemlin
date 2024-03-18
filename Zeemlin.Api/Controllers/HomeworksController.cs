@@ -13,27 +13,22 @@ public class HomeworksController : BaseController
         _homeworkService = homeworkService;
     }
 
-    //Create
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] HomeworkForCreationDto dto)
         => Ok(await this._homeworkService.CreateAsync(dto));
 
-    //GetAll
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
         => Ok(await this._homeworkService.RetrieveAllAsync());
 
-    //GetById
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
         => Ok(await this._homeworkService.RetrieveIdAsync(id));
 
-    //Delete
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(await this._homeworkService.RemoveAsync(id));
 
-    //Update
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] HomeworkForUpdateDto dto)
         => Ok(await this._homeworkService.ModifyAsync(id, dto));
