@@ -1,8 +1,7 @@
-﻿
-using Zeemlin.Domain.Entities;
-using Zeemlin.Service.DTOs.Grade;
-using Zeemlin.Service.DTOs.Group;
-using Zeemlin.Service.DTOs.LessonAttendances;
+﻿using Zeemlin.Service.DTOs.Group;
+using Zeemlin.Service.DTOs.Homework;
+using Zeemlin.Service.DTOs.Subjects;
+using Zeemlin.Service.DTOs.Teachers;
 
 namespace Zeemlin.Service.DTOs.Lesson;
 
@@ -11,11 +10,12 @@ public class LessonForResultDto
     public long Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public TimeSpan Duration { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
     public long GroupId { get; set; }
     public GroupForResultDto Group { get; set; }
-    public ICollection<GradeForResultDto> GradeForResultDtos { get; set; }
-    public ICollection<LessonAttendanceForResultDto> lessonAttendanceForResultDtos { get; set; }
+    public long TeacherId { get; set; }
+    public TeacherForResultDto Teacher { get; set; }
+    public ICollection<HomeworkForResultDto> Homework  { get; set; }
+    public ICollection<SubjectForResultDto> Subjects { get; set; }
 }
