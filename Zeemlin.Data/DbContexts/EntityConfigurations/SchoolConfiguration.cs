@@ -44,8 +44,9 @@ public class SchoolConfiguration
             builder.ToTable("Courses");
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Name);
+            builder.Property(e => e.Name).IsRequired(); ;
             builder.Property(e => e.Description);
+            builder.Property(e => e.price).IsRequired();
             builder.Property(e => e.SchoolId).IsRequired();
 
             builder.HasMany(e => e.Groups)
