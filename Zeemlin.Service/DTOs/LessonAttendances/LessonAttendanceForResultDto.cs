@@ -11,9 +11,6 @@ public class LessonAttendanceForResultDto
     public LessonForResultDto LessonForResultDto { get; set; }
     public long StudentId { get; set; }
     public StudentForResultDto StudentForResultDto { get; set; }
-    public string GroupName { get; set; }
-    public string TeacherName { get; set; }
     public DateTime Date { get; set; }
-    public ScienceType ScienceType { get; set; }
-    public LessonAttendanceType LessonAttendanceType { get; set; }
+    public string LessonAttendanceType { get; set; }
 }

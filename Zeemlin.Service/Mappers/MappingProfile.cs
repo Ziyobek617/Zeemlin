@@ -79,11 +79,10 @@ public class MappingProfile : Profile
         CreateMap<Lesson, LessonForUpdateDto>().ReverseMap();
         CreateMap<Lesson, LessonForResultDto>().ReverseMap();
 
-        CreateMap<LessonAttendance, LessonForCreationDto>().ReverseMap();
-        CreateMap<LessonAttendance, LessonForUpdateDto>().ReverseMap();
-        CreateMap<LessonAttendance, LessonForResultDto>().ReverseMap();
-        CreateMap<LessonAttendance, LessonAttendanceReportDataDto>().ReverseMap();
-        CreateMap<LessonAttendance, StudentAttendanceDataDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonAttendanceForCreationDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonAttendanceForUpdateDto>().ReverseMap();
+        CreateMap<LessonAttendance, LessonAttendanceForResultDto>().ReverseMap();
+        CreateMap<LessonAttendance, StudentAttendanceReportDto>().ReverseMap();
         #endregion
 
         #region Relationships
