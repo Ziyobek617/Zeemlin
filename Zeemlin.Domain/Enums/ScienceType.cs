@@ -1,23 +1,35 @@
 ﻿namespace Zeemlin.Domain.Enums;
 
-public enum ScienceType
+public enum ScienceType : byte
 {
+    // Arts & Humanities
     Art, // Chizmachilik
     Music, // Musiqa
-    Physics, // Fizika
-    History, // Jahon Tarixi
-    Biology, // Biologiya
-    Algebra, // Algebra
     Upbring, // Tarbiya
-    Geometry, // Geometriya
-    Chemistry, // Kimyo
-    Geography, // Geografiya
-    Mathematics, // Matematika
-    UzbekLanguage, // Ona tili
+    WorldHistory, // Jahon Tarixi (World History)
+    HistoryOfUzbekistan, // O'zbekiston Tarixi (Uzbekistan History)
+
+    // Languages
+    UzbekLanguage, // Ona tili (Native Language)
+    KoreanLanguage, // Koreys tili
     GermanLanguage, // Nemis tili
     FrenchLanguage, // Fransuz tili
     RussianLanguage, // Rus tili
     EnglishLanguage, // Ingliz tili
-    HistoryOfUzbekistan, // O'zbekiston Tarixi
+    TurkishLanguage, // Turk tili
+
+    // Mathematics & Logic
+    Mathematics, // Matematika
+    Algebra, // Algebra
+    Geometry, // Geometriya
+
+    // Natural Sciences
+    Physics, // Fizika
+    Biology, // Biologiya
+    Chemistry, // Kimyo
+    Geography, // Geografiya
+
+    // Other
+    Elementary, // Boshlang'ich
     InformationTechnology, // Informatika
 }

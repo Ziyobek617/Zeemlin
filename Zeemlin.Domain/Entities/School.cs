@@ -10,6 +10,8 @@ public class School : Auditable
 {
     [Required] // Adjust MaxLength as needed
     public long SchoolNumber { get; set; }
+    [Required]
+    public SchoolType SchoolType { get; set; }
 
     [Required]
     [MaxLength(255)] // Adjust MaxLength as needed
@@ -27,6 +29,7 @@ public class School : Auditable
     [Required]
     [MaxLength(50)]
     public string Country { get; set; }
+    [Required]
     public Region Region { get; set; }
     [Required]
     [MaxLength(50)]

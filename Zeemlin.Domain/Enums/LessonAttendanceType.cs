@@ -3,7 +3,10 @@
 public enum LessonAttendanceType
 {
     Yes,
-    No,
+    PartiallyPresent,
     Reasonably,
+    Online,
+    Late,
+    No,
     empty,
 }
