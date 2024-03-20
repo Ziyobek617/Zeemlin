@@ -16,9 +16,11 @@ public class SchoolConfiguration
 
             // Define property configurations
             builder.Property(s => s.SchoolNumber).IsRequired();
+            builder.Property(s => s.SchoolType).IsRequired();
             builder.Property(s => s.Name).IsRequired().HasMaxLength(255);
             builder.Property(s => s.Description).IsRequired().HasMaxLength(2000);
-            builder.Property(s => s.Country).IsRequired().HasMaxLength(50);
+            builder.Property(s => s.Country).IsRequired();
+            builder.Property(s => s.Region).IsRequired();
             builder.Property(s => s.DistrictName).IsRequired().HasMaxLength(50);
             builder.Property(s => s.GeneralAddressMFY).IsRequired().HasMaxLength(50);
             builder.Property(s => s.StreetName).IsRequired().HasMaxLength(50);
@@ -164,8 +166,6 @@ public class SchoolConfiguration
 
             builder.Property(e => e.LessonId).IsRequired();
             builder.Property(e => e.StudentId).IsRequired();
-            builder.Property(e => e.GroupName);
-            builder.Property(e => e.TeacherName);
             builder.Property(e => e.DateTime).IsRequired();
             builder.Property(e => e.LessonAttendanceType).IsRequired();
         }
