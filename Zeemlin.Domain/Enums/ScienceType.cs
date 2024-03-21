@@ -6,7 +6,7 @@ public enum ScienceType : byte
     Art, // Chizmachilik
     Music, // Musiqa
     Upbring, // Tarbiya
-    WorldHistory, // Jahon Tarixi (World History)
+    History, // Jahon Tarixi (World History)
     HistoryOfUzbekistan, // O'zbekiston Tarixi (Uzbekistan History)
 
     // Languages

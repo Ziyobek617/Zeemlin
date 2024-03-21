@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
-using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Group;
 using Zeemlin.Service.Exceptions;
@@ -13,42 +11,37 @@ namespace Zeemlin.Service.Services;
 public class GroupService : IGroupService
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Group> _groupRepository;
-    private readonly AppDbContext _context;
+    private readonly IGroupRepository _groupRepository;
+    private readonly ICourseRepository _courseRepository;
 
-
-    public GroupService(IRepository<Group> repository, IMapper mapper, AppDbContext context)
+    public GroupService(
+        IGroupRepository repository,
+        IMapper mapper,
+        ICourseRepository courseRepository)
     {
         _mapper = mapper;
         _groupRepository = repository;
-        _context = context;
+        _courseRepository = courseRepository;
     }
 
     public async Task<GroupForResultDto> CreateAsync(GroupForCreationDto dto)
     {
-        var groupTeacherId = await _context
-            .Teachers
-            .FirstOrDefaultAsync(t => t.Id == dto.HeadTeacherId);
+        var course = await _courseRepository.SelectAll()
+            .Where(c => c.Id == dto.CourseId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        if (groupTeacherId is null)
-            throw new ZeemlinException(404, "Teacher Not Found");
+        if (course is null)
+            throw new ZeemlinException(404, "Course not found");
 
-        //var groupSchoolId = await _groupRepository
-        //    .SelectAll()
-        //    .AsNoTracking()
-        //    .Where(t => t.SchoolId == dto.SchoolId)
-        //    .FirstOrDefaultAsync();
+        var groupName = await _groupRepository.SelectAll()
+            .Where(gn => gn.CourseId == dto.CourseId 
+            && gn.Name.ToLower() == dto.Name.ToLower())
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        //if (groupSchoolId is not null)
-            //throw new ZeemlinException(404, "School Not Found");
-
-        //var IsValidGroupInSchool = await _groupRepository.SelectAll()
-        //    .Where(g=> g.Name.ToLower() == dto.Name.ToLower() 
-        //    && g.SchoolId == dto.SchoolId)
-        //    .FirstOrDefaultAsync();
-
-        //if (IsValidGroupInSchool is not null)
-        //    throw new ZeemlinException(409, "Group name already exists in School");
+        if (groupName is not null)
+            throw new ZeemlinException(409, $"Group with same name already exists in this {course.Name}");
 
         var mappedGroup = _mapper.Map<Group>(dto);
         mappedGroup.CreatedAt = DateTime.UtcNow;
@@ -67,12 +60,22 @@ public class GroupService : IGroupService
         if (group is null)
             throw new ZeemlinException(404, "Group Not Found");
 
-        var groupName = await _groupRepository.SelectAll()
-            .Where(g => g.Name.ToLower() == dto.Name.ToLower())
+        var course = await _courseRepository.SelectAll()
+            .Where(c => c.Id == dto.CourseId)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (groupName is not null)
-            throw new ZeemlinException(409, "Group name already exists");
+        if (course is null)
+            throw new ZeemlinException(404, "Course not found");
+
+        var groupNameUpdate = await _groupRepository.SelectAll()
+            .Where(gn => gn.CourseId == dto.CourseId
+            && gn.Name.ToLower() == dto.Name.ToLower())
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (groupNameUpdate is not null)
+            throw new ZeemlinException(409, $"Group with same name already exists in this {course.Name}");
 
         group.UpdatedAt = DateTime.UtcNow;
         var groups = _mapper.Map(dto,group);
@@ -113,4 +116,15 @@ public class GroupService : IGroupService
 
         return _mapper.Map<GroupForResultDto>(group);
     }
+
+    public async Task<IEnumerable<GroupForResultDto>> SearchGroupsAsync(string searchTerm)
+    {
+        var groups = await _groupRepository.SelectAll()
+            .Where(g => g.Name.ToLower().Contains(searchTerm.ToLower()))
+            .AsNoTracking()
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<GroupForResultDto>>(groups);
+    }
+
 }
