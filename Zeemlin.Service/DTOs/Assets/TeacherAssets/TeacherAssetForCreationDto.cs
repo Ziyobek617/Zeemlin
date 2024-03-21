@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Zeemlin.Service.DTOs.Assets;
+namespace Zeemlin.Service.DTOs.Assets.TeacherAssets;
 
 public class TeacherAssetForCreationDto
 {

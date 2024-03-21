@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries.Assets;
 using Zeemlin.Domain.Entities.Assets;
-using Zeemlin.Service.DTOs.Assets;
+using Zeemlin.Service.DTOs.Assets.TeacherAssets;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Helpers;
 using Zeemlin.Service.Interfaces.Assets;

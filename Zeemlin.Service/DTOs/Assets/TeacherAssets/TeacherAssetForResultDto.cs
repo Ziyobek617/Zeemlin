@@ -1,6 +1,6 @@
 ﻿using Zeemlin.Service.DTOs.Teachers;
 
-namespace Zeemlin.Service.DTOs.Assets;
+namespace Zeemlin.Service.DTOs.Assets.TeacherAssets;
 
 public class TeacherAssetForResultDto
 {
