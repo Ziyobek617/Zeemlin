@@ -37,7 +37,7 @@ public class DirectorsController : BaseController
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] DirectorForUpdateDto dto)
         => Ok(await this._directorService.ModifyAsync(id, dto));
 
-    [HttpGet("username|PassportSeria|Email|PhoneNumber")]
+    [HttpGet("username-PassportSeria-Email-PhoneNumber")]
     public async Task<IActionResult> SearchAdminsTerm(string director)
     {
         return Ok(await _directorService.RetrieveByUsernameAsync(director, appDbContext));

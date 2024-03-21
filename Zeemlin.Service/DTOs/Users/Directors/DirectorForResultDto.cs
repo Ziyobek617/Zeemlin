@@ -1,5 +1,4 @@
-﻿using Zeemlin.Domain.Entities;
-using Zeemlin.Domain.Enums;
+﻿using Zeemlin.Service.DTOs.Schools;
 
 namespace Zeemlin.Service.DTOs.Users.Directors;
 
@@ -14,6 +13,6 @@ public class DirectorForResultDto
     public string Gender { get; set; }
     public string PassportSeria { get; set; }
 
-    public ICollection<School> schools { get; set; }
+    public ICollection<SchoolForDirectorDto> schools { get; set; }
 
 }
