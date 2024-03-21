@@ -6,6 +6,21 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
 {
     public class AssetsConfiguration
     {
+        public class SchoolLogoAssetConfiguration : IEntityTypeConfiguration<SchoolLogoAsset>
+        {
+            public void Configure(EntityTypeBuilder<SchoolLogoAsset> builder)
+            {
+                builder.ToTable("SchoolLogoAssets");
+                builder.HasKey(e => e.Id);
+
+                builder.Property(e => e.Path).IsRequired();
+                builder.Property(e => e.UploadedDate).IsRequired();
+
+                builder.HasOne(e => e.School)
+                    .WithMany()
+                    .HasForeignKey(e => e.SchoolId);
+            }
+        }
         public class SchoolAssetConfiguration : IEntityTypeConfiguration<SchoolAsset>
         {
             public void Configure(EntityTypeBuilder<SchoolAsset> builder)

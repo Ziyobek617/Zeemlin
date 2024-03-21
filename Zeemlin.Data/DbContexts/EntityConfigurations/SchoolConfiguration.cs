@@ -29,6 +29,10 @@ public class SchoolConfiguration
             builder.Property(s => s.Website);
 
             // Define relationships
+            builder.HasMany(s => s.Asset)
+                .WithOne(a => a.School)
+                .HasForeignKey(a => a.SchoolId);
+
             builder.HasMany(s => s.Courses)
                 .WithOne(c => c.School)
                 .HasForeignKey(c => c.SchoolId);

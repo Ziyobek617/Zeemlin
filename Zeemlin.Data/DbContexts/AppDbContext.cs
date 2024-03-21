@@ -29,6 +29,7 @@ namespace Zeemlin.Data.DbContexts
         public DbSet<Student> Students { get; set; }
 
         // Assets
+        public DbSet<SchoolLogoAsset> SchoolLogoAssets { get; set; }
         public DbSet<SchoolAsset> SchoolAssets { get; set; }
         public DbSet<TeacherAsset> TeacherAssets { get; set; }
         public DbSet<HomeworkAsset> HomeworkAssets { get; set; }
@@ -56,6 +57,7 @@ namespace Zeemlin.Data.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Assets
+            modelBuilder.ApplyConfiguration(new SchoolLogoAssetConfiguration());
             modelBuilder.ApplyConfiguration(new SchoolAssetConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkAssetConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherAssetConfiguration());
@@ -67,10 +69,6 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new TeacherConfiguration());
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
 
-            modelBuilder.Entity<SuperAdmin>().HasData(SuperAdminSeedData.GetSuperAdmins());
-            modelBuilder.Entity<Admin>().HasData(AdminSeedData.GetAdmins());
-            modelBuilder.Entity<Director>().HasData(DirectorSeedData.GetDirectors());
-            modelBuilder.Entity<Teacher>().HasData(TeacherSeedData.GetTeachers());
 
             // School
             modelBuilder.ApplyConfiguration(new SchoolConfigurations());
@@ -84,13 +82,17 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new LessonAttendanceConfiguration());
             modelBuilder.ApplyConfiguration(new GradeConfiguration());
 
+            // Seed datas
+            modelBuilder.Entity<SuperAdmin>().HasData(SuperAdminSeedData.GetSuperAdmins());
+            modelBuilder.Entity<Admin>().HasData(AdminSeedData.GetAdmins());
+            modelBuilder.Entity<Director>().HasData(DirectorSeedData.GetDirectors());
+            modelBuilder.Entity<Teacher>().HasData(TeacherSeedData.GetTeachers());
             modelBuilder.Entity<School>().HasData(SchoolSeedData.GetSchools());
             modelBuilder.Entity<Course>().HasData(CourseSeedData.GetCourses());
             modelBuilder.Entity<Group>().HasData(GroupSeedData.GetGroups());
             modelBuilder.Entity<Lesson>().HasData(LessonSeedData.GetLessons());
             modelBuilder.Entity<Homework>().HasData(HomeworkSeedData.GetHomeworks());
             modelBuilder.Entity<TeacherGroup>().HasData(TeacherGroupSeedData.GetTeacherGroups());
-            // Other entity configurations...
         }
 
     }
