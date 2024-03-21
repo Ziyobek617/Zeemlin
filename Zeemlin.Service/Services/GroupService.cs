@@ -88,6 +88,7 @@ public class GroupService : IGroupService
     {
         var group = await _groupRepository.SelectAll()
             .Where (g => g.Id == id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
         if (group is null)

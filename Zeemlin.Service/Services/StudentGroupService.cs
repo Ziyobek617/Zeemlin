@@ -13,21 +13,35 @@ public class StudentGroupService : IStudentGroupService
 {
     private readonly IMapper _mapper;
     private readonly IStudentGroupRepository _studentGroupRepository;
-    private readonly AppDbContext appDbContext;
-    public StudentGroupService(IMapper mapper, IStudentGroupRepository studentGroupRepository, AppDbContext appDbContext)
+    private readonly IStudentRepository _studentRepository;
+    private readonly IGroupRepository _groupRepository;
+    public StudentGroupService(
+        IMapper mapper,
+        IStudentGroupRepository studentGroupRepository,
+        IStudentRepository studentRepository,
+        IGroupRepository groupRepository)
     {
         _mapper = mapper;
         _studentGroupRepository = studentGroupRepository;
-        this.appDbContext = appDbContext;
+        _studentRepository = studentRepository;
+        _groupRepository = groupRepository;
     }
 
     public async Task<StudentGroupForResultDto> AddAsync(StudentGroupForCreationDto dto)
     {
-        var group = await appDbContext.Groups.FirstOrDefaultAsync(g => g.Id == dto.GroupId);
-        if (group is null)
-            throw new ZeemlinException(404, "Group not found");
+        var group = await _groupRepository.SelectAll()
+            .Where(g => g.Id == dto.GroupId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-        var student = await appDbContext.Students.FirstOrDefaultAsync(s => s.Id == dto.StudentId); // Or use FirstOrDefaultAsync for optional student
+        if (group is null)
+            throw new ZeemlinException(404, "Group Not Found");
+
+        var student = await _studentRepository.SelectAll()
+            .Where(s => s.Id == dto.StudentId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
         if (student is null)
             throw new ZeemlinException(404, "Student not found");
 
@@ -56,6 +70,30 @@ public class StudentGroupService : IStudentGroupService
         if (user is null)
             throw new ZeemlinException(404, "Not found");
 
+        var group = await _groupRepository.SelectAll()
+            .Where(g => g.Id == dto.GroupId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (group is null)
+            throw new ZeemlinException(404, "Group Not Found");
+
+        var student = await _studentRepository.SelectAll()
+            .Where(s => s.Id == dto.StudentId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (student is null)
+            throw new ZeemlinException(404, "Student not found");
+
+        var existingStudentGroup = await _studentGroupRepository.SelectAll()
+         .Where(s => s.StudentId == dto.StudentId && s.GroupId == dto.GroupId)
+         .AsNoTracking()
+         .FirstOrDefaultAsync();
+
+        if (existingStudentGroup is not null)
+            throw new ZeemlinException(400, "Student already exists in group ");
+
         var mappedStudentGroup = _mapper.Map(dto,user);
         mappedStudentGroup.UpdatedAt = DateTime.UtcNow;
         await _studentGroupRepository.UpdateAsync(mappedStudentGroup);
@@ -67,6 +105,7 @@ public class StudentGroupService : IStudentGroupService
     {
         var user = await _studentGroupRepository.SelectAll()
             .Where(u => u.Id == id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
         if (user is null)
             throw new ZeemlinException(404, "Not found");
@@ -78,21 +117,21 @@ public class StudentGroupService : IStudentGroupService
 
     public async Task<IEnumerable<StudentGroupForResultDto>> RetrieveAllAsync()
     {
-        var users = await _studentGroupRepository.SelectAll().ToListAsync();
+        var studentGroups = await _studentGroupRepository.SelectAll().ToListAsync();
 
-        return _mapper.Map<IEnumerable<StudentGroupForResultDto>>(users);
+        return _mapper.Map<IEnumerable<StudentGroupForResultDto>>(studentGroups);
     }
 
     public async Task<StudentGroupForResultDto> RetrieveByIdAsync(long id)
     {
-        var student = await _studentGroupRepository.SelectAll()
+        var studentGroup = await _studentGroupRepository.SelectAll()
             .Where(s => s.Id == id)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (student is null)
+        if (studentGroup is null)
             throw new ZeemlinException(404, "Student not found");
 
-        return _mapper.Map<StudentGroupForResultDto>(student);
+        return _mapper.Map<StudentGroupForResultDto>(studentGroup);
     }
 }

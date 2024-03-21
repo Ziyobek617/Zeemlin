@@ -88,11 +88,12 @@ public class StudentService : IStudentService
 
         return _mapper.Map<StudentForResultDto>(person);
     }
-
+                       
     public async Task<bool> RemoveAsync(long id)
     {
         var user = await _studentRepository.SelectAll()
             .Where(u => u.Id == id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
         if (user is null)
             throw new ZeemlinException(404, "User is not found");
