@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries;
+using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.Exceptions;
@@ -10,13 +11,18 @@ namespace Zeemlin.Service.Services;
 
 public class SchoolService : ISchoolService
 {
-    private readonly ISchoolRepository _schoolRepository;
     private readonly IMapper _mapper;
+    private readonly ISchoolRepository _schoolRepository;
+    private readonly IDirectorRepository _directorRepository;
 
-    public SchoolService(ISchoolRepository schoolRepository, IMapper mapper)
+    public SchoolService(
+        IMapper mapper,
+        ISchoolRepository schoolRepository,
+        IDirectorRepository directorRepository)
     {
-        _schoolRepository = schoolRepository;
         _mapper = mapper;
+        _schoolRepository = schoolRepository;
+        _directorRepository = directorRepository;
     }
 
 
@@ -31,12 +37,20 @@ public class SchoolService : ISchoolService
             .SelectAll()
             .AsNoTracking()
             .Where(s => s.SchoolNumber == dto.SchoolNumber
-            && s.StreetName.Equals(dto.StreetName))
+            && s.DistrictName.ToLower().Equals(dto.DistrictName.ToLower()))
             .AnyAsync();
 
         if (existingSchoolWithSameNumberAndStreet)
             throw new ZeemlinException(409,
                 "A school with the same number already exists on that street.");
+
+        var director = await _directorRepository.SelectAll()
+            .Where(d => d.Id == dto.DirectorId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (director is null)
+            throw new ZeemlinException(404, "Director not found");
 
         var school = _mapper.Map<School>(dto);
         school.CreatedAt = DateTime.UtcNow;
@@ -61,16 +75,25 @@ public class SchoolService : ISchoolService
             .SelectAll()
             .AsNoTracking()
             .Where(s => s.SchoolNumber == dto.SchoolNumber
-            && s.StreetName.Equals(dto.StreetName))
+            && s.DistrictName.ToLower().Equals(dto.DistrictName.ToLower()))
             .AnyAsync();
 
         if (existingSchoolWithSameNumberAndStreet)
-            throw new ZeemlinException(409, "A school with the same number already exists on that street.");
+            throw new ZeemlinException(409, $"A school with the same {school.SchoolNumber} already exists on that {school.DistrictName} district.");
 
-        school.UpdatedAt = DateTime.UtcNow;
-        var s = _mapper.Map(dto, school);
-        await _schoolRepository.UpdateAsync(s);
-        return _mapper.Map<SchoolForResultDto>(s);
+        var director = await _directorRepository.SelectAll()
+            .Where(d => d.Id == dto.DirectorId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (director is null)
+            throw new ZeemlinException(404, "Director not found");
+
+        var mapped = _mapper.Map(dto, school);
+        mapped.UpdatedAt = DateTime.UtcNow;
+        await _schoolRepository.UpdateAsync(mapped);
+
+        return _mapper.Map<SchoolForResultDto>(mapped);
     }
 
     public async Task<bool> RemoveAsync(long id)

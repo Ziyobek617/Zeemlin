@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Service.DTOs.Schools;
 
@@ -9,6 +8,7 @@ public class SchoolForResultDto
 
     [Required] // Adjust MaxLength as needed
     public long SchoolNumber { get; set; }
+    public string SchoolType { get; set; }
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
@@ -24,7 +24,7 @@ public class SchoolForResultDto
     [MaxLength(50)]
     public string Country { get; set; }
 
-    public Region Region { get; set; } // nullable to allow omission when creating
+    public string Region { get; set; } // nullable to allow omission when creating
 
     [Required]
     [MaxLength(50)]
