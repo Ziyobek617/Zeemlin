@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Zeemlin.Service.DTOs.Assets;
+using Zeemlin.Service.DTOs.Assets.TeacherAssets;
 using Zeemlin.Service.Interfaces.Assets;
 using Zeemlin.Service.Services.Assets;
 

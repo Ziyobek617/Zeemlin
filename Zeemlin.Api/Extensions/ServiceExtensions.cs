@@ -77,6 +77,9 @@ public static class ServiceExtensions
 
 
         // Assets
+        services.AddScoped<ISchoolLogoAssetRepository, SchoolLogoAssetRepository>();
+        services.AddScoped<ISchoolLogoAssetService, SchoolLogoAssetService>();
+
         services.AddScoped<ISchoolAssetRepository, SchoolAssetRepository>();
         services.AddScoped<ISchoolAssetService, SchoolAssetService>();
 

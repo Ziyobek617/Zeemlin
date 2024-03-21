@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\SchoolLogoAssets\" />
     <Folder Include="wwwroot\SchoolAssets\" />
     <Folder Include="wwwroot\TeacherAssets\" />
   </ItemGroup>

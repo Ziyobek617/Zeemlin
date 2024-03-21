@@ -1,25 +1,26 @@
 ﻿using AutoMapper;
 using Zeemlin.Domain.Entities;
-using Zeemlin.Service.DTOs.Grade; //3
-using Zeemlin.Service.DTOs.Group; //6
-using Zeemlin.Service.DTOs.Homework; //7
-using Zeemlin.Service.DTOs.Lesson; //7
-using Zeemlin.Service.DTOs.Teachers; //2
+using Zeemlin.Service.DTOs.Grade;
+using Zeemlin.Service.DTOs.Group;
+using Zeemlin.Service.DTOs.Homework;
+using Zeemlin.Service.DTOs.Lesson;
+using Zeemlin.Service.DTOs.Teachers;
 using Zeemlin.Service.DTOs.StudentGroups;
-using Zeemlin.Service.DTOs.Students; //1
+using Zeemlin.Service.DTOs.Students;
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.DTOs.TeacherGroups;
 using Zeemlin.Service.DTOs.Subjects;
 using Zeemlin.Service.DTOs.Courses;
 using Zeemlin.Domain.Entities.Assets;
-using Zeemlin.Service.DTOs.Assets;
 using Zeemlin.Service.DTOs.Assets.HomeworkAssets;
 using Zeemlin.Service.DTOs.LessonAttendances;
 using Zeemlin.Domain.Entities.Users;
 using Zeemlin.Service.DTOs.Users.SuperAdmins;
 using Zeemlin.Service.DTOs.Users.Admins;
 using Zeemlin.Service.DTOs.Users.Directors;
-using Zeemlin.Service.DTOs.Assets.SchoolAssets; //8
+using Zeemlin.Service.DTOs.Assets.SchoolAssets;
+using Zeemlin.Service.DTOs.Assets.TeacherAssets;
+using Zeemlin.Service.DTOs.Assets.SchoolLogoAssets;
 
 namespace Zeemlin.Service.Mappers;
 
@@ -96,6 +97,9 @@ public class MappingProfile : Profile
         #endregion
 
         #region Assets
+        CreateMap<SchoolLogoAsset, SchoolLogoAssetForCreationDto>().ReverseMap();
+        CreateMap<SchoolLogoAsset, SchoolLogoAssetForResultDto>().ReverseMap();
+
         CreateMap<SchoolAsset, SchoolAssetForCreationDto>().ReverseMap();
         CreateMap<SchoolAsset, SchoolAssetForResultDto>().ReverseMap();
 
