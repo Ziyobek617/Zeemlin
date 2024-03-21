@@ -83,6 +83,37 @@ public class LessonService : ILessonService
         if (lessons is null)
             throw new ZeemlinException(404, "Lesson is not found");
 
+        var group = await groupRepository.SelectAll()
+            .Where(g => g.Id == dto.GroupId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found");
+
+        var teacher = await teacherRepository.SelectAll()
+            .Where(t => t.Id == dto.TeacherId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (teacher is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
+        var existingLesson = await lessonRepository.SelectAll()
+            .Where(l => l.Title.ToLower() == dto.Title.ToLower() &&
+            l.GroupId == dto.GroupId &&
+            l.TeacherId == dto.TeacherId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (existingLesson is not null)
+        {
+            // Get teacher name for exception message
+            var teacherName = teacher?.FirstName + " " + teacher?.LastName; // Handle null teacher
+
+            throw new ZeemlinException(409, $"Lesson with this name already exists in the group. {teacherName} created a lesson with this title on {existingLesson.CreatedAt:yyyy-MM-dd}");
+        }
+
         lessons.UpdatedAt = DateTime.UtcNow;
         var lesson = _mapper.Map(dto, lessons);
         await lessonRepository.UpdateAsync(lesson);
