@@ -63,11 +63,11 @@ public class StudentGroupService : IStudentGroupService
 
     public async Task<StudentGroupForResultDto> ModifyAsync(long id, StudentGroupForUpdateDto dto)
     {
-        var user = await _studentGroupRepository.SelectAll()
+        var studentGroup = await _studentGroupRepository.SelectAll()
         .Where(u => u.Id == id)
         .AsNoTracking()
         .FirstOrDefaultAsync();
-        if (user is null)
+        if (studentGroup is null)
             throw new ZeemlinException(404, "Not found");
 
         var group = await _groupRepository.SelectAll()
@@ -94,7 +94,7 @@ public class StudentGroupService : IStudentGroupService
         if (existingStudentGroup is not null)
             throw new ZeemlinException(400, "Student already exists in group ");
 
-        var mappedStudentGroup = _mapper.Map(dto,user);
+        var mappedStudentGroup = _mapper.Map(dto,studentGroup);
         mappedStudentGroup.UpdatedAt = DateTime.UtcNow;
         await _studentGroupRepository.UpdateAsync(mappedStudentGroup);
 
