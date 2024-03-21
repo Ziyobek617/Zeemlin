@@ -114,8 +114,8 @@ public class LessonService : ILessonService
             throw new ZeemlinException(409, $"Lesson with this name already exists in the group. {teacherName} created a lesson with this title on {existingLesson.CreatedAt:yyyy-MM-dd}");
         }
 
-        lessons.UpdatedAt = DateTime.UtcNow;
         var lesson = _mapper.Map(dto, lessons);
+        lesson.UpdatedAt = DateTime.UtcNow;
         await lessonRepository.UpdateAsync(lesson);
 
         return _mapper.Map<LessonForResultDto>(lesson);
