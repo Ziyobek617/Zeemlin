@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Zeemlin.Domain.Enums;
-using Zeemlin.Service.DTOs.Group;
-using Zeemlin.Service.DTOs.TeacherGroups;
+﻿using Zeemlin.Service.DTOs.TeacherGroups;
 
 namespace Zeemlin.Service.DTOs.Teachers
 {
@@ -12,7 +9,7 @@ namespace Zeemlin.Service.DTOs.Teachers
         public string LastName { get; set; }
 
         // Consider hiding DateOfBirth unless necessary for specific purposes
-        public DateTime? DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -24,12 +21,9 @@ namespace Zeemlin.Service.DTOs.Teachers
         public string genderType { get; set; }
         public long SchoolNumber { get; set; }
 
-        // Optionally include Group information if relevant
-        public GroupForResultDto? Group { get; set; }
-
         // Consider adding additional properties like created/updated dates
         public DateTime CreatedAt { get; set; }
-        public TeacherGroupForResultDto TeacherGroupForResult { get; set; }
+        public ICollection<TeacherGroupForResultDto> TeacherGroupForResult { get; set; }
         //public ScienceTeacherForResultDto ScienceTeacher { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.Interfaces;
 
@@ -32,4 +33,12 @@ public class SchoolsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] SchoolForUpdateDto dto)
         => Ok(await this._schoolService.ModifyAsync(id, dto));
+
+    [HttpGet("{Region}")]
+    public async Task<IActionResult> GetSchoolsByRegion(Region region)
+    {
+        var schools = await _schoolService.FilterByRegionAsync(region);
+        return Ok(schools);
+    }
+
 }

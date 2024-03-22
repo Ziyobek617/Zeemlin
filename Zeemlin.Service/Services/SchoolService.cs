@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Domain.Entities;
+using Zeemlin.Domain.Enums;
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
@@ -126,4 +127,15 @@ public class SchoolService : ISchoolService
 
         return _mapper.Map<SchoolForResultDto>(school);
     }
+
+    public async Task<IEnumerable<SchoolForResultDto>> FilterByRegionAsync(Region region)
+    {
+        var schools = await _schoolRepository.SelectAll()
+            .AsNoTracking()
+            .Where(s => s.Region == region)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<SchoolForResultDto>>(schools);
+    }
+
 }

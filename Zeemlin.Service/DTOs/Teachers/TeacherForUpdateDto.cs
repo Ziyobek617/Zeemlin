@@ -8,7 +8,7 @@ namespace Zeemlin.Service.DTOs.Teachers
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime? DateOfBirth { get; set; } // Make nullable for optional updates
+        public string DateOfBirth { get; set; } // Make nullable for optional updates
 
         [Phone]
         public string PhoneNumber { get; set; }
