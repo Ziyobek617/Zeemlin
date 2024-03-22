@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using Zeemlin.Data.DbContexts;
 using Zeemlin.Data.IRepositries;
-using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Service.DTOs.Courses;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
-using Zeemlin.Service.Interfaces.Caches;
 
 namespace Zeemlin.Service.Services;
 
@@ -49,6 +46,8 @@ public class CourseService : ICourseServices
 
         if (IsValidSchoolNumber is null)
             throw new ZeemlinException(404, "School Not Found");
+
+
 
         var mappedCourse = _mapper.Map<Course>(dto);
         mappedCourse.CreatedAt = DateTime.UtcNow;
@@ -126,4 +125,5 @@ public class CourseService : ICourseServices
 
         return _mapper.Map<CourseForResultDto>(IsValidId);
     }
+
 }
