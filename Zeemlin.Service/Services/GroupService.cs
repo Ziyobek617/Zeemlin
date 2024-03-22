@@ -106,26 +106,82 @@ public class GroupService : IGroupService
         return _mapper.Map<IEnumerable<GroupForResultDto>>(group);
     }
 
-    public async Task<GroupForResultDto> RetrieveIdAsync(long id)
+    public async Task<GroupForResultDto> RetrieveByIdAsync(long id)
     {
         var group = await _groupRepository.SelectAll()
+            .Include(g => g.TeacherGroups)
+                .ThenInclude(tg => tg.Teacher) // Eagerly load Teacher within TeacherGroups
+            .Include(g => g.Course) // Include Course for details
+            .Include(g => g.StudentGroups) // Include StudentGroups
             .Where(g => g.Id == id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
         if (group is null)
+        {
             throw new ZeemlinException(404, "Group Not Found");
+        }
 
-        return _mapper.Map<GroupForResultDto>(group);
+        // Map to GroupForResultDto, including related entities
+        var groupDto = _mapper.Map<GroupForResultDto>(group);
+
+        // Handle GroupDataResultDto mapping (optional, adjust based on your logic)
+        if (group.TeacherGroups.Any()) // Check if there are TeacherGroups
+        {
+            groupDto.GroupData = group.TeacherGroups.Select(tg => new GroupDataResultDto
+            {
+                GroupId = tg.GroupId, // Assuming GroupId exists in TeacherGroup
+                GroupName = tg.Group?.Name, // Access Group Name through relationship (if applicable)
+                TeacherFirstName = tg.Teacher?.FirstName,
+                TeacherLastName = tg.Teacher?.LastName,
+                GroupStudentCount = tg.Group.StudentGroups.Count ,
+                CourseName = tg.Group?.Course?.Name,
+                GroupAgeInDays = tg.Group.CreatedAt.ToString()
+            }).ToList();
+        }
+        else
+        {
+            groupDto.GroupData = new List<GroupDataResultDto>(); // Empty collection
+        }
+
+        return groupDto;
     }
 
-    public async Task<IEnumerable<GroupForResultDto>> SearchGroupsAsync(string searchTerm)
+
+    public async Task<IEnumerable<GroupDataResultDto>> SearchGroupsAsync(string searchTerm)
     {
+        var groupTerm = await _groupRepository.SelectAll()
+            .Where(g => g.Name.ToLower().Contains(searchTerm.ToLower()))
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (groupTerm is null)
+            throw new ZeemlinException(404, "Not Found");
+
         var groups = await _groupRepository.SelectAll()
+            .Include(g => g.TeacherGroups)
+                .ThenInclude(tg => tg.Teacher)
+            .Include(g => g.Course)
+            .Include(g => g.StudentGroups)  
             .Where(g => g.Name.ToLower().Contains(searchTerm.ToLower()))
             .AsNoTracking()
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GroupForResultDto>>(groups);
+
+        return groups.Select(g => new GroupDataResultDto
+        {
+            GroupId = g.Id,
+            GroupName = g.Name,
+            TeacherFirstName = g.TeacherGroups.FirstOrDefault()?.Teacher?.FirstName,    
+            TeacherLastName = g.TeacherGroups.FirstOrDefault()?.Teacher?.LastName,
+            GroupStudentCount = g.StudentGroups.Count,
+            CourseName = g.Course?.Name,
+            GroupAgeInDays = g.CreatedAt.ToString()
+        });
     }
+
+
+
+
 
 }
