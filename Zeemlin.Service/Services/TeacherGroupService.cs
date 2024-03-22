@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries;
-using Zeemlin.Data.Repositories;
 using Zeemlin.Domain.Entities;
-using Zeemlin.Service.DTOs.StudentGroups;
 using Zeemlin.Service.DTOs.TeacherGroups;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
@@ -14,28 +12,45 @@ public class TeacherGroupService : ITeacherGroupService
 {
     private readonly IMapper _mapper;
     private readonly ITeacherGroupRepository _repository;
+    private readonly ITeacherRepository _teacher;
+    private readonly IGroupRepository _groupRepository;
 
-    public TeacherGroupService(IMapper mapper, ITeacherGroupRepository repository)
+    public TeacherGroupService(
+        IMapper mapper,
+        ITeacherGroupRepository repository,
+        ITeacherRepository teacher,
+        IGroupRepository groupRepository)
     {
         _mapper = mapper;
         _repository = repository;
+        _teacher = teacher;
+        _groupRepository = groupRepository;
     }
 
     public async Task<TeacherGroupForResultDto> AddAsync(TeacherGroupForCreationDto dto)
     {
-        var group = await _repository.SelectAll()
-        .Where(u => u.GroupId == dto.GroupId)
+        var group = await _groupRepository.SelectAll()
+        .Where(u => u.Id == dto.GroupId)
         .AsNoTracking()
         .FirstOrDefaultAsync();
-        if (group is not null)
-            throw new ZeemlinException(400, "Group already exists");
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found");
 
-        var teacher = await _repository.SelectAll()
-        .Where(s => s.TeacherId == dto.TeacherId)
+        var teacher = await _teacher.SelectAll()
+        .Where(s => s.Id == dto.TeacherId)
         .AsNoTracking()
         .FirstOrDefaultAsync();
-        if (teacher is not null)
-            throw new ZeemlinException(400, "Teacher already exists");
+        if (teacher is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
+        var teacherGroup = await _repository.SelectAll()
+            .Where(tg => tg.TeacherId == dto.TeacherId &&
+            tg.GroupId == dto.GroupId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (teacherGroup is not null)
+            throw new ZeemlinException(409, $"{teacher.FirstName} {teacher.LastName} is available in this {group.Name} group");
 
         var mappedStudentGroup = _mapper.Map<TeacherGroup>(dto);
         mappedStudentGroup.CreatedAt = DateTime.UtcNow;
@@ -46,14 +61,37 @@ public class TeacherGroupService : ITeacherGroupService
 
     public async Task<TeacherGroupForResultDto> ModifyAsync(long id, TeacherGroupForUpdateDto dto)
     {
-        var group = await _repository.SelectAll()
+        var isvalidGroup = await _repository.SelectAll()
         .Where(u => u.Id == id)
         .AsNoTracking()
         .FirstOrDefaultAsync();
-        if (group is null)
+        if (isvalidGroup is null)
             throw new ZeemlinException(404, "Not found");
 
-        var mappedTeacherGroup = _mapper.Map(dto, group);
+        var group = await _groupRepository.SelectAll()
+        .Where(u => u.Id == dto.GroupId)
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
+        if (group is null)
+            throw new ZeemlinException(404, "Group not found");
+
+        var teacher = await _teacher.SelectAll()
+        .Where(s => s.Id == dto.TeacherId)
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
+        if (teacher is null)
+            throw new ZeemlinException(404, "Teacher not found");
+
+        var teacherGroup = await _repository.SelectAll()
+            .Where(tg => tg.TeacherId == dto.TeacherId &&
+            tg.GroupId == dto.GroupId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (teacherGroup is not null)
+            throw new ZeemlinException(409, $"{teacher.FirstName} {teacher.LastName} is available in this {group.Name} group");
+
+        var mappedTeacherGroup = _mapper.Map(dto, isvalidGroup);
         mappedTeacherGroup.UpdatedAt = DateTime.UtcNow;
         await _repository.UpdateAsync(mappedTeacherGroup);
 
