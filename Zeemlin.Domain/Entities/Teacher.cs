@@ -21,11 +21,8 @@ public class Teacher : Auditable
     [Required]
     [MaxLength(50)]
     public string DistrictName { get; set; }
-    [Required]
-    public long SchoolNumber { get; set; }
     public ScienceType ScienceType { get; set; }
     public GenderType genderType { get; set; }
-
 
     public ICollection<TeacherGroup> TeacherGroups { get; set; }
     public ICollection<Question> Questions { get; set; }

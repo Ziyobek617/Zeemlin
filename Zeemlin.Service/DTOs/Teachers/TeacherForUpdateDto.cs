@@ -6,24 +6,23 @@ namespace Zeemlin.Service.DTOs.Teachers
 {
     public class TeacherForUpdateDto
     {
+        [Required, MaxLength(50)]
         public string FirstName { get; set; }
+        [Required, MaxLength(50)]
         public string LastName { get; set; }
-        public string DateOfBirth { get; set; } // Make nullable for optional updates
-
-        [Phone]
+        public string DateOfBirth { get; set; }
+        [Phone(ErrorMessage = "Phone number is required")]
         public string PhoneNumber { get; set; }
-
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email { get; set; }
-
         [PasswordPropertyText]
-        public string Password { get; set; } // Allow optional password updates
-
+        public string Password { get; set; }
         public string Biography { get; set; }
-
-        public string DistrictName { get; set; } // Allow optional updates
         [Required]
+        [MaxLength(50)]
+        public string DistrictName { get; set; }
+        public ScienceType ScienceType { get; set; }
         public GenderType genderType { get; set; }
-        public long? SchoolNumber { get; set; }  // Allow optional updates
     }
 }
