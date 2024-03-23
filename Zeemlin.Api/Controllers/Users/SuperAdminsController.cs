@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Zeemlin.Service.DTOs.ScienceTeachers;
 using Zeemlin.Service.DTOs.Users.SuperAdmins;
 using Zeemlin.Service.Interfaces.Users;
 

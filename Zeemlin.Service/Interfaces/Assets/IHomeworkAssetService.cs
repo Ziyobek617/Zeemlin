@@ -1,5 +1,4 @@
 ﻿using Zeemlin.Service.DTOs.Assets.HomeworkAssets;
-using Zeemlin.Service.DTOs.Sciences;
 
 namespace Zeemlin.Service.Interfaces.Assets;
 
