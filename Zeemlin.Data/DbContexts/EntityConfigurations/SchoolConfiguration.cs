@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Questions;
+using Zeemlin.Domain.Entities.Events;
 
 namespace Zeemlin.Data.DbContexts.EntityConfigurations;
 
@@ -71,6 +72,7 @@ public class SchoolConfiguration
             builder.Property(e => e.Name).IsRequired().HasMaxLength(100);
             builder.Property(e => e.Description);
             builder.Property(e => e.CourseId).IsRequired();
+            
 
             builder.HasMany(e => e.StudentGroups)
                 .WithOne(sg => sg.Group)
@@ -103,6 +105,21 @@ public class SchoolConfiguration
 
             builder.Property(e => e.TeacherId).IsRequired();
             builder.Property(e => e.GroupId).IsRequired();
+            builder.Property(e => e.Role).IsRequired();
+
+
+        }
+    }
+
+    public class ParentStudentConfiguration : IEntityTypeConfiguration<ParentStudent>
+    {
+        public void Configure(EntityTypeBuilder<ParentStudent> builder)
+        {
+            builder.ToTable("ParentStudents");
+            builder.HasKey(e => e.Id);
+
+            builder.Property(ps => ps.ParentId).IsRequired();
+            builder.Property(ps => ps.StudentId).IsRequired();
         }
     }
 
@@ -175,6 +192,22 @@ public class SchoolConfiguration
         }
     }
 
+    public class LessonTableConfiguration : IEntityTypeConfiguration<LessonTable>
+    {
+        public void Configure(EntityTypeBuilder<LessonTable> builder)
+        {
+            builder.ToTable("LessonTables");
+            builder.HasKey(e => e.Id);
+
+            builder.Property(e => e.Date).IsRequired();
+            builder.Property(e => e.Title).IsRequired().HasMaxLength(100);
+            builder.Property(e => e.LessonId).IsRequired();
+            builder.Property(e => e.TeacherId).IsRequired();
+            builder.Property(e => e.Classroom).IsRequired().HasMaxLength(100);
+
+        }
+    }
+
     public class GradeConfiguration : IEntityTypeConfiguration<Grade>
     {
         public void Configure(EntityTypeBuilder<Grade> builder)
@@ -243,6 +276,21 @@ public class SchoolConfiguration
             builder.HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId);
+        }
+    }
+
+    public class EventConfiguration : IEntityTypeConfiguration<Event>
+    {
+        public void Configure(EntityTypeBuilder<Event> builder)
+        {
+            builder.ToTable("Events");
+            builder.HasKey(a => a.Id);
+
+            builder.Property(e => e.Title).IsRequired();
+            builder.Property(e => e.Orginizer).IsRequired();
+            builder.Property(e => e.Location).IsRequired();
+            builder.Property(e => e.Contact).IsRequired();
+
         }
     }
 }

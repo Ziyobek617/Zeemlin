@@ -3,6 +3,7 @@ using Zeemlin.Data.DbContexts.Seeds.Schools;
 using Zeemlin.Data.DbContexts.Seeds.Users;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Assets;
+using Zeemlin.Domain.Entities.Events;
 using Zeemlin.Domain.Entities.Questions;
 using Zeemlin.Domain.Entities.Users;
 using static Zeemlin.Data.DbContexts.EntityConfigurations.AssetsConfiguration;
@@ -20,6 +21,9 @@ namespace Zeemlin.Data.DbContexts
         public DbSet<School> School { get; set; }
         public DbSet<Course> Courses { get; set; }
 
+        // Event
+        public DbSet<Event> Events { get; set; }
+
         // Users
         public DbSet<SuperAdmin> SuperAdmins { get; set; }
         public DbSet<Admin> Admins { get; set; }
@@ -31,6 +35,7 @@ namespace Zeemlin.Data.DbContexts
         // Assets
         public DbSet<SchoolLogoAsset> SchoolLogoAssets { get; set; }
         public DbSet<SchoolAsset> SchoolAssets { get; set; }
+        public DbSet<EventAsset> EventAssets { get; set; }
         public DbSet<TeacherAsset> TeacherAssets { get; set; }
         public DbSet<HomeworkAsset> HomeworkAssets { get; set; }
 
@@ -53,6 +58,7 @@ namespace Zeemlin.Data.DbContexts
         // Many-to-Many Relationships (without navigation properties)
         public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<TeacherGroup> TeacherGroups { get; set; } // Explicitly define the join table
+        public DbSet<ParentStudent> ParentStudents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +67,8 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new SchoolAssetConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkAssetConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherAssetConfiguration());
+            modelBuilder.ApplyConfiguration(new EventAssetConfiguration());
+
 
             // Users
             modelBuilder.ApplyConfiguration(new SuperAdminConfiguration());
@@ -76,11 +84,17 @@ namespace Zeemlin.Data.DbContexts
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
             modelBuilder.ApplyConfiguration(new StudentGroupConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherGroupConfiguration());
-            modelBuilder.ApplyConfiguration(new LessonConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonTableConfiguration());
             modelBuilder.ApplyConfiguration(new LessonAttendanceConfiguration());
             modelBuilder.ApplyConfiguration(new GradeConfiguration());
+
+
+            // Event
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
+
 
             // Seed datas
             modelBuilder.Entity<SuperAdmin>().HasData(SuperAdminSeedData.GetSuperAdmins());

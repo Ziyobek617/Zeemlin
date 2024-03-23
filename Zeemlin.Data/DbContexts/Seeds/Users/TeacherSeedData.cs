@@ -21,7 +21,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced teacher in mathematics.",
                 DistrictName = "Mirzo Ulug'bek",
-                SchoolNumber = 12345,
                 ScienceType = ScienceType.Mathematics,
                 genderType = GenderType.Male
             };
@@ -38,7 +37,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in history.",
                 DistrictName = "Mirzo Ulug'bek",
-                SchoolNumber = 12345,
                 ScienceType = ScienceType.History,
                 genderType = GenderType.Female
             };
@@ -55,7 +53,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated teacher with expertise in geography.",
                 DistrictName = "Eskishahar",
-                SchoolNumber = 54321,
                 ScienceType = ScienceType.Geography,
                 genderType = GenderType.Male
             };
@@ -72,7 +69,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced Mathematics teacher with 10+ years of experience.",
                 DistrictName = "Mirzo Ulug'bek",
-                SchoolNumber = 12345, 
                 ScienceType = ScienceType.Mathematics,
                 genderType = GenderType.Male
             };
@@ -89,7 +85,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password", 
                 Biography = "Enthusiastic English language teacher with a passion for fostering communication skills.",
                 DistrictName = "Eskishahar",
-                SchoolNumber = 54321,
                 ScienceType = ScienceType.EnglishLanguage,
                 genderType = GenderType.Female
             };
@@ -106,7 +101,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced teacher specializing in chemistry.",
                 DistrictName = "Mirzo Ulug'bek",
-                SchoolNumber = 12345,
                 ScienceType = ScienceType.Chemistry,
                 genderType = GenderType.Female
             };
@@ -123,7 +117,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher with expertise in art.",
                 DistrictName = "Mirzo Ulug'bek",
-                SchoolNumber = 12345,
                 ScienceType = ScienceType.Art,
                 genderType = GenderType.Male
             };
@@ -140,7 +133,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated teacher with a passion for music.",
                 DistrictName = "Eskishahar",
-                SchoolNumber = 54321,
                 ScienceType = ScienceType.Music,
                 genderType = GenderType.Female
             };
@@ -157,7 +149,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced mathematics teacher.",
                 DistrictName = "Eskishahar",
-                SchoolNumber = 54321,
                 ScienceType = ScienceType.Mathematics,
                 genderType = GenderType.Male
             };
@@ -174,7 +165,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in biology.",
                 DistrictName = "Shahriston",
-                SchoolNumber = 67890,
                 ScienceType = ScienceType.Biology,
                 genderType = GenderType.Female
             };
@@ -191,7 +181,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced history teacher.",
                 DistrictName = "Shahriston",
-                SchoolNumber = 67890,
                 ScienceType = ScienceType.History,
                 genderType = GenderType.Male
             };
@@ -208,7 +197,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated teacher with expertise in physics.",
                 DistrictName = "Namangan shahri",
-                SchoolNumber = 98765,
                 ScienceType = ScienceType.Physics,
                 genderType = GenderType.Female
             };
@@ -225,7 +213,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in algebra.",
                 DistrictName = "Namangan shahri",
-                SchoolNumber = 98765,
                 ScienceType = ScienceType.Algebra,
                 genderType = GenderType.Male
             };
@@ -242,7 +229,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated History teacher with a strong emphasis on critical thinking skills.",
                 DistrictName = "Shahriston",
-                SchoolNumber = 67890, 
                 ScienceType = ScienceType.History,
                 genderType = GenderType.Male
             };
@@ -259,7 +245,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Skilled Uzbek language teacher passionate about preserving cultural heritage.",
                 DistrictName = "Namangan shahri",
-                SchoolNumber = 98765,
                 ScienceType = ScienceType.UzbekLanguage,
                 genderType = GenderType.Female
             };
@@ -276,7 +261,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced teacher specializing in geography.",
                 DistrictName = "Namangan shahri",
-                SchoolNumber = 98765,
                 ScienceType = ScienceType.Geography,
                 genderType = GenderType.Female
             };
@@ -293,7 +277,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher with expertise in biology.",
                 DistrictName = "Samarkand shahri",
-                SchoolNumber = 24680,
                 ScienceType = ScienceType.Biology,
                 genderType = GenderType.Male
             };
@@ -310,7 +293,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated teacher with a passion for music.",
                 DistrictName = "Samarkand shahri",
-                SchoolNumber = 24680,
                 ScienceType = ScienceType.Music,
                 genderType = GenderType.Female
             };
@@ -327,7 +309,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced mathematics teacher.",
                 DistrictName = "Yunusabad",
-                SchoolNumber = 13579,
                 ScienceType = ScienceType.Mathematics,
                 genderType = GenderType.Male
             };
@@ -344,7 +325,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in physics.",
                 DistrictName = "Yunusabad",
-                SchoolNumber = 13579,
                 ScienceType = ScienceType.Physics,
                 genderType = GenderType.Female
             };
@@ -361,7 +341,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced teacher with expertise in chemistry.",
                 DistrictName = "Navoiy shahri",
-                SchoolNumber = 35791,
                 ScienceType = ScienceType.Chemistry,
                 genderType = GenderType.Male
             };
@@ -378,7 +357,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in algebra.",
                 DistrictName = "Navoiy shahri",
-                SchoolNumber = 35791,
                 ScienceType = ScienceType.Algebra,
                 genderType = GenderType.Female
             };
@@ -395,7 +373,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Dedicated teacher with a passion for art.",
                 DistrictName = "Termiz shahri",
-                SchoolNumber = 46802,
                 ScienceType = ScienceType.Art,
                 genderType = GenderType.Male
             };
@@ -412,7 +389,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Experienced teacher specializing in history.",
                 DistrictName = "Termiz shahri",
-                SchoolNumber = 46802,
                 ScienceType = ScienceType.History,
                 genderType = GenderType.Female
             };
@@ -429,7 +405,6 @@ namespace Zeemlin.Data.DbContexts.Seeds.Users
                 Password = "hashed_password",
                 Biography = "Passionate teacher specializing in information technology.",
                 DistrictName = "Termiz shahri",
-                SchoolNumber = 46802,
                 ScienceType = ScienceType.InformationTechnology,
                 genderType = GenderType.Female
             };

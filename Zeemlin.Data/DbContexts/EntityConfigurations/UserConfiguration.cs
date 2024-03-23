@@ -20,7 +20,7 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.Property(e => e.Email).IsRequired();
                 builder.Property(e => e.Password).IsRequired();
                 builder.Property(e => e.Gender).IsRequired();
-                builder.Property(e => e.PassportSeria);
+                builder.Property(e => e.PassportSeria).IsRequired().HasMaxLength(9);
 
             }
         }
@@ -39,7 +39,7 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.Property(e => e.PhoneNumber).IsRequired();
                 builder.Property(e => e.Password).IsRequired();
                 builder.Property(e => e.Gender).IsRequired();
-                builder.Property(e => e.PassportSeria);
+                builder.Property(e => e.PassportSeria).IsRequired().HasMaxLength(9);
 
                 builder.HasMany(e => e.Schools)
                     .WithOne(s => s.Director)
@@ -60,7 +60,7 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.Property(e => e.Email);
                 builder.Property(e => e.Password).IsRequired();
                 builder.Property(e => e.Gender).IsRequired();
-                builder.Property(e => e.PassportSeria);
+                builder.Property(e => e.PassportSeria).IsRequired().HasMaxLength(9);
 
             }
         }
@@ -80,7 +80,6 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.Property(t => t.Email).IsRequired();
                 builder.Property(t => t.Password).IsRequired();
                 builder.Property(t => t.DistrictName).IsRequired().HasMaxLength(50);
-                builder.Property(t => t.SchoolNumber).IsRequired();
                 builder.Property(t => t.ScienceType).IsRequired();
                 builder.Property(t => t.genderType).IsRequired();
 
@@ -92,6 +91,30 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.HasMany(t => t.Questions)
                     .WithOne(q => q.Teacher)
                     .HasForeignKey(q => q.TeacherId);
+            }
+        }
+
+
+        public class ParentConfiguration : IEntityTypeConfiguration<Parent>
+        {
+            public void Configure(EntityTypeBuilder<Parent> builder)
+            {
+                builder.ToTable("Parents");
+                builder.HasKey(e => e.Id);
+
+                builder.Property(e => e.FirstName).IsRequired();
+                builder.Property(e => e.LastName).IsRequired();
+                builder.Property(e => e.DateOfBirth).IsRequired();
+                builder.Property(e => e.Gender).IsRequired();
+                builder.Property(e => e.Email).IsRequired().HasMaxLength(255);
+                builder.Property(e => e.DistrictName).IsRequired().HasMaxLength(50);
+                builder.Property(e => e.GeneralAddressMFY).IsRequired().HasMaxLength(50);
+                builder.Property(e => e.StreetName).IsRequired().HasMaxLength(50);
+                builder.Property(e => e.HouseNumber).IsRequired();
+
+                builder.HasMany(p => p.ParentStudents)
+                    .WithOne(ps => ps.Parent)
+                    .HasForeignKey(ps => ps.ParentId);
             }
         }
 
@@ -125,6 +148,9 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.HasMany(e => e.LessonAttendances)
                     .WithOne(la => la.Student)
                     .HasForeignKey(la => la.StudentId);
+                builder.HasMany(ps => ps.ParentStudents)
+                    .WithOne(s => s.Student)
+                    .HasForeignKey(s => s.StudentId);
             }
         }
     }

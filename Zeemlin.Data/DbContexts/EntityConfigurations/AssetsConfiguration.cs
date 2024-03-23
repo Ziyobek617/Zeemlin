@@ -68,5 +68,21 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                     .HasForeignKey(e => e.TeacherId);
             }
         }
+
+        public class EventAssetConfiguration : IEntityTypeConfiguration<EventAsset>
+        {
+            public void Configure(EntityTypeBuilder<EventAsset> builder)
+            {
+                builder.ToTable("EventAssets");
+                builder.HasKey(e => e.Id);
+
+                builder.Property(e => e.Path).IsRequired();
+                builder.Property(e => e.UploadedDate).IsRequired();
+
+                builder.HasOne(e => e.Event)
+                    .WithMany()
+                    .HasForeignKey(e => e.EventId);
+            }
+        }
     }
 }
