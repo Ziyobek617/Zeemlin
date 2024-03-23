@@ -37,16 +37,6 @@ public class TeacherService : ITeacherService
             throw new ZeemlinException
                 (409, "Teacher is already exist.");
 
-        var school = await appDbContext.School
-            .FirstOrDefaultAsync(s => s.SchoolNumber == dto.SchoolNumber);
-
-        if (school is null)
-            throw new ZeemlinException(404, "School not found.");
-
-        if (dto.SchoolNumber <= 0)
-            throw new ZeemlinException
-                (400, "Invalid School Number. School Number must be greater than 0.");
-
         var mapped = _mapper.Map<Teacher>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
         var created = await _repository.InsertAsync(mapped);
@@ -75,16 +65,6 @@ public class TeacherService : ITeacherService
 
         if (TeacherEmailExist is not null)
             throw new ZeemlinException(409, "Teacher is already exist.");
-
-        var school = await appDbContext.School
-            .FirstOrDefaultAsync(s => s.SchoolNumber == dto.SchoolNumber);
-
-        if (school is null)
-            throw new ZeemlinException(404, "School not found.");
-
-        if (dto.SchoolNumber <= 0)
-            throw new ZeemlinException
-                (400, "Invalid School Number. School Number must be greater than 0.");
 
         Teacher.UpdatedAt = DateTime.UtcNow;
         var person = _mapper.Map(dto,Teacher);

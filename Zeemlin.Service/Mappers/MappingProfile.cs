@@ -21,6 +21,9 @@ using Zeemlin.Service.DTOs.Users.Directors;
 using Zeemlin.Service.DTOs.Assets.SchoolAssets;
 using Zeemlin.Service.DTOs.Assets.TeacherAssets;
 using Zeemlin.Service.DTOs.Assets.SchoolLogoAssets;
+using Zeemlin.Service.DTOs.Assets.EventAssets;
+using Zeemlin.Domain.Entities.Events;
+using Zeemlin.Service.DTOs.Events;
 
 namespace Zeemlin.Service.Mappers;
 
@@ -55,6 +58,13 @@ public class MappingProfile : Profile
         CreateMap<School, SchoolForCreationDto>().ReverseMap();
         CreateMap<School, SchoolForUpdateDto>().ReverseMap();
         CreateMap<School, SchoolForResultDto>().ReverseMap();
+
+        CreateMap<Event, EventForCreationDto>().ReverseMap();
+        CreateMap<Event, EventForUpdateDto>().ReverseMap();
+        CreateMap<Event, EventForPublicDto>();
+        CreateMap<Event, EventForResultDto>().ReverseMap();
+        CreateMap<Event, RejectedEventForSuperAdminDto>();
+        CreateMap<Event, ApprovedEventForSuperAdminDto>();
 
         CreateMap<Course, CourseForCreationDto>().ReverseMap();
         CreateMap<Course, CourseForUpdateDto>().ReverseMap();
@@ -110,6 +120,9 @@ public class MappingProfile : Profile
         CreateMap<HomeworkAsset, HomeworkAssetForCreationDto>().ReverseMap();
         CreateMap<HomeworkAsset, HomeworkAssetForUpdateDto>().ReverseMap();
         CreateMap<HomeworkAsset, HomeworkAssetForResultDto>().ReverseMap();
+
+        CreateMap<EventAsset, EventAssetForCreationDto>().ReverseMap();
+        CreateMap<EventAsset, EventAssetForResultDto>().ReverseMap();
         #endregion
     }
 }

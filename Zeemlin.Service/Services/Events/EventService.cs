@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Zeemlin.Data.IRepositries.Events;
 using Zeemlin.Domain.Entities.Events;
 using Zeemlin.Domain.Enums.Events;

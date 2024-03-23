@@ -14,7 +14,6 @@ public class EventForCreationDto
     public DateTime StartedAt { get; set; }
     public DateTime EndDate { get; set; }
     public EventFormat Format { get; set; }
-    public EventStatus Status { get; set; }
     [Required]
     public string Location { get; set; }
     public string Address { get; set; }
@@ -23,6 +22,5 @@ public class EventForCreationDto
     [Required]
     public string Contact { get; set; }
     public string? OfficialPage { get; set; }
-    public long CreatedByUserId { get; set; }
-    public long UpdaterId { get; set; }
+    public string CreatedByUsername { get; set; }
 }

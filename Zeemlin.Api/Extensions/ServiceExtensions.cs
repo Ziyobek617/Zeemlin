@@ -15,6 +15,10 @@ using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Data.Repositories.Users;
 using Zeemlin.Service.Interfaces.Users;
 using Zeemlin.Service.Services.Users;
+using Zeemlin.Service.Interfaces.Events;
+using Zeemlin.Service.Services.Events;
+using Zeemlin.Data.IRepositries.Events;
+using Zeemlin.Data.Repositories.Events;
 
 namespace Zeemlin.Api.Extensions;
 
@@ -42,6 +46,11 @@ public static class ServiceExtensions
 
         services.AddScoped<ITeacherService, TeacherService>();
         services.AddScoped<ITeacherRepository, TeacherRepository>();
+
+
+        // Events
+        services.AddScoped<IEventService, EventService>();
+        services.AddScoped<IEventRepository, EventRepository>();
 
         // Schools
         services.AddScoped<ISchoolRepository, SchoolRepository>();
