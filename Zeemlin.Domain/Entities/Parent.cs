@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities;
 
@@ -13,8 +14,8 @@ public class Parent : Auditable
     public string LastName { get; set; }
 
     [Required]
-    [DataType(DataType.Date)]
     public DateTime DateOfBirth { get; set; }
+    public GenderType Gender { get; set; }
 
     // Contact information:
     [Phone] 
@@ -41,4 +42,7 @@ public class Parent : Auditable
     public string StreetName { get; set; }
     [Required]
     public short HouseNumber { get; set; } 
+
+
+    public ICollection<ParentStudent> ParentStudents { get; set; }
 }
