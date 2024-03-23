@@ -1,4 +1,5 @@
-﻿using Zeemlin.Domain.Commons;
+﻿using System.ComponentModel.DataAnnotations;
+using Zeemlin.Domain.Commons;
 using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities.Users;
@@ -11,6 +12,8 @@ public class Admin : Auditable
     public string Email { get; set; } // Admin's email address
     public string Password { get; set; } // Password for authentication (securely hashed!)
     public GenderType Gender { get; set; }
+    [Required]
+    [StringLength(100)]
     public string PassportSeria { get; set; }
     public long SchoolId { get; set; }
     public School School { get; set; }

@@ -16,7 +16,7 @@ namespace Zeemlin.Domain.Entities.Users
         public string LastName { get; set; } // Director's last name
         [EmailAddress]
         public string Email { get; set; }
-        [Required]
+        [Required]  
         [Phone]
         public string PhoneNumber { get; set; }
 
@@ -24,6 +24,7 @@ namespace Zeemlin.Domain.Entities.Users
         public string Password { get; set; } // Password for authentication (securely hashed!)
         public GenderType Gender { get; set; }
         [Required]
+        [StringLength(100)]
         public string PassportSeria { get; set; }
 
         // List of Director's schools, ensuring bidirectional relationship

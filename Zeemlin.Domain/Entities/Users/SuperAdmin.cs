@@ -21,13 +21,14 @@ namespace Zeemlin.Domain.Entities.Users
         [Required]
         public string Password { get; set; } // Securely hashed password
         public GenderType Gender { get; set; }
-        public string PassportSeria { get; set; }
 
-        // Consider role-based access control for granular permissions
+
+        public string PassportSeria { get; set; }
 
         // Methods for managing schools and admins (assuming one-to-many relationships)
         public ICollection<School> Schools { get; set; } = new HashSet<School>();
         public ICollection<Admin> Admins { get; set; } = new HashSet<Admin>();
+        public ICollection<Director> Directors { get; set; }
 
     }
 }
