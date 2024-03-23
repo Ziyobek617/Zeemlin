@@ -2,9 +2,8 @@
 
 public enum EventStatus : short
 {
-    Approved = 1,
+    InProcess,
+    Approved,
     Rejected,
-    Cancelled,
     Completed,
-    InProcess
 }

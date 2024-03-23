@@ -5,7 +5,7 @@ public enum EventType : byte
     Seminar,
     Conference,
     Hackathon,
-    competition,
+    Competition,
     AwardCeremony,
     Exhibition,
     NetworkingEvent,
