@@ -2,7 +2,7 @@
 
 public enum EventType : byte
 {
-    Seminar,
+    Seminar = 1,
     Conference,
     Hackathon,
     Competition,
