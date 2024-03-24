@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries.Events;
+using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Domain.Entities.Events;
 using Zeemlin.Domain.Enums.Events;
 using Zeemlin.Service.DTOs.Events;
@@ -13,38 +14,72 @@ public class EventService : IEventService
 {
     private readonly IMapper _mapper;
     private readonly IEventRepository _eventRepository;
+    private readonly IAdminRepository _adminRepository;
+    private readonly ISuperAdminRepository _superAdminRepository;
 
-    public EventService(IMapper mapper, IEventRepository eventRepository)
+    public EventService(
+        IMapper mapper,
+        IEventRepository eventRepository,
+        IAdminRepository adminRepository, 
+        ISuperAdminRepository superAdminRepository)
     {
         _mapper = mapper;
         _eventRepository = eventRepository;
+        _adminRepository = adminRepository;
+        _superAdminRepository = superAdminRepository;
     }
 
-    public async Task<EventForResultDto> CreateEventAsync(EventForCreationDto createDto)
+    public async Task<EventForResultDto> CreateEpicEventAsync(EventForCreationDto createDto)
+{
+        // Validate all data upfront
+        await ValidateEventDates(createDto); // Ensure asynchronous validation completes
+
+        
+
+        // Proceed with event creation if all validation passes
+        var mappedEvent = _mapper.Map<Event>(createDto);
+        mappedEvent.CreatedAt = DateTime.UtcNow; // Use DateTime.Now for user's local time zone (optional)
+        mappedEvent.Status = EventStatus.InProcess;
+
+        await _eventRepository.InsertAsync(mappedEvent);
+        return _mapper.Map<EventForResultDto>(mappedEvent);
+    }
+
+    private async Task ValidateEventDates(EventForCreationDto createDto)
     {
-        // Check StartedAt and EndDate
-        if (createDto.StartedAt < DateTime.UtcNow)
+        if (createDto.StartedAt < DateTime.Now)
         {
-            throw new ZeemlinException(400, "Event creation failed: Start date cannot be in the past.");
+            throw new ZeemlinException(400, "Whoa! Start date can't be in the past. Let's schedule for the future.");
         }
 
         if (createDto.EndDate <= createDto.StartedAt)
         {
-            throw new ZeemlinException(400, "Event creation failed: End date must be after the start date.");
+            throw new ZeemlinException(400, "The event needs to end sometime after it starts. Just sayin'.");
         }
 
-        if (createDto.Price.HasValue && createDto.Price.Value < 1000)
+        if (createDto.IsPaid && (!createDto.Price.HasValue || createDto.Price.Value < 1000))
         {
-            throw new ZeemlinException(400, "Event creation failed: Price cannot be less than 1000.");
+            throw new ZeemlinException(400, "Hold on there! For paid events, price can't be empty or less than 1000.");
         }
 
-        var mapped = _mapper.Map<Event>(createDto);
-        mapped.CreatedAt = DateTime.UtcNow;
-        mapped.Status = EventStatus.InProcess;
-        await _eventRepository.InsertAsync(mapped);
+        // Assuming a username property exists in the DTO
+        if (string.IsNullOrEmpty(createDto.CreatedByUsername))
+        {
+            throw new ZeemlinException(400, "Username cannot be empty.");
+        }
 
-        return _mapper.Map<EventForResultDto>(mapped);
+        var superAdminExists = await _superAdminRepository.ExistsByUsernameAsync(createDto.CreatedByUsername);
+        var adminExists = await _adminRepository.ExistsByUsernameAsync(createDto.CreatedByUsername);
+
+        if (!adminExists && !superAdminExists)
+        {
+            throw new ZeemlinException(400, "Invalid username. No admin or super admin found.");
+        }
+
     }
+
+
+
 
     public async Task<bool> RemoveEventAsync(long eventId)
     {
@@ -87,8 +122,7 @@ public class EventService : IEventService
     public async Task<IEnumerable<EventForResultDto>> RetrieveAllInProccesAsync()
     {
         var approvedEvents = await _eventRepository.SelectAll()
-            .Where(e => e.Status == EventStatus.InProcess &&
-            e.StartedAt >= DateTime.UtcNow)
+            .Where(e => e.Status == EventStatus.InProcess)
             .AsNoTracking()
             .ToListAsync();
 
@@ -105,20 +139,6 @@ public class EventService : IEventService
         if (IsValidId is null)
             throw new ZeemlinException(404, "Not Found");
 
-        if (updateDto.StartedAt < DateTime.UtcNow)
-        {
-            throw new ZeemlinException(400, "Event creation failed: Start date cannot be in the past.");
-        }
-
-        if (updateDto.EndDate <= updateDto.StartedAt)
-        {
-            throw new ZeemlinException(400, "Event creation failed: End date must be after the start date.");
-        }
-
-        if (updateDto.Price.HasValue && updateDto.Price.Value < 1000)
-        {
-            throw new ZeemlinException(400, "Event creation failed: Price cannot be less than 1000.");
-        }
 
         var mapped = _mapper.Map(updateDto, IsValidId);
         mapped.UpdatedAt = DateTime.UtcNow;
@@ -127,40 +147,62 @@ public class EventService : IEventService
         return _mapper.Map<EventForResultDto>(mapped);
     }
 
-    public async Task<EventForResultDto> UpdateEventStatusAsync(EventStatusUpdateDto statusDto)
+    public async Task<EventForResultDto> UpdateEventStatusAsync(long eventId, EventStatusUpdateDto statusDto)
     {
         var IsValidId = await _eventRepository
             .SelectAll().AsNoTracking()
-            .Where(u => u.Id == statusDto.EventId)
+            .Where(u => u.Id == eventId)
             .FirstOrDefaultAsync();
 
         if (IsValidId is null)
             throw new ZeemlinException(404, "Not Found");
 
-        // Update the status and potentially approver (if applicable)
-        IsValidId.Status = statusDto.NewStatus;
-        if (statusDto.NewStatus == EventStatus.Approved)
-        {
-            IsValidId.UpdaterId = statusDto.UpdaterId;
-        }
+        var IsSuperAdminId = await _superAdminRepository
+            .SelectAll().AsNoTracking()
+            .Where(u => u.Id == statusDto.UpdaterId)
+            .FirstOrDefaultAsync();
 
-        var mapped = _mapper.Map(statusDto,IsValidId);
+        if (IsSuperAdminId is null)
+            throw new ZeemlinException(404, "Super Admin not Found");
+
+        IsValidId.Status = statusDto.NewStatus;
+        var originalIsPaid = IsValidId.IsPaid;
+
+        var mapped = _mapper.Map(statusDto, IsValidId);
         mapped.UpdatedAt = DateTime.UtcNow;
+        mapped.IsPaid = originalIsPaid;
         await _eventRepository.UpdateAsync(mapped);
 
-         return _mapper.Map<EventForResultDto>(mapped);
+        return _mapper.Map<EventForResultDto>(mapped);
     }
 
     public async Task<IEnumerable<RejectedEventForSuperAdminDto>> RetrieveAllRejectedAsync()
     {
-        // Use eager loading to include EventStatusUpdateDto
+        // Fetch rejected events with non-null UpdaterIds
         var rejectedEvents = await _eventRepository.SelectAll()
-            .Where(e => e.Status == EventStatus.Rejected &&
-            e.StartedAt >= DateTime.UtcNow).AsNoTracking()
-            .ToListAsync();
-        
-        return _mapper.Map<IEnumerable<RejectedEventForSuperAdminDto>>(rejectedEvents);
+          .Where(e => e.Status == EventStatus.Rejected && e.UpdaterId.HasValue)  // Filter by non-null UpdaterId
+          .AsNoTracking()
+          .ToListAsync();
+
+        // Separate query to retrieve usernames for UpdaterIds
+        var superAdminUsernames = await _superAdminRepository.GetAllUsernamesByIds(
+          rejectedEvents.Select(e => e.UpdaterId.Value).ToList()); // Use Value property for non-null UpdaterIds
+
+        // Map events and populate username
+        var mappedEvents = rejectedEvents.Select(e =>
+        {
+            var username = superAdminUsernames.ContainsKey(e.UpdaterId.Value) ?
+              superAdminUsernames[e.UpdaterId.Value] : null;
+            var dto = _mapper.Map<RejectedEventForSuperAdminDto>(e);
+            dto.UpdaterUsername = username;
+            return dto;
+        });
+
+
+        return mappedEvents;
     }
+
+
 
     public async Task<IEnumerable<ApprovedEventForSuperAdminDto>> RetrieveAllApprovedAsync()
     {

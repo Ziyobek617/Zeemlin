@@ -63,6 +63,7 @@ public class MappingProfile : Profile
         CreateMap<Event, EventForUpdateDto>().ReverseMap();
         CreateMap<Event, EventForPublicDto>();
         CreateMap<Event, EventForResultDto>().ReverseMap();
+        CreateMap<EventStatusUpdateDto, Event>();
         CreateMap<Event, RejectedEventForSuperAdminDto>();
         CreateMap<Event, ApprovedEventForSuperAdminDto>();
 

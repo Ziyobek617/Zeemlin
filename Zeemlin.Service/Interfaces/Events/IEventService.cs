@@ -10,7 +10,7 @@ public interface IEventService
     Task<IEnumerable<RejectedEventForSuperAdminDto>> RetrieveAllRejectedAsync(); // For super admins
     Task<IEnumerable<ApprovedEventForSuperAdminDto>> RetrieveAllApprovedAsync(); // For super admins
     Task<IEnumerable<EventForPublicDto>> GetApprovedEventsForPublicAsync(); // For regular users
-    Task<EventForResultDto> CreateEventAsync(EventForCreationDto createDto);
-    Task<EventForResultDto> UpdateEventStatusAsync(EventStatusUpdateDto statusDto);
+    Task<EventForResultDto> CreateEpicEventAsync(EventForCreationDto createDto);
     Task<EventForResultDto> UpdateEventAsync(long eventId, EventForUpdateDto updateDto);
+    Task<EventForResultDto> UpdateEventStatusAsync(long eventId, EventStatusUpdateDto statusDto);
 }
