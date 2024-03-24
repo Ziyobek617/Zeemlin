@@ -14,7 +14,6 @@ public class StudentForResultDto
     public string genderType { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
 
     // Address
     public string DistrictName { get; set; }
