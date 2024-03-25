@@ -9,6 +9,7 @@ public class ApprovedEventForSuperAdminDto
     public string EventType { get; set; }
     public string StartedAt { get; set; }
     public string EndDate { get; set; }
+    public string Status { get; set; }
     public string Format { get; set; }
     public string Location { get; set; }
     public string Address { get; set; }
@@ -18,4 +19,5 @@ public class ApprovedEventForSuperAdminDto
     public string? OfficialPage { get; set; }
     public long CreatedById { get; set; }
     public long UpdaterId { get; set; }
+    public string UpdaterUsername { get; set; }
 }
