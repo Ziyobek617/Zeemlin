@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Zeemlin.Data.IRepositries.Events;
 using Zeemlin.Data.IRepositries.Users;
+using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Events;
 using Zeemlin.Domain.Enums.Events;
 using Zeemlin.Service.DTOs.Events;
 using Zeemlin.Service.Exceptions;
+using Zeemlin.Service.Interfaces;
 using Zeemlin.Service.Interfaces.Events;
 
 namespace Zeemlin.Service.Services.Events;
@@ -16,25 +18,28 @@ public class EventService : IEventService
     private readonly IEventRepository _eventRepository;
     private readonly IAdminRepository _adminRepository;
     private readonly ISuperAdminRepository _superAdminRepository;
+    private readonly IEmailService _emailService;
 
     public EventService(
         IMapper mapper,
         IEventRepository eventRepository,
-        IAdminRepository adminRepository, 
-        ISuperAdminRepository superAdminRepository)
+        IAdminRepository adminRepository,
+        ISuperAdminRepository superAdminRepository,
+        IEmailService emailService)
     {
         _mapper = mapper;
         _eventRepository = eventRepository;
         _adminRepository = adminRepository;
         _superAdminRepository = superAdminRepository;
+        _emailService = emailService;
     }
 
     public async Task<EventForResultDto> CreateEpicEventAsync(EventForCreationDto createDto)
-{
+    {
         // Validate all data upfront
         await ValidateEventDates(createDto); // Ensure asynchronous validation completes
 
-        
+
 
         // Proceed with event creation if all validation passes
         var mappedEvent = _mapper.Map<Event>(createDto);
@@ -173,6 +178,13 @@ public class EventService : IEventService
         mapped.IsPaid = originalIsPaid;
         await _eventRepository.UpdateAsync(mapped);
 
+        var creatorUsername = mapped.CreatedByUsername;
+        var createrEmail = await GetCreatorEmailAsync(creatorUsername);
+
+
+        // Send email notification
+        await SendEmailNotification(createrEmail, creatorUsername, statusDto.NewStatus, mapped);
+
         return _mapper.Map<EventForResultDto>(mapped);
     }
 
@@ -206,11 +218,59 @@ public class EventService : IEventService
 
     public async Task<IEnumerable<ApprovedEventForSuperAdminDto>> RetrieveAllApprovedAsync()
     {
-        var rejectedEvents = await _eventRepository.SelectAll()
+        var approvedEvents = await _eventRepository.SelectAll()
             .Where(e => e.Status == EventStatus.Approved)
             .AsNoTracking()
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<ApprovedEventForSuperAdminDto>>(rejectedEvents);
+        var superAdminUsernames = await _superAdminRepository.GetAllUsernamesByIds(
+          approvedEvents.Select(e => e.UpdaterId.Value).ToList()); // Use Value property for non-null UpdaterIds
+
+        // Map events and populate username
+        var mappedEvents = approvedEvents.Select(e =>
+        {
+            var username = superAdminUsernames.ContainsKey(e.UpdaterId.Value) ?
+              superAdminUsernames[e.UpdaterId.Value] : null;
+            var dto = _mapper.Map<ApprovedEventForSuperAdminDto>(e);
+            dto.UpdaterUsername = username;
+            return dto;
+        });
+
+
+        return mappedEvents;
+
+    }
+
+
+
+    private async Task<string> GetCreatorEmailAsync(string username)
+    {
+        // Assuming creatorId belongs to either admin or super admin
+        var superAdminEmail = await _superAdminRepository.GetEmailByUsername(username);
+
+        if (string.IsNullOrEmpty(superAdminEmail))
+        {
+            var adminEmail = await _adminRepository.GetEmailByUsername(username); // Assuming username is stored as string
+            return adminEmail;
+        }
+
+        // Return Super Admin email if found
+        return superAdminEmail;
+    }
+
+    private async Task SendEmailNotification(string createrEmail ,string creatorUsername, EventStatus newStatus, Event eventData)
+    {
+        var subject = $"Your event '{eventData.Title}' has been {newStatus.ToString().ToLower()}";
+        var body = $"Dear {creatorUsername},\n\n" +
+                    $"\n This email is to inform you that your event '{eventData.Title}' has been {newStatus.ToString().ToLower()}.\n";
+
+        var message = new Message
+        {
+            Subject = subject,
+            Body = body,
+            To = createrEmail
+        };
+
+        await _emailService.SendMessage(message);
     }
 }
