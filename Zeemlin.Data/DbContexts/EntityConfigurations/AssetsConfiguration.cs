@@ -84,5 +84,22 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                     .HasForeignKey(e => e.EventId);
             }
         }
+
+
+        public class QuestionAssetConfiguration : IEntityTypeConfiguration<QuestionAsset>
+        {
+            public void Configure(EntityTypeBuilder<QuestionAsset> builder)
+            {
+                builder.ToTable("QuestionAssets");
+                builder.HasKey(e => e.Id);
+
+                builder.Property(e => e.Path).IsRequired();
+                builder.Property(e => e.UploadedDate).IsRequired();
+
+                builder.HasOne(e => e.Question)
+                    .WithMany()
+                    .HasForeignKey(e => e.QuestionId);
+            }
+        }
     }
 }

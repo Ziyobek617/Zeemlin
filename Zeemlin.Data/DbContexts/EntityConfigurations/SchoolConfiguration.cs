@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Entities.Questions;
 using Zeemlin.Domain.Entities.Events;
+using Zeemlin.Domain.Entities.Assets;
 
 namespace Zeemlin.Data.DbContexts.EntityConfigurations;
 
@@ -31,18 +32,25 @@ public class SchoolConfiguration
 
             // Define relationships
             builder.HasMany(s => s.Asset)
-                .WithOne(a => a.School)
-                .HasForeignKey(a => a.SchoolId);
+              .WithOne(a => a.School)
+              .HasForeignKey(a => a.SchoolId);
 
             builder.HasMany(s => s.Courses)
-                .WithOne(c => c.School)
-                .HasForeignKey(c => c.SchoolId);
+              .WithOne(c => c.School)
+              .HasForeignKey(c => c.SchoolId);
 
             builder.HasMany(s => s.Quizzes)
-                .WithOne(q => q.School)
-                .HasForeignKey(q => q.SchoolId);
+              .WithOne(q => q.School)
+              .HasForeignKey(q => q.SchoolId);
+
+            // One-to-One relationship with cascade delete for SchoolLogoAsset
+            builder.HasOne(s => s.SchoolLogoAsset)
+              .WithOne(a => a.School)
+              .HasForeignKey<SchoolLogoAsset>(a => a.SchoolId)
+              .OnDelete(DeleteBehavior.Cascade); 
         }
     }
+
 
     public class CourseConfiguration : IEntityTypeConfiguration<Course>
     {
@@ -250,8 +258,8 @@ public class SchoolConfiguration
 
             builder.Property(q => q.Text).IsRequired();
             builder.Property(q => q.Description);
+            builder.Property(q => q.CreatedAt); // Consider adding creation date property
 
-            // Define relationships
             builder.HasOne(q => q.Quiz)
                 .WithMany(qz => qz.Questions)
                 .HasForeignKey(q => q.QuizId);
@@ -259,8 +267,14 @@ public class SchoolConfiguration
             builder.HasOne(q => q.Teacher)
                 .WithMany(t => t.Questions)
                 .HasForeignKey(q => q.TeacherId);
+
+            builder.HasMany(q => q.QuestionAssets) // Corrected to HasMany
+                .WithOne(a => a.Question)
+                .HasForeignKey(a => a.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
+
 
     public class AnswerConfiguration : IEntityTypeConfiguration<Answer>
     {
@@ -272,7 +286,6 @@ public class SchoolConfiguration
             builder.Property(a => a.Text).IsRequired();
             builder.Property(a => a.IsCorrect).IsRequired();
 
-            // Define relationships
             builder.HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId);
@@ -286,11 +299,18 @@ public class SchoolConfiguration
             builder.ToTable("Events");
             builder.HasKey(a => a.Id);
 
+            // Define required properties
             builder.Property(e => e.Title).IsRequired();
             builder.Property(e => e.Orginizer).IsRequired();
             builder.Property(e => e.Location).IsRequired();
             builder.Property(e => e.Contact).IsRequired();
 
+            // Define relationship with EventAsset
+            builder.HasOne(e => e.EventAsset)
+              .WithOne(a => a.Event)
+              .HasForeignKey<EventAsset>(a => a.EventId)
+              .OnDelete(DeleteBehavior.Cascade); // Optional: Delete EventAsset when Event is deleted
         }
     }
+
 }

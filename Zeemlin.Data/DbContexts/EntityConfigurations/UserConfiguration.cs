@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Zeemlin.Domain.Entities;
+using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Domain.Entities.Users;
 
 namespace Zeemlin.Data.DbContexts.EntityConfigurations
@@ -72,27 +73,35 @@ namespace Zeemlin.Data.DbContexts.EntityConfigurations
                 builder.ToTable("Teachers");
                 builder.HasKey(t => t.Id);
 
-                // Define property configurations
+                // Define property configurations with annotations
                 builder.Property(t => t.FirstName).IsRequired();
                 builder.Property(t => t.LastName).IsRequired();
-                builder.Property(t => t.DateOfBirth).IsRequired();
-                builder.Property(t => t.PhoneNumber).IsRequired();
+                builder.Property(t => t.DateOfBirth).IsRequired(); // Consider using DateTime type
+                builder.Property(t => t.PhoneNumber).IsRequired(); // Use Phone data annotation
                 builder.Property(t => t.Email).IsRequired();
-                builder.Property(t => t.Password).IsRequired();
+                builder.Property(t => t.Password).IsRequired(); // Implement secure password hashing
+                builder.Property(t => t.Biography);
                 builder.Property(t => t.DistrictName).IsRequired().HasMaxLength(50);
-                builder.Property(t => t.ScienceType).IsRequired();
-                builder.Property(t => t.genderType).IsRequired();
+                builder.Property(t => t.ScienceType).IsRequired(); // Consider using ScienceType enum
+                builder.Property(t => t.genderType).IsRequired(); // Consider using GenderType enum
 
                 // Define relationships
                 builder.HasMany(t => t.TeacherGroups)
-                    .WithOne(tg => tg.Teacher)
-                    .HasForeignKey(tg => tg.TeacherId);
+                  .WithOne(tg => tg.Teacher)
+                  .HasForeignKey(tg => tg.TeacherId);
 
                 builder.HasMany(t => t.Questions)
-                    .WithOne(q => q.Teacher)
-                    .HasForeignKey(q => q.TeacherId);
+                  .WithOne(q => q.Teacher)
+                  .HasForeignKey(q => q.TeacherId);
+
+                // One-to-One relationship with TeacherAsset
+                builder.HasOne(t => t.TeacherAsset)
+                  .WithOne(a => a.Teacher)
+                  .HasForeignKey<TeacherAsset>(a => a.TeacherId)
+                  .OnDelete(DeleteBehavior.Cascade); // Optional: Delete TeacherAsset when Teacher is deleted
             }
         }
+
 
 
         public class ParentConfiguration : IEntityTypeConfiguration<Parent>
