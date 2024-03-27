@@ -62,12 +62,23 @@ public class SchoolLogoAssetService : ISchoolLogoAssetService
     public async Task<SchoolLogoAssetForResultDto> UploadAsync(SchoolLogoAssetForCreationDto dto)
     {
         var school = await _schoolRepository.SelectAll()
-            .Where(s => s.Id == dto.SchoolId)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
+          .Include(s => s.SchoolLogoAsset) // Include SchoolLogoAsset in the query
+          .Where(s => s.Id == dto.SchoolId)
+          .AsNoTracking()
+          .FirstOrDefaultAsync();
 
         if (school is null)
+        {
             throw new ZeemlinException(404, "School not found");
+        }
+
+        // Check if a logo already exists for the school
+        if (school.SchoolLogoAsset != null)
+        {
+            // Handle the conflict (e.g., throw an exception or update existing logo)
+            throw new ZeemlinException(409, "School already has a logo. Update existing logo or choose a different school.");
+        }
+
 
         var WwwRootPath = Path.Combine(WebHostEnviromentHelper.WebRootPath, "SchoolLogoAssets");
         var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(dto.Path.FileName);

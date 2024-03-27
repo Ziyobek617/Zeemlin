@@ -4,6 +4,7 @@ using Zeemlin.Data.IRepositries;
 using Zeemlin.Data.IRepositries.Users;
 using Zeemlin.Domain.Entities;
 using Zeemlin.Domain.Enums;
+using Zeemlin.Service.DTOs.Assets.SchoolLogoAssets;
 using Zeemlin.Service.DTOs.Schools;
 using Zeemlin.Service.Exceptions;
 using Zeemlin.Service.Interfaces;
@@ -29,7 +30,7 @@ public class SchoolService : ISchoolService
 
     public async Task<SchoolForResultDto> AddAsync(SchoolForCreationDto dto)
     {
-        if (dto.SchoolNumber < 0)
+        if (dto.SchoolNumber <= 0)
         {
             throw new ZeemlinException(400, "Invalid school number");
         }
@@ -72,6 +73,9 @@ public class SchoolService : ISchoolService
         if (school is null)
             throw new ZeemlinException(404, "School not found");
 
+        if (dto.SchoolNumber < 0)
+            throw new ZeemlinException(400, "Invalid school number");
+
         var existingSchoolWithSameNumberAndStreet = await _schoolRepository
             .SelectAll()
             .AsNoTracking()
@@ -80,7 +84,8 @@ public class SchoolService : ISchoolService
             .AnyAsync();
 
         if (existingSchoolWithSameNumberAndStreet)
-            throw new ZeemlinException(409, $"A school with the same {school.SchoolNumber} already exists on that {school.DistrictName} district.");
+            throw new ZeemlinException
+                (409, $"A school with the same {school.SchoolNumber} already exists on that {school.DistrictName} district.");
 
         var director = await _directorRepository.SelectAll()
             .Where(d => d.Id == dto.DirectorId)
@@ -112,30 +117,80 @@ public class SchoolService : ISchoolService
 
     public async Task<IEnumerable<SchoolForResultDto>> RetrieveAllAsync()
     {
-        var schools = await _schoolRepository.SelectAll().ToListAsync();
-        return _mapper.Map<IEnumerable<SchoolForResultDto>>(schools);
+        var query = _schoolRepository.SelectAll()
+          .Include(s => s.SchoolLogoAsset) // Include SchoolLogoAsset in the query
+          .AsNoTracking();
+
+        var schools = await query.ToListAsync();
+
+        // Project schools and include SchoolLogoAsset information using AutoMapper
+        var schoolDtos = schools.Select(school =>
+        {
+            var schoolDto = _mapper.Map<SchoolForResultDto>(school);
+
+            // Handle SchoolLogoAsset (avoid cyclical references during serialization)
+            schoolDto.SchoolLogoAsset = school.SchoolLogoAsset != null ? _mapper.Map<SchoolLogoAssetForResultDto>(school.SchoolLogoAsset) : null;
+
+            return schoolDto;
+        });
+
+        return schoolDtos;
     }
+
 
     public async Task<SchoolForResultDto> RetrieveByIdAsync(long id)
     {
         var school = await _schoolRepository.SelectAll()
-            .AsNoTracking()
-            .Where(s => s.Id == id)
-            .FirstOrDefaultAsync();
+          .Include(s => s.SchoolLogoAsset) // Include SchoolLogoAsset in the query
+          .AsNoTracking()
+          .Where(s => s.Id == id)
+          .FirstOrDefaultAsync();
+
         if (school is null)
+        {
             throw new ZeemlinException(404, "School not found");
+        }
 
-        return _mapper.Map<SchoolForResultDto>(school);
+        // Map School to SchoolForResultDto
+        var schoolDto = _mapper.Map<SchoolForResultDto>(school);
+
+        // If SchoolLogoAsset exists, map it to SchoolLogoAssetForResultDto
+        schoolDto.SchoolLogoAsset = school.SchoolLogoAsset != null ? _mapper.Map<SchoolLogoAssetForResultDto>(school.SchoolLogoAsset) : null;
+
+        return schoolDto;
     }
 
-    public async Task<IEnumerable<SchoolForResultDto>> FilterByRegionAsync(Region region)
+
+    public async Task<IEnumerable<SchoolForResultDto>> FilterByRegionAsync(Region region, SchoolType? schoolType = null)
     {
-        var schools = await _schoolRepository.SelectAll()
-            .AsNoTracking()
-            .Where(s => s.Region == region)
-            .ToListAsync();
+        var query = _schoolRepository.SelectAll()
+          .Include(s => s.SchoolLogoAsset) // Include SchoolLogoAsset in the query
+          .AsNoTracking()
+          .Where(s => s.Region == region);
 
-        return _mapper.Map<IEnumerable<SchoolForResultDto>>(schools);
+        // Apply school type filter (optional)
+        if (schoolType != null)
+        {
+            query = query.Where(s => s.SchoolType == schoolType);
+        }
+
+        var schools = await query.ToListAsync();
+
+        // Project schools and include SchoolLogoAsset information using AutoMapper
+        var schoolDtos = schools.Select(school =>
+        {
+            var schoolDto = _mapper.Map<SchoolForResultDto>(school);
+
+            // Handle SchoolLogoAsset (avoid cyclical references during serialization)
+            schoolDto.SchoolLogoAsset = school.SchoolLogoAsset != null ? _mapper.Map<SchoolLogoAssetForResultDto>(school.SchoolLogoAsset) : null;
+
+            return schoolDto;
+        });
+
+        return schoolDtos;
     }
+
+
+
 
 }

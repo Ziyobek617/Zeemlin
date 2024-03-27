@@ -34,10 +34,10 @@ public class SchoolsController : BaseController
     public async Task<IActionResult> PutAsync([FromRoute(Name = "id")] long id, [FromBody] SchoolForUpdateDto dto)
         => Ok(await this._schoolService.ModifyAsync(id, dto));
 
-    [HttpGet("{Region}")]
-    public async Task<IActionResult> GetSchoolsByRegion(Region region)
+    [HttpGet("filter")]
+    public async Task<IActionResult> FilterByRegionAndType(Region region, SchoolType? schoolType = null)
     {
-        var schools = await _schoolService.FilterByRegionAsync(region);
+        var schools = await _schoolService.FilterByRegionAsync(region, schoolType);
         return Ok(schools);
     }
 

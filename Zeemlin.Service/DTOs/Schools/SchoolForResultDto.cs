@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Zeemlin.Domain.Entities.Assets;
+using Zeemlin.Service.DTOs.Assets.SchoolLogoAssets;
 
 namespace Zeemlin.Service.DTOs.Schools;
 
@@ -42,4 +44,5 @@ public class SchoolForResultDto
     public string CallCenter { get; set; }
     public string EmailCenter { get; set; }
     public string? Website { get; set; }
+    public SchoolLogoAssetForResultDto SchoolLogoAsset { get; set; }
 }
