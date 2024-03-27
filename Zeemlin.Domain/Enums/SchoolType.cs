@@ -2,7 +2,7 @@
 
 public enum SchoolType : byte
 {
-    EducationalCenter,
+    EducationalCenter = 1,
     Elementary,
     HighSchool,
     School,
