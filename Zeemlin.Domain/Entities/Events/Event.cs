@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Domain.Enums.Events;
 
 namespace Zeemlin.Domain.Entities.Events;
@@ -28,4 +29,6 @@ public class Event : Auditable
 
 
     public long? UpdaterId { get; set; }
+    public long? EventAssetId {  get; set; }
+    public EventAsset? EventAsset { get; set; }
 }
