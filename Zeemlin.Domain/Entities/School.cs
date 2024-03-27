@@ -47,6 +47,8 @@ public class School : Auditable
     public string EmailCenter { get; set; }
     public string? Website { get; set; }
 
+    public long? SchoolLogoAssetId { get; set; }
+    public SchoolLogoAsset? SchoolLogoAsset { get; set; }
     public ICollection<SchoolAsset> Asset { get; set; }
     public ICollection<Course> Courses { get; set; }
     public ICollection<Quiz> Quizzes { get; set; }
