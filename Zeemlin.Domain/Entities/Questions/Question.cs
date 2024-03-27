@@ -1,4 +1,5 @@
 ﻿using Zeemlin.Domain.Commons;
+using Zeemlin.Domain.Entities.Assets;
 using Zeemlin.Domain.Enums;
 
 namespace Zeemlin.Domain.Entities.Questions
@@ -14,7 +15,7 @@ namespace Zeemlin.Domain.Entities.Questions
         public long TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 
-
+        public ICollection<QuestionAsset> QuestionAssets { get; set; }
         public ICollection<Answer> Answers { get; set; }
 
     }
